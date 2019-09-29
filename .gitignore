@@ -1,0 +1,6 @@
+
+*.csproj
+*\Library\metadata\*
+*\Library\*
+*\Collab\*
+*.meta
