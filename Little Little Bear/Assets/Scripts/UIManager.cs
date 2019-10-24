@@ -19,14 +19,34 @@ public class UIManager : MonoBehaviour {
 			case ClickType.MainMenu:
 			break;
 			case ClickType.NewGame:
-			//erase Save files
-			EraseSaveFiles();
+                if (!gameManager.instance.SaveMenu.activeSelf)
+                {
+                    gameManager.instance.NewOrLoad = true;
+                    gameManager.instance.SaveMenu.SetActive(true);
+                }
+                else
+                {
+                    gameManager.instance.SaveMenu.SetActive(false);
+                }
+                //load save from txt probs would be best here
+                break;
+                //erase Save files
+                EraseSaveFiles();
 			//force load level 1
 			gameManager.instance.LoadScene(1);
 			break;
 			case ClickType.LoadGame:
-			//load save from txt probs would be best here
-			break;
+                if (!gameManager.instance.SaveMenu.activeSelf)
+                {
+                    gameManager.instance.NewOrLoad = false;
+                    gameManager.instance.SaveMenu.SetActive(true);
+                }
+                else
+                {
+                    gameManager.instance.SaveMenu.SetActive(false);
+                }
+                //load save from txt probs would be best here
+                break;
 			case ClickType.Pause:
 			//set instance of pauseMenu(needs to be created) to active
 			break;
