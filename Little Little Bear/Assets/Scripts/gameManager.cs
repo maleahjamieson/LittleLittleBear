@@ -7,11 +7,15 @@ public class gameManager : MonoBehaviour {
 	private UIManager uiManager;
 	//for turning credits on or off
 	public GameObject CreditsMenu;
+    public GameObject SaveMenu;
  
 
 	//for pausing
 	public bool Paused;
 	public bool CreditsOn;
+    //True if New game, false if Loading game within the SaveMenu Object
+    public bool NewOrLoad;
+    public bool SaveOn;
 	// Use this for initialization
 
 	//sets up global instance of gameManager
