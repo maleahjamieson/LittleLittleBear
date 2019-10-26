@@ -1,15 +1,11 @@
 fileFormatVersion: 2
 guid: 2947b8b4aef8ad14f9ad3b562a0114a9
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -1331291199273325092
-    second: WalkAni_0
-  - first:
-      213: 8342974697891487497
-    second: WalkAni_1
+  fileIDToRecycleName:
+    21300000: WalkAni_0
+    21300002: WalkAni_1
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 7
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -64,7 +60,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -75,8 +71,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 2
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -87,7 +82,6 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -107,7 +101,6 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1e481fe862e30604d91446e16e2b1f48
-      internalID: -1331291199273325092
       vertices: []
       indices: 
       edges: []
@@ -128,7 +121,6 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 679ad220512eb9f44964e25d5aa3b116
-      internalID: 8342974697891487497
       vertices: []
       indices: 
       edges: []
@@ -137,12 +129,10 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
-    secondaryTextures: []
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
