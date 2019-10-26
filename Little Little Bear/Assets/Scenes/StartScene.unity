@@ -2227,7 +2227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593be568710a7524e83dc619f8a88fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickType: 0
+  clickType: 3
 --- !u!1 &1685239372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2726,7 +2726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CreditsMenu: {fileID: 2067577249}
-  SaveMenu: {fileID: 0}
+  SaveMenu: {fileID: 18079557}
   Paused: 0
   CreditsOn: 0
   NewOrLoad: 0
