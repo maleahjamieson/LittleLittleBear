@@ -237,12 +237,12 @@ public class BoardGenerator
 			return false;
 	}
 
-	public Direction pickDir()
+	private Direction pickDir()
 	{
 		return (Direction)random_range(0, 3);
 	}
 
-	public Direction tryToTurn(Direction d)
+	private Direction tryToTurn(Direction d)
 	{
 		int option = random(1);
 
@@ -273,17 +273,17 @@ public class BoardGenerator
 		}
 	}
 
-	public int pickRoomWidth()
+	private int pickRoomWidth()
 	{
 		return random_range(this.min_room_width, this.min_room_height);
 	}
 
-	public int pickRoomHeight()
+	private int pickRoomHeight()
 	{
 		return random_range(this.min_room_height, this.max_room_height);
 	}
 
-	public int move_x(Direction d)
+	public static int move_x(Direction d)
 	{
 		if (d == Direction.EAST)
 			return 1;
@@ -293,7 +293,7 @@ public class BoardGenerator
 			return 0;
 	}
 
-	public int move_y(Direction d)
+	public static int move_y(Direction d)
 	{
 		if (d == Direction.NORTH)
 			return -1;
@@ -306,7 +306,7 @@ public class BoardGenerator
 	//**********************************//
 	//           Initializers           //
 	//**********************************//
-	public void initializeCounters()
+	private void initializeCounters()
 	{
 		this.tileCounter = 0;
 		this.wallCounter = 0;
@@ -323,7 +323,7 @@ public class BoardGenerator
 		this.hallwayCounter = 0;
 	}
 
-	public void initializeMap()
+	private void initializeMap()
 	{
 		for (int x = 0; x < this.board_width; x++)
 		{
@@ -340,7 +340,7 @@ public class BoardGenerator
 	//   Actual generation functions    //
 	//**********************************//
 	// Done [ ]
-	public Position hallway(Position p)
+	private Position hallway(Position p)
 	{
 		Position m = p;
 		int length = random_range(this.min_hallway_length, this.max_hallway_length);
@@ -383,7 +383,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void puzzleHallway(Position p)
+	private void puzzleHallway(Position p)
 	{
 		Position m = p;
 		int length = random_range(this.min_hallway_length, this.max_hallway_length);
@@ -422,7 +422,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void tunnel(Position p)
+	private void tunnel(Position p)
 	{
 		Position m = p;
 		int length = random_range(this.min_tunnel_length, this.max_tunnel_length);
@@ -493,7 +493,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void room(Position p)
+	private void room(Position p)
 	{
 		Position m = p;
 		int _width = random_range(this.min_room_width, this.max_room_width);
@@ -563,7 +563,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void secret_room(Position p)
+	private void secret_room(Position p)
 	{
 		// For now, just use the normal room script
 		Position m = p;
@@ -627,14 +627,14 @@ public class BoardGenerator
 		this.secretCounter++;
 	}
 
-	public void puzzle_room(Position p)
+	private void puzzle_room(Position p)
 	{
 		// TODO: The FUCKING MESS that will be the puzzle room method
 		this.puzzleCounter++;
 	}
 
 	// Done [ ]
-	public void start_room(Position p)
+	private void start_room(Position p)
 	{
 		// For now, just use the normal room script
 		// TODO: specific changes for starting room
@@ -645,7 +645,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void end_room(Position p)
+	private void end_room(Position p)
 	{
 		// For now, just use the normal room script
 		// TODO: specific changes for ending room
@@ -656,7 +656,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void make_walls()
+	private void make_walls()
 	{
 		for (int x = 1; x < this.board_width-1; x++)
 		{
@@ -692,7 +692,7 @@ public class BoardGenerator
 	}
 
 	// Done [ ]
-	public void offshoot(Position p)
+	private void offshoot(Position p)
 	{
 		Position m = p;
 		int numRooms = random_range(2, 4);
