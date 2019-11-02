@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class gameManager : MonoBehaviour {
 	static public gameManager instance;
 	private UIManager uiManager;
+    public BoardGenerator board;
 	//for turning credits on or off
 	public GameObject CreditsMenu;
     public GameObject SaveMenu;
@@ -32,6 +33,10 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu = GameObject.Find("CreditsMenu");
 			CreditsMenu.SetActive(false);
 		}
+        board = new BoardGenerator(1000,1000);
+        board.generate();
+        board.printRecords();
+        board.printMap(2);
 	}
 	
 	// Update is called once per frame

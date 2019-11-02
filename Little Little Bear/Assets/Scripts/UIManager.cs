@@ -68,9 +68,9 @@ public class UIManager : MonoBehaviour {
 	void Update () {
 		
 	}
-	void EraseSaveFiles()
+	int EraseSaveFiles()
 	{
-
+        return 0;
 	}
 
 }
