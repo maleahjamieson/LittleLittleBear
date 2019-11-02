@@ -36,7 +36,11 @@ public class gameManager : MonoBehaviour {
         board = new BoardGenerator(1000,1000);
         board.generate();
         board.printRecords();
-        board.printMap(2);
+        board.Floor = GameObject.Find("FloorTile1");
+        board.Wall = GameObject.Find("WallTile1");
+        board.Rock = GameObject.Find("RockTile1");
+        board.Mud = GameObject.Find("MudTile1");
+        board.GenMap(0);
 	}
 	
 	// Update is called once per frame

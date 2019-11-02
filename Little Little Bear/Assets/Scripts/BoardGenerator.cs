@@ -66,6 +66,9 @@ public class BoardGenerator : MonoBehaviour
     //      Parameters & Variables      //
     //**********************************//
     public GameObject Floor;
+    public GameObject Wall;
+    public GameObject Rock;
+    public GameObject Mud;
 	private int board_width, board_height;
 	private int min_hallway_length, max_hallway_length;
 	private bool hallwayTurns;
@@ -793,15 +796,18 @@ public class BoardGenerator : MonoBehaviour
 						//Debug.Log("["+(short)this.map[x,y].tileType+"]");
 						if (this.map[x,y].tileType == TileSet.NOTHING)
 							Debug.Log(" ");
+                            
 						else
 							Debug.Log((short)this.map[x,y].tileType);
-						break;
+                            
+                        break;
 					case 1: // Prints enum names
 						Debug.Log(this.map[x,y].tileType+" ");
 						break;
 					case 2: // Prints short values without empty spaces
 						if (this.map[x, y].tileType != TileSet.NOTHING)
 							Debug.Log("["+(short)this.map[x,y].tileType+"]");
+                            Instantiate(Floor, new Vector2(x,y), Quaternion.identity);
 						break;
 				}
 			}
@@ -810,7 +816,57 @@ public class BoardGenerator : MonoBehaviour
 		}
 	}
 
-	public void printRecords()
+    public void GenMap(int mode)
+    {
+        for (int y = 0; y < this.board_height; y++)
+        {
+            for (int x = 0; x < this.board_width; x++)
+            {
+                switch (mode)
+                {
+                    case 0: // Prints short values and empty spaces
+                            //Debug.Log("["+(short)this.map[x,y].tileType+"]");
+                        if (this.map[x, y].tileType == TileSet.NOTHING) {
+                            //Debug.Log(" ");
+
+                        } else
+                        {
+                            //Debug.Log((short)this.map[x, y].tileType);
+                            switch (this.map[x, y].tileType) {
+                                case TileSet.FLOOR:
+                                        Instantiate(Floor, new Vector2(x * .85f, y * .85f), Quaternion.identity);
+                                break;
+                                case TileSet.WALL:
+                                    Instantiate(Wall, new Vector2(x * .85f, y * .85f), Quaternion.identity);
+                                break;
+                                case TileSet.ROCK:
+                                    Instantiate(Rock, new Vector2(x * .85f, y * .85f), Quaternion.identity);
+                                    break;
+                                case TileSet.MUD:
+                                    Instantiate(Mud, new Vector2(x * .85f, y * .85f), Quaternion.identity);
+                                 break;
+                                case TileSet.HALLWAY:
+                                    Instantiate(Floor, new Vector2(x * .85f, y * .85f), Quaternion.identity);
+                                    break;
+                                
+                            }
+                        }
+                        break;
+                    case 1: // Prints enum names
+                        Debug.Log(this.map[x, y].tileType + " ");
+                        break;
+                    case 2: // Prints short values without empty spaces
+                        if (this.map[x, y].tileType != TileSet.NOTHING)
+                            Debug.Log("[" + (short)this.map[x, y].tileType + "]");
+                        Instantiate(Floor, new Vector2(x * 10, y * 10), Quaternion.identity);
+                        break;
+                }
+            }
+            Debug.Log("\n");
+        }
+    }
+
+    public void printRecords()
 	{
 		Debug.Log("======= Records =======");
        
