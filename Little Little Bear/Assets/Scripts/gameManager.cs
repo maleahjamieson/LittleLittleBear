@@ -36,10 +36,14 @@ public class gameManager : MonoBehaviour {
         board = new BoardGenerator(1000,1000);
         board.generate();
         board.printRecords();
-        board.Floor = GameObject.Find("FloorTile1");
-        board.Wall = GameObject.Find("WallTile1");
-        board.Rock = GameObject.Find("RockTile1");
-        board.Mud = GameObject.Find("MudTile1");
+        board.Floor = GameObject.Find("TileForestGround");
+        board.Wall = GameObject.Find("TileForestWall");
+        board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
+        board.Hallway = GameObject.Find("TileForestHallway");
+        board.Puzzle_Hallway = GameObject.Find("TileForestPuzzleHallway");
+        board.Spawner = GameObject.Find("TileForestSpawner");
+        board.Secret_Floor = GameObject.Find("TileForestSecretGround");
+        board.Trap = GameObject.Find("TileForestTrap");
         board.GenMap(0);
 	}
 	
