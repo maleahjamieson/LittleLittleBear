@@ -12,8 +12,10 @@
 // This generator was originally made for the class COP 4331, where Project Group 11
 // chose the Roguelike/Roguelite project and decided on the Little-Little-Bear theme.
 
-using System;
-
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 //**********************************//
 //     Specific Data Structures     //
 //**********************************//
@@ -58,11 +60,26 @@ public class Item
 // The map array shall be accessed in this fashion: //
 //        map[x, y]                                 //
 //**************************************************//
-public class BoardGenerator
-{	
-	//**********************************//
-	//      Parameters & Variables      //
-	//**********************************//
+public class BoardGenerator : MonoBehaviour
+{
+    //**********************************//
+    //      Parameters & Variables      //	
+    //**********************************//
+    public GameObject Floor;
+    public GameObject Wall;
+    public GameObject Rock;
+    public GameObject Mud;
+    public GameObject Secret_Floor;
+    public GameObject Trap;
+    public GameObject Spawner;
+    public GameObject Puzzle_Floor;
+    public GameObject Dig;
+    public GameObject Puzzle_Hallway;
+    public GameObject Hallway;
+    public GameObject Dig_Tile;
+    public GameObject Boulder;
+    public GameObject Start_Tile;
+    public GameObject End_Tile;
 	private int board_width, board_height;
 	private int min_hallway_length, max_hallway_length;
 	private bool hallwayTurns;
@@ -107,7 +124,7 @@ public class BoardGenerator
 		setDefaultParameters();
 	}
 
-	BoardGenerator(int width, int height)
+	public BoardGenerator(int width, int height)
 	{
 		setBoardSize(width, height);
 		setDungeonDepth(1);
@@ -208,12 +225,12 @@ public class BoardGenerator
 	//**********************************//
 	public static int random(int x)
 	{
-		Random rand = new Random();
+		//Random rand = new Random();
 		
 		if (x < 0)
 			x *= -1;
 
-		return rand.Next(0, x);
+		return Random.Range(0, x);
 	}
 
 	public static int random_range(int a, int b)
@@ -222,9 +239,9 @@ public class BoardGenerator
 
 		// We've gotta be safe
 		if (a < b)
-			return rand.Next(a, b);
+			return Random.Range(a, b);
 		else
-			return rand.Next(b, a);
+			return Random.Range(b, a);
 	}
 
 	public static bool chance(int outOf100)
@@ -439,8 +456,8 @@ public class BoardGenerator
 			// Change the width every step for varied tunnels
 			int width = random_range(this.min_tunnel_width, this.max_tunnel_width);
 			int lBound, rBound, uBound, dBound;
-			lBound = -(int)Math.Floor((double)width/2);
-			rBound = (int)Math.Ceiling((double)width/2);
+			lBound = -(int)Mathf.Floor((int)width/2);
+			rBound = (int)Mathf.Ceil((int)width/2);
 			uBound = lBound;
 			dBound = rBound;
 
@@ -504,10 +521,10 @@ public class BoardGenerator
 		if (this.centeredRooms)
 		{
 			// Create rooms around x and y
-			lBound = -(int) Math.Floor((double) _width/2);
-			rBound = (int) Math.Ceiling((double) _width/2);
-			uBound = -(int) Math.Floor((double) _height/2);
-			dBound = (int) Math.Ceiling((double) _height/2);
+			lBound = -(int) Mathf.Floor((int) _width/2);
+			rBound = (int) Mathf.Ceil((int) _width/2);
+			uBound = -(int) Mathf.Floor((int) _height/2);
+			dBound = (int) Mathf.Ceil((int) _height/2);
 		}
 		else
 		{
@@ -575,10 +592,10 @@ public class BoardGenerator
 		if (this.centeredRooms)
 		{
 			// Create rooms around x and y
-			lBound = -(int) Math.Floor((double) _width/2);
-			rBound = (int) Math.Ceiling((double) _width/2);
-			uBound = -(int) Math.Floor((double) _height/2);
-			dBound = (int) Math.Ceiling((double) _height/2);
+			lBound = -(int) Mathf.Floor((int) _width/2);
+			rBound = (int) Mathf.Ceil((int) _width/2);
+			uBound = -(int) Mathf.Floor((int) _height/2);
+			dBound = (int) Mathf.Ceil((int) _height/2);
 		}
 		else
 		{
@@ -787,47 +804,135 @@ public class BoardGenerator
 				switch (mode)
 				{
 					case 0: // Prints short values and empty spaces
-						//Console.Write("["+(short)this.map[x,y].tileType+"]");
+						//Debug.Log("["+(short)this.map[x,y].tileType+"]");
 						if (this.map[x,y].tileType == TileSet.NOTHING)
-							Console.Write(" ");
+							Debug.Log(" ");
+                            
 						else
-							Console.Write((short)this.map[x,y].tileType);
-						break;
+							Debug.Log((short)this.map[x,y].tileType);
+                            
+                        break;
 					case 1: // Prints enum names
-						Console.Write(this.map[x,y].tileType+" ");
+						Debug.Log(this.map[x,y].tileType+" ");
 						break;
 					case 2: // Prints short values without empty spaces
 						if (this.map[x, y].tileType != TileSet.NOTHING)
-							Console.Write("["+(short)this.map[x,y].tileType+"]");
+							Debug.Log("["+(short)this.map[x,y].tileType+"]");
+                            Instantiate(Floor, new Vector2(x,y), Quaternion.identity);
 						break;
 				}
 			}
-
-			Console.WriteLine();
+            
+			Debug.Log("\n");
 		}
 	}
 
-	public void printRecords()
+    public void GenMap(int mode)
+    {
+        for (int y = 0; y < this.board_height; y++)
+        {
+            for (int x = 0; x < this.board_width; x++)
+            {
+                switch (mode)
+                {
+                    case 0: // Prints short values and empty spaces
+                            //Debug.Log("["+(short)this.map[x,y].tileType+"]");
+                        if (this.map[x, y].tileType == TileSet.NOTHING) {
+                            //Debug.Log(" ");
+
+                        } else
+                        {
+                            //Debug.Log((short)this.map[x, y].tileType);
+                            float offsetforTiles = 0.3f;
+                            switch (this.map[x, y].tileType) {
+                                case TileSet.FLOOR:
+                                    Debug.Log("[Floor]");
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.WALL:
+                                    Debug.Log("[Wall]");
+                                    Instantiate(Wall, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.ROCK:
+                                    Debug.Log("[Rock]");
+                                    Instantiate(Rock, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.MUD:
+                                    Debug.Log("[Mud]");
+                                    Instantiate(Mud, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                 break;
+                                case TileSet.HALLWAY:
+                                    Debug.Log("[Hallway]");
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.SPAWNER:
+                                    Debug.Log("[Spawner]");
+                                    Instantiate(Spawner, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.SECRET_FLOOR:
+                                    Debug.Log("[Secret_Floor]");
+                                    Instantiate(Secret_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.PUZZLE_FLOOR:
+                                    Debug.Log("[Puzzle_Floor]");
+                                    Instantiate(Puzzle_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.PUZZLE_HALLWAY:
+                                    Debug.Log("[Puzzle_Hallway]");
+                                    Instantiate(Puzzle_Hallway, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.TRAP:
+                                    Debug.Log("[Trap]");
+                                    Instantiate(Trap, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.NOTHING:
+                                    break;
+                                case TileSet.BOULDER:
+                                    Debug.Log("[Boulder]");
+                                    Instantiate(Boulder, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                default:
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+
+                            }
+                        }
+                        break;
+                    case 1: // Prints enum names
+                        Debug.Log(this.map[x, y].tileType + " ");
+                        break;
+                    case 2: // Prints short values without empty spaces
+                        if (this.map[x, y].tileType != TileSet.NOTHING)
+                            Debug.Log("[" + (short)this.map[x, y].tileType + "]");
+                        Instantiate(Floor, new Vector2(x * 10, y * 10), Quaternion.identity);
+                        break;
+                }
+            }
+            
+        }
+    }
+
+    public void printRecords()
 	{
-		Console.WriteLine("======= Records =======");
-
+		Debug.Log("======= Records =======");
+       
 		// Grid-Centric
-		Console.WriteLine("Total Tiles: "+this.tileCounter);
-		Console.WriteLine("Total Walls: "+this.wallCounter);
-		Console.WriteLine("Total Spawns: "+this.spawnCounter);
-		Console.WriteLine("Total Traps: "+this.trapCounter);
-		Console.WriteLine("Total Items: "+this.itemCounter);
-		Console.WriteLine("Total Dig Tiles: "+this.digCounter);
+		Debug.Log("Total Tiles: "+this.tileCounter);
+		Debug.Log("Total Walls: "+this.wallCounter);
+		Debug.Log("Total Spawns: "+this.spawnCounter);
+		Debug.Log("Total Traps: "+this.trapCounter);
+		Debug.Log("Total Items: "+this.itemCounter);
+		Debug.Log("Total Dig Tiles: "+this.digCounter);
 
-		Console.WriteLine();
+        Debug.Log("\n");
 
 		// Concept-centric
-		Console.WriteLine("Total Offshoots: "+this.offshootCounter);
-		Console.WriteLine("Total Rooms: "+this.roomCounter);
-		Console.WriteLine("Total Hallways: "+this.hallwayCounter);
-		Console.WriteLine("Total Tunnels: "+this.tunnelCounter);
-		Console.WriteLine("Total Secrets: "+this.secretCounter);
-		Console.WriteLine("Total Puzzles: "+this.puzzleCounter);
+		Debug.Log("Total Offshoots: "+this.offshootCounter);
+		Debug.Log("Total Rooms: "+this.roomCounter);
+		Debug.Log("Total Hallways: "+this.hallwayCounter);
+		Debug.Log("Total Tunnels: "+this.tunnelCounter);
+		Debug.Log("Total Secrets: "+this.secretCounter);
+		Debug.Log("Total Puzzles: "+this.puzzleCounter);
 	}
 
 	//!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!&!//
@@ -844,7 +949,7 @@ public class BoardGenerator
 
 		// Testing
 		board_gen.printRecords();
-		Console.WriteLine();
+		Debug.Log();
 		board_gen.printMap(2);
 	}
 	*/
