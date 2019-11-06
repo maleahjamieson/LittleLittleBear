@@ -30,7 +30,7 @@ public abstract class BasicEntity : MonoBehaviour
     {
         Vector2 sPos = transform.position; //Start Position
         Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
-        // if (checkBoardMove(ePos)){}
+
         
         if (true)
         {
