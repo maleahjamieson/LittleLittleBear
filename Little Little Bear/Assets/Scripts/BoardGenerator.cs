@@ -12,6 +12,8 @@
 // This generator was originally made for the class COP 4331, where Project Group 11
 // chose the Roguelike/Roguelite project and decided on the Little-Little-Bear theme.
 
+
+// Notes: 8 across, 14 up
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,6 +90,8 @@ public class BoardGenerator : MonoBehaviour
 	private int min_tunnel_width, max_tunnel_width;
 	private int min_room_width, max_room_width;
 	private int min_room_height, max_room_height;
+	private int min_secret_room_width, max_secret_room_width;
+	private int min_secret_room_height, max_secret_room_height;
 	private int min_room_count, max_room_count;
 	private int min_secret_room_count, max_secret_room_count;
 	private bool createdPuzzleRoom;
@@ -119,6 +123,7 @@ public class BoardGenerator : MonoBehaviour
 	{
 		setBoardSize(2500, 2500);
 		setDungeonDepth(1);
+		// Random.seed = System.DateTime.Now.Millisecond;
 
 		// Default parameters here
 		setDefaultParameters();
@@ -128,6 +133,7 @@ public class BoardGenerator : MonoBehaviour
 	{
 		setBoardSize(width, height);
 		setDungeonDepth(1);
+		// Random.seed = System.DateTime.Now.Millisecond;
 
 		// Default parameters here
 		setDefaultParameters();
@@ -137,6 +143,7 @@ public class BoardGenerator : MonoBehaviour
 	{
 		setBoardSize(width, height);
 		setDefaultParameters();
+		// Random.seed = System.DateTime.Now.Millisecond;
 
 		setDungeonDepth(depth); // Overwrite default depth
 	}
@@ -158,7 +165,7 @@ public class BoardGenerator : MonoBehaviour
 		this.max_secret_room_count = maxSecretRooms;
 	}
 
-	public void setRoomParams(int minWidth, int minHeight, int maxWidth, int maxHeight, bool centered)
+	public void setRoomParams(int minWidth, int maxWidth, int minHeight, int maxHeight, bool centered)
 	{
 		this.min_room_width = minWidth;
 		this.min_room_height = minHeight;
@@ -166,6 +173,14 @@ public class BoardGenerator : MonoBehaviour
 		this.max_room_height = maxHeight;
 		this.centeredRooms = centered;
 	}
+
+	public void setSecretRoomParams(int minWidth, int maxWidth, int minHeight, int maxHeight)
+	{
+		this.min_secret_room_width = minWidth;
+		this.max_secret_room_width = maxWidth;
+		this.min_secret_room_height = minHeight;
+		this.max_secret_room_height = maxHeight;
+	}	
 
 	public void setHallwayParams(int minLength, int maxLength, bool noTurns)
 	{
@@ -212,9 +227,10 @@ public class BoardGenerator : MonoBehaviour
 	{
 		setDungeonDepth(1);
 		setBoardParams(7, 12, 1, 999);
-		setRoomParams(5, 10, 5, 10, true);
+		setRoomParams(5, 12, 5, 12, true); // Previously, (5, 10, 5, 10, true);
+		setSecretRoomParams(4, 7, 4, 7);
 		setHallwayParams(6, 12, false);
-		setTunnelParams(6, 12, 2, 5);
+		setTunnelParams(6, 12, 1, 5);
 		setOffshootParams(5, 15, 5, 30);
 		setTileParams(50, 50);
 		setMiscParams(40, 70, 100);
@@ -226,22 +242,26 @@ public class BoardGenerator : MonoBehaviour
 	public static int random(int x)
 	{
 		//Random rand = new Random();
-		
-		if (x < 0)
-			x *= -1;
+		int result = Random.Range(0, x+1);
 
-		return Random.Range(0, x);
+		//Debug.Log("random() -> "+result);
+
+		return result;
 	}
 
 	public static int random_range(int a, int b)
 	{
-		Random rand = new Random();
-
+		//Random rand = new Random();
+		int result;
 		// We've gotta be safe
 		if (a < b)
-			return Random.Range(a, b);
+			result = Random.Range(a, b+1);
 		else
-			return Random.Range(b, a);
+			result = Random.Range(b, a+1);
+
+		//Debug.Log("random_range() -> "+result);
+
+		return result;
 	}
 
 	public static bool chance(int outOf100)
@@ -456,8 +476,8 @@ public class BoardGenerator : MonoBehaviour
 			// Change the width every step for varied tunnels
 			int width = random_range(this.min_tunnel_width, this.max_tunnel_width);
 			int lBound, rBound, uBound, dBound;
-			lBound = -(int)Mathf.Floor((int)width/2);
-			rBound = (int)Mathf.Ceil((int)width/2);
+			lBound = -(int)Mathf.Floor((int)width/2)-1;
+			rBound = (int)Mathf.Ceil((int)width/2)+1;
 			uBound = lBound;
 			dBound = rBound;
 
@@ -473,20 +493,25 @@ public class BoardGenerator : MonoBehaviour
 						this.tileCounter++;
 						this.digCounter++;
 					}
+					///*
 					else
 					{
 						// Move past the used tiles
-						while (this.map[m.x, m.y].tileType != TileSet.NOTHING)
+						if (j == 0 && k == 0)
 						{
-							m.x += move_x(m.dir);
-							m.y += move_y(m.dir);
-						}
+							while (this.map[m.x, m.y].tileType != TileSet.NOTHING && this.map[m.x, m.y].tileType != TileSet.DIG_TILE)
+							{
+								m.x += move_x(m.dir);
+								m.y += move_y(m.dir);
+							}
 
-						// Place our hallway piece
-						this.map[m.x + j, m.y + k].tileType = TileSet.DIG_TILE;
-						this.tileCounter++;
-						this.digCounter++;
+							// Place our hallway piece
+							this.map[m.x + j, m.y + k].tileType = TileSet.DIG_TILE;
+							this.tileCounter++;
+							this.digCounter++;
+						}
 					}
+					//*/
 				}
 			}
 
@@ -513,8 +538,10 @@ public class BoardGenerator : MonoBehaviour
 	private void room(Position p)
 	{
 		Position m = p;
+		Debug.Log("Room is picking width ("+this.min_room_width+","+this.max_room_width+") and height ("+this.min_room_height+","+this.max_room_height+")");
 		int _width = random_range(this.min_room_width, this.max_room_width);
 		int _height = random_range(this.min_room_height, this.max_room_height);
+		Debug.Log("Picked width and height: "+_width+", "+_height);
 
 		int lBound, rBound, uBound, dBound;
 
@@ -584,8 +611,8 @@ public class BoardGenerator : MonoBehaviour
 	{
 		// For now, just use the normal room script
 		Position m = p;
-		int _width = random_range(this.min_room_width, this.max_room_width);
-		int _height = random_range(this.min_room_height, this.max_room_height);
+		int _width = random_range(this.min_secret_room_width, this.max_secret_room_width);
+		int _height = random_range(this.min_secret_room_height, this.max_secret_room_height);
 
 		int lBound, rBound, uBound, dBound;
 
@@ -620,7 +647,7 @@ public class BoardGenerator : MonoBehaviour
 					type = TileSet.SPAWNER;
 
 				// Set down the tile we chose if nothing is there
-				if (this.map[m.x + xx, m.y + yy].tileType == TileSet.NOTHING || this.map[m.x + xx, m.y + yy].tileType == TileSet.HALLWAY)
+				if (this.map[m.x + xx, m.y + yy].tileType == TileSet.NOTHING || this.map[m.x + xx, m.y + yy].tileType == TileSet.HALLWAY || this.map[m.x + xx, m.y + yy].tileType == TileSet.DIG_TILE)
 				{
 					this.map[m.x + xx, m.y + yy].tileType = type;
 					this.tileCounter++;
@@ -843,11 +870,17 @@ public class BoardGenerator : MonoBehaviour
                         } else
                         {
                             //Debug.Log((short)this.map[x, y].tileType);
-                            float offsetforTiles = 0.3f;
+                            //float offsetforTiles = 0.3f;
+                            float offsetforTiles = 0.32f;
+
                             switch (this.map[x, y].tileType) {
                                 case TileSet.FLOOR:
                                     Debug.Log("[Floor]");
                                     Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.DIG_TILE:
+                                	Debug.Log("[DigTile]");
+                                	Instantiate(Dig_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                 break;
                                 case TileSet.WALL:
                                     Debug.Log("[Wall]");

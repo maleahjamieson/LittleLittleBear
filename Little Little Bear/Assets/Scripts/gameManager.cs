@@ -33,6 +33,7 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu = GameObject.Find("CreditsMenu");
 			CreditsMenu.SetActive(false);
 		}
+		Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         board = new BoardGenerator(1000,1000);
         board.generate();
         board.printRecords();
@@ -44,6 +45,7 @@ public class gameManager : MonoBehaviour {
         board.Spawner = GameObject.Find("TileForestSpawner");
         board.Secret_Floor = GameObject.Find("TileForestSecretGround");
         board.Trap = GameObject.Find("TileForestTrap");
+        board.Dig_Tile = GameObject.Find("TileForestDig");
         board.GenMap(0);
 	}
 	
