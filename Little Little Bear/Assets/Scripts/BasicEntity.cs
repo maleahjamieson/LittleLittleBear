@@ -57,7 +57,7 @@ public abstract class BasicEntity : MonoBehaviour
                 case TileSet.NOTHING:
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
-                    return false;
+                    return true;
 
                 default: // Currently default since moving is only here
                     Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
