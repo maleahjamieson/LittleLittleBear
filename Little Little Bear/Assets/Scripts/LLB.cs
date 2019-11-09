@@ -13,7 +13,6 @@ public class LLB : BasicEntity
     private bool turnEnd;
     private bool dig;
     private bool checkInput;
-
     protected override void Start()
     {        
         turnEnd = false;
@@ -64,7 +63,8 @@ public class LLB : BasicEntity
             if (horizontal != 0 || vertical != 0)
             {
                 checkInput = false;
-                if (Move(horizontal, vertical))
+                Debug.Log("Lets MOVE!");
+                if (Move(CurrentX + horizontal, CurrentY + vertical))
                 {
                     if (horizontal == -1)
                         moveLeft = true;
@@ -78,6 +78,7 @@ public class LLB : BasicEntity
             }
         }
         
+
 
     }
     void FixedUpdate()
@@ -139,16 +140,16 @@ public class LLB : BasicEntity
     // Yes these IEnumerators are sloppy, this will be converged into a single IEnumerator soon
     private IEnumerator wait2Move(char c, float t)
     {
-        
+        float offsetforTiles = board.offsetforTiles;
         switch (c)
         {
             case 'a': //attack
                 {
                     if (!flipped)
                     {
-                        transform.Translate((Vector2.left) / 2);
+                        transform.Translate((Vector2.left) * offsetforTiles / 2);
                         yield return new WaitForSeconds(t);
-                        transform.Translate((Vector2.right) / 2);
+                        transform.Translate((Vector2.right) * offsetforTiles / 2);
                     }
                     else
                     {
@@ -160,31 +161,31 @@ public class LLB : BasicEntity
                 break;
             case 'l':
                 {
-                    transform.Translate((Vector2.left)/2);
+                    transform.Translate((Vector2.left) * offsetforTiles / 2);
                     yield return new WaitForSeconds(t);
-                    transform.Translate((Vector2.left) / 2);
+                    transform.Translate((Vector2.left) * offsetforTiles / 2);
                 }
                 
                 break;
             case 'r':
                 {
-                    transform.Translate((Vector2.right) / 2);
+                    transform.Translate((Vector2.right) * offsetforTiles / 2);
                     yield return new WaitForSeconds(t);
-                    transform.Translate((Vector2.right) / 2);
+                    transform.Translate((Vector2.right) * offsetforTiles / 2);
                 }
                 break;
             case 'u':
                 {
-                    transform.Translate((Vector2.up) / 2);
+                    transform.Translate((Vector2.up) * offsetforTiles / 2);
                     yield return new WaitForSeconds(t);
-                    transform.Translate((Vector2.up) / 2);
+                    transform.Translate((Vector2.up) * offsetforTiles / 2);
                 }
                 break;
             case 'd':
                 {
-                    transform.Translate((Vector2.down) / 2);
+                    transform.Translate((Vector2.down) * offsetforTiles / 2);
                     yield return new WaitForSeconds(t);
-                    transform.Translate((Vector2.down) / 2);
+                    transform.Translate((Vector2.down) * offsetforTiles / 2);
                 }
                 break;
             case 'o': //Other, just wait for animation to end

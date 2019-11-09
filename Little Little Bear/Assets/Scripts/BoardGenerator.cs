@@ -28,7 +28,18 @@ public enum TileSet : short
 	PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
 	PUZZLE_HALLWAY, START_TILE, END_TILE
 };
-
+public enum ItemSet : short
+{
+    NOTHING = -1, FLOOR = 0,
+    WALL, HALLWAY, TRAP, SPAWNER, SECRET_FLOOR,
+    PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
+    PUZZLE_HALLWAY, START_TILE, END_TILE
+};
+public enum EntitySet : int
+{
+    NOTHING = 0, PLAYER = 1,
+    Enemy1, Enemy2, Item,
+};
 public enum Direction
 {
 	ERROR = -1, NORTH = 0, SOUTH, EAST, WEST
@@ -44,13 +55,13 @@ public struct Position
 public struct GridCell
 {
 	public TileSet tileType;
-	public Entity entity;
-	public Item item;
+    public EntitySet entityType;
+    public Item item;
 }
 
 public class Entity
 {
-	// Placeholder
+    public EntitySet entityType;
 }
 
 public class Item
@@ -82,7 +93,13 @@ public class BoardGenerator : MonoBehaviour
     public GameObject Boulder;
     public GameObject Start_Tile;
     public GameObject End_Tile;
-	private int board_width, board_height;
+
+    public GameObject HamsterEntity; // LLB basically
+
+    public float offsetforTiles = 0.32f;
+
+
+    private int board_width, board_height;
 	private int min_hallway_length, max_hallway_length;
 	private bool hallwayTurns;
 	private bool centeredRooms;
@@ -368,7 +385,11 @@ public class BoardGenerator : MonoBehaviour
 			{
 				this.map[x, y].tileType = TileSet.NOTHING;
 			}
-		}
+            for (int y = 0; y < this.board_height; y++)
+            {
+                this.map[x, y].entityType = EntitySet.NOTHING;
+            }
+        }
 
 		this.createdPuzzleRoom = false;
 	}
@@ -768,6 +789,7 @@ public class BoardGenerator : MonoBehaviour
 		int numRooms = random_range(this.min_room_count, this.max_room_count);
 
 		// Starting room
+
 		start_room(g);
 
 		for (int i = 0; i < numRooms; i++)
@@ -871,57 +893,71 @@ public class BoardGenerator : MonoBehaviour
                         {
                             //Debug.Log((short)this.map[x, y].tileType);
                             //float offsetforTiles = 0.3f;
-                            float offsetforTiles = 0.32f;
-
+                            
+                            if (x == 499 && y == 500) {
+                                Debug.Log("GROUND IS WITH " + this.map[x, y].tileType);
+                            }
                             switch (this.map[x, y].tileType) {
+                                case TileSet.START_TILE:
+                                    Debug.Log("START TILE POSITION X: " + x + " y: " + y);
+                                    HamsterEntity.GetComponent<BasicEntity>().CurrentX = x;
+                                    HamsterEntity.GetComponent<BasicEntity>().CurrentY = y;
+                                    HamsterEntity.transform.position = new Vector2(x * offsetforTiles, y * offsetforTiles);
+                                    Instantiate(Start_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    //LLB starts here put their currentposition to here
+                                    break;
+                                case TileSet.END_TILE:
+                                    Instantiate(End_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    //LLB starts here put their currentposition to here
+                                    break;
                                 case TileSet.FLOOR:
-                                    Debug.Log("[Floor]");
+                                    //Debug.Log("[Floor]");
                                     Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                 break;
                                 case TileSet.DIG_TILE:
-                                	Debug.Log("[DigTile]");
+                                	//Debug.Log("[DigTile]");
                                 	Instantiate(Dig_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                 break;
                                 case TileSet.WALL:
-                                    Debug.Log("[Wall]");
+                                   // Debug.Log("[Wall]");
                                     Instantiate(Wall, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                 break;
                                 case TileSet.ROCK:
-                                    Debug.Log("[Rock]");
+                                    //Debug.Log("[Rock]");
                                     Instantiate(Rock, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.MUD:
-                                    Debug.Log("[Mud]");
+                                    //Debug.Log("[Mud]");
                                     Instantiate(Mud, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                  break;
                                 case TileSet.HALLWAY:
-                                    Debug.Log("[Hallway]");
+                                    //Debug.Log("[Hallway]");
                                     Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.SPAWNER:
-                                    Debug.Log("[Spawner]");
+                                    //Debug.Log("[Spawner]");
                                     Instantiate(Spawner, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.SECRET_FLOOR:
-                                    Debug.Log("[Secret_Floor]");
+                                    //Debug.Log("[Secret_Floor]");
                                     Instantiate(Secret_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.PUZZLE_FLOOR:
-                                    Debug.Log("[Puzzle_Floor]");
+                                    //Debug.Log("[Puzzle_Floor]");
                                     Instantiate(Puzzle_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.PUZZLE_HALLWAY:
-                                    Debug.Log("[Puzzle_Hallway]");
+                                   // Debug.Log("[Puzzle_Hallway]");
                                     Instantiate(Puzzle_Hallway, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.TRAP:
-                                    Debug.Log("[Trap]");
+                                    //Debug.Log("[Trap]");
                                     Instantiate(Trap, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 case TileSet.NOTHING:
                                     break;
                                 case TileSet.BOULDER:
-                                    Debug.Log("[Boulder]");
+                                    //Debug.Log("[Boulder]");
                                     Instantiate(Boulder, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     break;
                                 default:

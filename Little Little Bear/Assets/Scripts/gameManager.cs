@@ -9,7 +9,7 @@ public class gameManager : MonoBehaviour {
 	//for turning credits on or off
 	public GameObject CreditsMenu;
     public GameObject SaveMenu;
- 
+    public GameObject LLB; //LLB entity
 
 	//for pausing
 	public bool Paused;
@@ -36,7 +36,7 @@ public class gameManager : MonoBehaviour {
 		Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         board = new BoardGenerator(1000,1000);
         board.generate();
-        board.printRecords();
+        //board.printRecords();
         board.Floor = GameObject.Find("TileForestGround");
         board.Wall = GameObject.Find("TileForestWall");
         board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
@@ -46,7 +46,11 @@ public class gameManager : MonoBehaviour {
         board.Secret_Floor = GameObject.Find("TileForestSecretGround");
         board.Trap = GameObject.Find("TileForestTrap");
         board.Dig_Tile = GameObject.Find("TileForestDig");
+        board.Start_Tile = GameObject.Find("TileForestStartTile");
+        board.End_Tile = GameObject.Find("TileForestEndTile");
+        board.HamsterEntity = GameObject.Find("Player");
         board.GenMap(0);
+        Debug.Log("GM SEES " + board.map[499, 500].tileType);
 	}
 	
 	// Update is called once per frame
