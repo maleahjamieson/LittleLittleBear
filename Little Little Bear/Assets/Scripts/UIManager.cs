@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 //enum that contains all UI buttons
-public enum ClickType {MainMenu, Pause, NewGame, LoadGame, Settings, Credits}
+public enum ClickType {MainMenu, Pause, NewGame, LoadGame, Settings, Credits, Music, ExitMenu, Inventory
+
+}
 public class UIManager : MonoBehaviour {
 	
 	static public gameManager GManager;
@@ -61,6 +63,28 @@ public class UIManager : MonoBehaviour {
 				gameManager.instance.CreditsMenu.SetActive(false);
 			}
 			break;
+            case ClickType.ExitMenu:
+                if (!gameManager.instance.BackgroundMenu.activeSelf)
+                {
+                    gameManager.instance.BackgroundMenu.SetActive(true);
+                }
+                else
+                {
+                    gameManager.instance.BackgroundMenu.SetActive(false);
+                }
+                break;
+            case ClickType.Inventory:
+                if (!gameManager.instance.InventoryMenu.activeSelf)
+                {
+                    gameManager.instance.InventoryMenu.SetActive(true);
+                }
+                else
+                {
+                    gameManager.instance.InventoryMenu.SetActive(false);
+                }
+                break;
+            case ClickType.Music:
+                break;
 		}
 
 	}
