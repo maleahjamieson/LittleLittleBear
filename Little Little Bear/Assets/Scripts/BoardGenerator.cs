@@ -96,7 +96,7 @@ public class BoardGenerator : MonoBehaviour
 
     public GameObject HamsterEntity; // LLB basically
 
-    public float offsetforTiles = 0.32f;
+    public float offsetforTiles = 1f;
 
 
     private int board_width, board_height;
@@ -900,8 +900,8 @@ public class BoardGenerator : MonoBehaviour
                             switch (this.map[x, y].tileType) {
                                 case TileSet.START_TILE:
                                     Debug.Log("START TILE POSITION X: " + x + " y: " + y);
-                                    HamsterEntity.GetComponent<BasicEntity>().CurrentX = x;
-                                    HamsterEntity.GetComponent<BasicEntity>().CurrentY = y;
+                                    HamsterEntity.GetComponent<BasicEntity>().currentX = x;
+                                    HamsterEntity.GetComponent<BasicEntity>().currentY = y;
                                     HamsterEntity.transform.position = new Vector2(x * offsetforTiles, y * offsetforTiles);
                                     Instantiate(Start_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
                                     //LLB starts here put their currentposition to here
