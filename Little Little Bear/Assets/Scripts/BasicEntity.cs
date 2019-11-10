@@ -10,6 +10,7 @@ public abstract class BasicEntity : MonoBehaviour
     public int CurrentX; // CurrentPosition
     public int CurrentY;
 
+    public int range; // Maximum range of attack
 
     // List of generic action boolean values
     public bool moveUp;
