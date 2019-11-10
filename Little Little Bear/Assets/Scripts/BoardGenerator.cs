@@ -58,12 +58,42 @@ public class Item
 // The map array shall be accessed in this fashion: //
 //        map[x, y]                                 //
 //**************************************************//
+<<<<<<< Updated upstream
 public class BoardGenerator
 {	
 	//**********************************//
 	//      Parameters & Variables      //
 	//**********************************//
 	private int board_width, board_height;
+=======
+public class BoardGenerator : MonoBehaviour
+{
+    //**********************************//
+    //      Parameters & Variables      //	
+    //**********************************//
+    public GameObject Floor;
+    public GameObject Wall;
+    public GameObject Rock;
+    public GameObject Mud;
+    public GameObject Secret_Floor;
+    public GameObject Trap;
+    public GameObject Spawner;
+    public GameObject Puzzle_Floor;
+    public GameObject Dig;
+    public GameObject Puzzle_Hallway;
+    public GameObject Hallway;
+    public GameObject Dig_Tile;
+    public GameObject Boulder;
+    public GameObject Start_Tile;
+    public GameObject End_Tile;
+
+    public GameObject HamsterEntity; // LLB basically
+
+    public float offsetforTiles = 1f;
+
+
+    private int board_width, board_height;
+>>>>>>> Stashed changes
 	private int min_hallway_length, max_hallway_length;
 	private bool hallwayTurns;
 	private bool centeredRooms;
@@ -807,7 +837,116 @@ public class BoardGenerator
 		}
 	}
 
+<<<<<<< Updated upstream
 	public void printRecords()
+=======
+    public void GenMap(int mode)
+    {
+        for (int y = 0; y < this.board_height; y++)
+        {
+            for (int x = 0; x < this.board_width; x++)
+            {
+                switch (mode)
+                {
+                    case 0: // Prints short values and empty spaces
+                            //Debug.Log("["+(short)this.map[x,y].tileType+"]");
+                        if (this.map[x, y].tileType == TileSet.NOTHING) {
+                            //Debug.Log(" ");
+
+                        } else
+                        {
+                            //Debug.Log((short)this.map[x, y].tileType);
+                            //float offsetforTiles = 0.3f;
+                            
+                            if (x == 499 && y == 500) {
+                                Debug.Log("GROUND IS WITH " + this.map[x, y].tileType);
+                            }
+                            switch (this.map[x, y].tileType) {
+                                case TileSet.START_TILE:
+                                    Debug.Log("START TILE POSITION X: " + x + " y: " + y);
+                                    HamsterEntity.GetComponent<BasicEntity>().currentX = x;
+                                    HamsterEntity.GetComponent<BasicEntity>().currentY = y;
+                                    HamsterEntity.transform.position = new Vector2(x * offsetforTiles, y * offsetforTiles);
+                                    Instantiate(Start_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    //LLB starts here put their currentposition to here
+                                    break;
+                                case TileSet.END_TILE:
+                                    Instantiate(End_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    //LLB starts here put their currentposition to here
+                                    break;
+                                case TileSet.FLOOR:
+                                    //Debug.Log("[Floor]");
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.DIG_TILE:
+                                	//Debug.Log("[DigTile]");
+                                	Instantiate(Dig_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.WALL:
+                                   // Debug.Log("[Wall]");
+                                    Instantiate(Wall, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                break;
+                                case TileSet.ROCK:
+                                    //Debug.Log("[Rock]");
+                                    Instantiate(Rock, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.MUD:
+                                    //Debug.Log("[Mud]");
+                                    Instantiate(Mud, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                 break;
+                                case TileSet.HALLWAY:
+                                    //Debug.Log("[Hallway]");
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.SPAWNER:
+                                    //Debug.Log("[Spawner]");
+                                    Instantiate(Spawner, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.SECRET_FLOOR:
+                                    //Debug.Log("[Secret_Floor]");
+                                    Instantiate(Secret_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.PUZZLE_FLOOR:
+                                    //Debug.Log("[Puzzle_Floor]");
+                                    Instantiate(Puzzle_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.PUZZLE_HALLWAY:
+                                   // Debug.Log("[Puzzle_Hallway]");
+                                    Instantiate(Puzzle_Hallway, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.TRAP:
+                                    //Debug.Log("[Trap]");
+                                    Instantiate(Trap, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                case TileSet.NOTHING:
+                                    break;
+                                case TileSet.BOULDER:
+                                    //Debug.Log("[Boulder]");
+                                    Instantiate(Boulder, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+                                default:
+                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                                    break;
+
+                            }
+                        }
+                        break;
+                    case 1: // Prints enum names
+                        Debug.Log(this.map[x, y].tileType + " ");
+                        break;
+                    case 2: // Prints short values without empty spaces
+                        if (this.map[x, y].tileType != TileSet.NOTHING)
+                            Debug.Log("[" + (short)this.map[x, y].tileType + "]");
+                        Instantiate(Floor, new Vector2(x * 10, y * 10), Quaternion.identity);
+                        break;
+                }
+            }
+            
+        }
+    }
+
+    public void printRecords()
+>>>>>>> Stashed changes
 	{
 		Console.WriteLine("======= Records =======");
 

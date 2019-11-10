@@ -3,6 +3,7 @@ guid: 28da28eb5e847034cb9c0d6a95e1a662
 TextureImporter:
   internalIDToNameTable:
   - first:
+<<<<<<< Updated upstream
       213: -377221195808790752
     second: SwingAni_0
   - first:
@@ -25,6 +26,30 @@ TextureImporter:
     second: SwingAni_6
   - first:
       213: 1711603702981968788
+=======
+      213: 21300000
+    second: SwingAni_0
+  - first:
+      213: 21300002
+    second: SwingAni_1
+  - first:
+      213: 21300004
+    second: SwingAni_2
+  - first:
+      213: 21300006
+    second: SwingAni_3
+  - first:
+      213: 21300008
+    second: SwingAni_4
+  - first:
+      213: 21300010
+    second: SwingAni_5
+  - first:
+      213: 21300012
+    second: SwingAni_6
+  - first:
+      213: 21300014
+>>>>>>> Stashed changes
     second: SwingAni_7
   externalObjects: {}
   serializedVersion: 10
@@ -55,7 +80,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -65,7 +90,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 1
+  spriteExtrude: 0
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -98,12 +123,12 @@ TextureImporter:
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 0
+    overridden: 1
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -125,7 +150,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: d02087027f7f5804a925e139f86d3323
+<<<<<<< Updated upstream
       internalID: -377221195808790752
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -146,7 +175,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9e8125ebbd9b4bd4e862647f331d74f1
+<<<<<<< Updated upstream
       internalID: 6151490956148979212
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -167,7 +200,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 7a9db81c46759b043b7ce0a5775b73be
+<<<<<<< Updated upstream
       internalID: -1347398764666821245
+=======
+      internalID: 21300004
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -188,7 +225,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 749d635745587904585055595bfd0ffe
+<<<<<<< Updated upstream
       internalID: 8789129196438047594
+=======
+      internalID: 21300006
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -209,7 +250,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 5d7cb1d3c6cfd214baa242ea90bbb070
+<<<<<<< Updated upstream
       internalID: 3108266045330193202
+=======
+      internalID: 21300008
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -230,7 +275,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 003314980732c0143b69ba7ae2af0735
+<<<<<<< Updated upstream
       internalID: 5627146840519276160
+=======
+      internalID: 21300010
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -251,7 +300,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1dd442f99bde0624b8103edc392fa6f4
+<<<<<<< Updated upstream
       internalID: -4156117915721028271
+=======
+      internalID: 21300012
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -272,7 +325,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 2b4cfa44c4f87674d8d11b732a851d6e
+<<<<<<< Updated upstream
       internalID: 1711603702981968788
+=======
+      internalID: 21300014
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []

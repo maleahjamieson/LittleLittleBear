@@ -3,10 +3,17 @@ guid: 16e6c5ce8f222ad478f734852a6896ac
 TextureImporter:
   internalIDToNameTable:
   - first:
+<<<<<<< Updated upstream
       213: -8624613224640105671
     second: SitAni_0
   - first:
       213: -3751440598814617633
+=======
+      213: 21300000
+    second: SitAni_0
+  - first:
+      213: 21300002
+>>>>>>> Stashed changes
     second: SitAni_1
   externalObjects: {}
   serializedVersion: 10
@@ -37,7 +44,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 4
     mipBias: -100
     wrapU: 1
@@ -78,11 +85,11 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 29
+    textureFormat: 4
     textureCompression: 0
-    compressionQuality: 100
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
@@ -99,7 +106,7 @@ TextureImporter:
         y: 0
         width: 64
         height: 64
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -107,7 +114,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 458b7bb726cb1144fbc0814137ad26d5
+<<<<<<< Updated upstream
       internalID: -8624613224640105671
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -128,7 +139,11 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 0afaa3d977933ea4da9a123b906f226b
+<<<<<<< Updated upstream
       internalID: -3751440598814617633
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
