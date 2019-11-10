@@ -3,10 +3,17 @@ guid: 2947b8b4aef8ad14f9ad3b562a0114a9
 TextureImporter:
   internalIDToNameTable:
   - first:
+<<<<<<< Updated upstream
       213: -1331291199273325092
     second: WalkAni_0
   - first:
       213: 8342974697891487497
+=======
+      213: 21300000
+    second: WalkAni_0
+  - first:
+      213: 21300002
+>>>>>>> Stashed changes
     second: WalkAni_1
   externalObjects: {}
   serializedVersion: 10
@@ -81,7 +88,11 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
+<<<<<<< Updated upstream
     textureCompression: 1
+=======
+    textureCompression: 0
+>>>>>>> Stashed changes
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -108,10 +119,14 @@ TextureImporter:
       bones: []
 <<<<<<< Updated upstream
       spriteID: 1e481fe862e30604d91446e16e2b1f48
+<<<<<<< Updated upstream
 =======
       spriteID: d2423f1c0bf2bb64691f093c3e075f92
 >>>>>>> Stashed changes
       internalID: -1331291199273325092
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []
@@ -133,10 +148,14 @@ TextureImporter:
       bones: []
 <<<<<<< Updated upstream
       spriteID: 679ad220512eb9f44964e25d5aa3b116
+<<<<<<< Updated upstream
 =======
       spriteID: 63a2db924757add4e9b8acdc5120c932
 >>>>>>> Stashed changes
       internalID: 8342974697891487497
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
       vertices: []
       indices: 
       edges: []

@@ -4,6 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       213: -377221195808790752
     second: SwingAni_0
   - first:
@@ -27,6 +28,8 @@ TextureImporter:
   - first:
       213: 1711603702981968788
 =======
+=======
+>>>>>>> Stashed changes
       213: 21300000
     second: SwingAni_0
   - first:
@@ -49,6 +52,9 @@ TextureImporter:
     second: SwingAni_6
   - first:
       213: 21300014
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     second: SwingAni_7
   externalObjects: {}
@@ -151,7 +157,11 @@ TextureImporter:
       bones: []
       spriteID: d02087027f7f5804a925e139f86d3323
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -377221195808790752
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
 =======
       internalID: 21300000
 >>>>>>> Stashed changes
@@ -176,7 +186,11 @@ TextureImporter:
       bones: []
       spriteID: 9e8125ebbd9b4bd4e862647f331d74f1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 6151490956148979212
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
 =======
       internalID: 21300002
 >>>>>>> Stashed changes
@@ -201,7 +215,11 @@ TextureImporter:
       bones: []
       spriteID: 7a9db81c46759b043b7ce0a5775b73be
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -1347398764666821245
+=======
+      internalID: 21300004
+>>>>>>> Stashed changes
 =======
       internalID: 21300004
 >>>>>>> Stashed changes
@@ -226,7 +244,11 @@ TextureImporter:
       bones: []
       spriteID: 749d635745587904585055595bfd0ffe
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 8789129196438047594
+=======
+      internalID: 21300006
+>>>>>>> Stashed changes
 =======
       internalID: 21300006
 >>>>>>> Stashed changes
@@ -251,7 +273,11 @@ TextureImporter:
       bones: []
       spriteID: 5d7cb1d3c6cfd214baa242ea90bbb070
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 3108266045330193202
+=======
+      internalID: 21300008
+>>>>>>> Stashed changes
 =======
       internalID: 21300008
 >>>>>>> Stashed changes
@@ -276,7 +302,11 @@ TextureImporter:
       bones: []
       spriteID: 003314980732c0143b69ba7ae2af0735
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 5627146840519276160
+=======
+      internalID: 21300010
+>>>>>>> Stashed changes
 =======
       internalID: 21300010
 >>>>>>> Stashed changes
@@ -301,7 +331,11 @@ TextureImporter:
       bones: []
       spriteID: 1dd442f99bde0624b8103edc392fa6f4
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -4156117915721028271
+=======
+      internalID: 21300012
+>>>>>>> Stashed changes
 =======
       internalID: 21300012
 >>>>>>> Stashed changes
@@ -326,7 +360,11 @@ TextureImporter:
       bones: []
       spriteID: 2b4cfa44c4f87674d8d11b732a851d6e
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 1711603702981968788
+=======
+      internalID: 21300014
+>>>>>>> Stashed changes
 =======
       internalID: 21300014
 >>>>>>> Stashed changes

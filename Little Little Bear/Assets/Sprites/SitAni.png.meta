@@ -4,15 +4,21 @@ TextureImporter:
   internalIDToNameTable:
   - first:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       213: -8624613224640105671
     second: SitAni_0
   - first:
       213: -3751440598814617633
 =======
+=======
+>>>>>>> Stashed changes
       213: 21300000
     second: SitAni_0
   - first:
       213: 21300002
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     second: SitAni_1
   externalObjects: {}
@@ -115,7 +121,11 @@ TextureImporter:
       bones: []
       spriteID: 458b7bb726cb1144fbc0814137ad26d5
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -8624613224640105671
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
 =======
       internalID: 21300000
 >>>>>>> Stashed changes
@@ -140,7 +150,11 @@ TextureImporter:
       bones: []
       spriteID: 0afaa3d977933ea4da9a123b906f226b
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -3751440598814617633
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
 =======
       internalID: 21300002
 >>>>>>> Stashed changes

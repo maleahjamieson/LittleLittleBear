@@ -4,6 +4,7 @@ TextureImporter:
   internalIDToNameTable:
   - first:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       213: -4966917047380901585
     second: DigAni_0
   - first:
@@ -57,6 +58,8 @@ TextureImporter:
   - first:
       213: 1855708756743379952
 =======
+=======
+>>>>>>> Stashed changes
       213: 21300000
     second: DigAni_0
   - first:
@@ -109,6 +112,9 @@ TextureImporter:
     second: DigAni_16
   - first:
       213: 21300034
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     second: DigAni_17
   externalObjects: {}
@@ -211,7 +217,11 @@ TextureImporter:
       bones: []
       spriteID: 1d5ddd1c1e7a17641a37d09376140130
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -4966917047380901585
+=======
+      internalID: 21300000
+>>>>>>> Stashed changes
 =======
       internalID: 21300000
 >>>>>>> Stashed changes
@@ -236,7 +246,11 @@ TextureImporter:
       bones: []
       spriteID: 9c87c0eaa54686a4cbfc27b44e06a337
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 8216520687584737409
+=======
+      internalID: 21300002
+>>>>>>> Stashed changes
 =======
       internalID: 21300002
 >>>>>>> Stashed changes
@@ -261,7 +275,11 @@ TextureImporter:
       bones: []
       spriteID: 041ece727073f3c40a83d16c619517d9
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 1558543349543171056
+=======
+      internalID: 21300004
+>>>>>>> Stashed changes
 =======
       internalID: 21300004
 >>>>>>> Stashed changes
@@ -286,7 +304,11 @@ TextureImporter:
       bones: []
       spriteID: a161a9c4c155b094c86e1aa98ff6ed2d
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -87267634787789096
+=======
+      internalID: 21300006
+>>>>>>> Stashed changes
 =======
       internalID: 21300006
 >>>>>>> Stashed changes
@@ -311,7 +333,11 @@ TextureImporter:
       bones: []
       spriteID: b21d228c890b07d468a7bb37c9b4cd2e
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -2869774349138238076
+=======
+      internalID: 21300008
+>>>>>>> Stashed changes
 =======
       internalID: 21300008
 >>>>>>> Stashed changes
@@ -336,7 +362,11 @@ TextureImporter:
       bones: []
       spriteID: 8ebb63b84d1daca4aa989f4f0b3e9889
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 1833624097137825429
+=======
+      internalID: 21300010
+>>>>>>> Stashed changes
 =======
       internalID: 21300010
 >>>>>>> Stashed changes
@@ -361,7 +391,11 @@ TextureImporter:
       bones: []
       spriteID: 32fea89ac3ed751448418e1b8b021677
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -8202335183190805900
+=======
+      internalID: 21300012
+>>>>>>> Stashed changes
 =======
       internalID: 21300012
 >>>>>>> Stashed changes
@@ -386,7 +420,11 @@ TextureImporter:
       bones: []
       spriteID: c00e9080dd506aa4bbce0a0b629a02a5
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 1120197148880556751
+=======
+      internalID: 21300014
+>>>>>>> Stashed changes
 =======
       internalID: 21300014
 >>>>>>> Stashed changes
@@ -411,7 +449,11 @@ TextureImporter:
       bones: []
       spriteID: 3e5d408a79ff17347b443712047f659a
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -281206272578311713
+=======
+      internalID: 21300016
+>>>>>>> Stashed changes
 =======
       internalID: 21300016
 >>>>>>> Stashed changes
@@ -436,7 +478,11 @@ TextureImporter:
       bones: []
       spriteID: 13c45ab753b4b724fbda22b23af7952c
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 6863625235895884811
+=======
+      internalID: 21300018
+>>>>>>> Stashed changes
 =======
       internalID: 21300018
 >>>>>>> Stashed changes
@@ -461,7 +507,11 @@ TextureImporter:
       bones: []
       spriteID: 59e96ffb69d047e4189110497f080b63
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -8037926982314739207
+=======
+      internalID: 21300020
+>>>>>>> Stashed changes
 =======
       internalID: 21300020
 >>>>>>> Stashed changes
@@ -486,7 +536,11 @@ TextureImporter:
       bones: []
       spriteID: 4abe416fa7dc6774c9b2e8a54b002be5
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 3079248204691076070
+=======
+      internalID: 21300022
+>>>>>>> Stashed changes
 =======
       internalID: 21300022
 >>>>>>> Stashed changes
@@ -511,7 +565,11 @@ TextureImporter:
       bones: []
       spriteID: 53ebc29eafc1cf34787e7b5cd96287ed
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -5279126926848339659
+=======
+      internalID: 21300024
+>>>>>>> Stashed changes
 =======
       internalID: 21300024
 >>>>>>> Stashed changes
@@ -536,7 +594,11 @@ TextureImporter:
       bones: []
       spriteID: 25463a1645544624ebef39e87d718cfb
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 798287259636400718
+=======
+      internalID: 21300026
+>>>>>>> Stashed changes
 =======
       internalID: 21300026
 >>>>>>> Stashed changes
@@ -561,7 +623,11 @@ TextureImporter:
       bones: []
       spriteID: b86991927f379e14794bb8b3d80480a0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -788595710710267841
+=======
+      internalID: 21300028
+>>>>>>> Stashed changes
 =======
       internalID: 21300028
 >>>>>>> Stashed changes
@@ -586,7 +652,11 @@ TextureImporter:
       bones: []
       spriteID: d9a585a4772d9094994734af39685d96
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -1905783433671695966
+=======
+      internalID: 21300030
+>>>>>>> Stashed changes
 =======
       internalID: 21300030
 >>>>>>> Stashed changes
@@ -611,7 +681,11 @@ TextureImporter:
       bones: []
       spriteID: 90eeed8764fb97a458964cec5fdf4227
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: -2195204661687402953
+=======
+      internalID: 21300032
+>>>>>>> Stashed changes
 =======
       internalID: 21300032
 >>>>>>> Stashed changes
@@ -636,7 +710,11 @@ TextureImporter:
       bones: []
       spriteID: b438277af99482d479fc9f05dec3fec3
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       internalID: 1855708756743379952
+=======
+      internalID: 21300034
+>>>>>>> Stashed changes
 =======
       internalID: 21300034
 >>>>>>> Stashed changes

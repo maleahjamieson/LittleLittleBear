@@ -7,10 +7,18 @@ public abstract class BasicEntity : MonoBehaviour
     public int health;
     public int strength; // Generic damage for now
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
     public float offset;  // Should match level's
     public int currentX; // CurrentPosition
     public int currentY;
+>>>>>>> Stashed changes
+=======
+
+    public float offset;  // Should match level's
+    public int currentX; // CurrentPosition
+    public int currentY;
+
 >>>>>>> Stashed changes
 
     // List of generic action boolean values
@@ -21,6 +29,7 @@ public abstract class BasicEntity : MonoBehaviour
     public bool attack;
     public bool flipped;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     //
 =======
     public EntitySet selfEntity;
@@ -30,6 +39,11 @@ public abstract class BasicEntity : MonoBehaviour
 
 >>>>>>> Stashed changes
 
+=======
+    public EntitySet selfEntity;
+    public BoardGenerator board;
+
+>>>>>>> Stashed changes
     protected virtual void Start()
     {
         moveUp = false;
@@ -42,6 +56,10 @@ public abstract class BasicEntity : MonoBehaviour
 =======
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         offset = board.offsetforTiles;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
 >>>>>>> Stashed changes
     }
 
@@ -77,9 +95,15 @@ public abstract class BasicEntity : MonoBehaviour
                 case TileSet.BOULDER:
                 case TileSet.ROCK:
                 case TileSet.WALL:
+<<<<<<< Updated upstream
                         Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                         //do nothing
                         return false;
+=======
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    //do nothing
+                    return false;
+>>>>>>> Stashed changes
                 default: // Currently default since moving is only here
                     Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
@@ -88,17 +112,27 @@ public abstract class BasicEntity : MonoBehaviour
                     currentX = xDir;
                     currentY = yDir;
                     return true;
-
-
             }
         }
         else //something is there
         {
             Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
         }
+<<<<<<< Updated upstream
 
         
             return true;
 >>>>>>> Stashed changes
     }
 }
+=======
+        return true;
+    }
+    
+    /*// Update is called once per frame We currently dont use basicEntity.Update()
+    void Update()
+    {
+        
+    }*/
+}
+>>>>>>> Stashed changes

@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1361092662749903036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1361092662749903035}
+  - component: {fileID: 1361092662749903034}
+  - component: {fileID: 1361092662749903037}
+  m_Layer: 0
+  m_Name: LevelTilesGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1361092662749903035
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361092662749903036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.9, y: 0.5, z: -90.58636}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1361092662749903034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361092662749903036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965bded3839800241ab7471d7f75b18b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Floor: {fileID: 0}
+  Wall: {fileID: 0}
+  Rock: {fileID: 0}
+  Mud: {fileID: 0}
+  Secret_Floor: {fileID: 0}
+  Trap: {fileID: 0}
+  Spawner: {fileID: 0}
+  Puzzle_Floor: {fileID: 0}
+  Dig: {fileID: 0}
+  Puzzle_Hallway: {fileID: 0}
+  Hallway: {fileID: 0}
+  Dig_Tile: {fileID: 0}
+  Boulder: {fileID: 0}
+  Start_Tile: {fileID: 0}
+  End_Tile: {fileID: 0}
+  HamsterEntity: {fileID: 0}
+  offsetforTiles: 1
+--- !u!114 &1361092662749903037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361092662749903036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65075bc7a8380ed438ccf7c6adb0e109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  board: {fileID: 1361092662749903034}
+  CreditsMenu: {fileID: 0}
+  SaveMenu: {fileID: 0}
+  LLB: {fileID: 0}
+  BackgroundMenu: {fileID: 0}
+  InventoryMenu: {fileID: 0}
+  Paused: 0
+  CreditsOn: 0
+  NewOrLoad: 0
+  SaveOn: 0

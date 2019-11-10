@@ -6,6 +6,7 @@ public class LLB : BasicEntity
 {
     private Animator animator; //LLB animation controller 
     private int horizontal = 0; //store direction we are moving
+<<<<<<< Updated upstream
     private int vertical = 0; 
 
     // List of personal boolean
@@ -19,6 +20,14 @@ public class LLB : BasicEntity
     private bool dig; 
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
  
+>>>>>>> Stashed changes
+=======
+    private int vertical = 0;
+
+    // List of personal boolean
+    // private bool turnEnd; // When true enemies can move
+    private bool dig;
+    private bool checkInput; // If true we can accept user input, avoids interrupting animation
 >>>>>>> Stashed changes
     protected override void Start()
     {
@@ -57,9 +66,15 @@ public class LLB : BasicEntity
             if (Input.GetKeyDown(KeyCode.Q)) 
             {
                 dig = true;
+<<<<<<< Updated upstream
                 checkInput = false; 
             }
             
+=======
+                checkInput = false;
+            }
+
+>>>>>>> Stashed changes
             //movement vector input
             horizontal = (int)Input.GetAxisRaw("Horizontal"); //using ints forces 1 unit movement
             vertical = (int)Input.GetAxisRaw("Vertical");
@@ -70,10 +85,15 @@ public class LLB : BasicEntity
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 checkInput = false;
                 if (Move(horizontal, vertical))
 =======
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
+>>>>>>> Stashed changes
+=======
+                if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
+
 >>>>>>> Stashed changes
                 {
                     checkInput = false;
@@ -87,6 +107,7 @@ public class LLB : BasicEntity
                     else
                         moveUp = true;
                 }
+<<<<<<< Updated upstream
                 
             }
         }
@@ -98,6 +119,14 @@ public class LLB : BasicEntity
     }
     void FixedUpdate() // Where animation and actions take place
     {   
+=======
+
+            }
+        }
+    }
+    void FixedUpdate() // Where animation and actions take place
+    {
+>>>>>>> Stashed changes
         if (attack)
         {
             attack = false; // reset bool so input can be taken again
@@ -154,6 +183,7 @@ public class LLB : BasicEntity
     private IEnumerator wait2Move(char c, float t) // c is action, t (seconds) is time to wait for action
     {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         
         switch (c)
         {
@@ -184,10 +214,19 @@ public class LLB : BasicEntity
         {
             case 'l':  //Move left
                 {
+=======
+        switch (c)
+        {
+            case 'l':  //Move left
+                {
+>>>>>>> Stashed changes
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
                     yield return new WaitForSeconds(t - 0.1f); // Lagtime after movement is complete
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 }
 
@@ -196,8 +235,14 @@ public class LLB : BasicEntity
                 {
                     transform.Translate((Vector2.right) / 2);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     yield return new WaitForSeconds(t);
                     transform.Translate((Vector2.right) / 2);
+=======
+                    yield return new WaitForSeconds(0.1f);
+                    transform.Translate((Vector2.right) / 2);
+                    yield return new WaitForSeconds(t - 0.1f);
+>>>>>>> Stashed changes
 =======
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
@@ -209,8 +254,14 @@ public class LLB : BasicEntity
                 {
                     transform.Translate((Vector2.up) / 2);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     yield return new WaitForSeconds(t);
                     transform.Translate((Vector2.up) / 2);
+=======
+                    yield return new WaitForSeconds(0.1f);
+                    transform.Translate((Vector2.up) / 2);
+                    yield return new WaitForSeconds(t - 0.1f);
+>>>>>>> Stashed changes
 =======
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
@@ -222,8 +273,14 @@ public class LLB : BasicEntity
                 {
                     transform.Translate((Vector2.down) / 2);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     yield return new WaitForSeconds(t);
                     transform.Translate((Vector2.down) / 2);
+=======
+                    yield return new WaitForSeconds(0.1f);
+                    transform.Translate((Vector2.down) / 2);
+                    yield return new WaitForSeconds(t - 0.1f);
+>>>>>>> Stashed changes
 =======
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
