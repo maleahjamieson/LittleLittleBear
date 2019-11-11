@@ -105,13 +105,25 @@ public class Enemy : BasicEntity
 
 		// Actually move based on our findings
 		if (dist[0] == northDist)
-			CurrentY -= 1;
+		{
+			Move(CurrentX, CurrentY - 1);
+			// CurrentY -= 1;
+		}
 		else if (dist[0] == southDist)
-			CurrentY += 1;
+		{
+			Move(CurrentX, CurrentY + 1);
+			// CurrentY += 1;
+		}
 		else if (dist[0] == eastDist)
-			CurrentX += 1;
+		{
+			Move(CurrentX + 1, CurrentY);
+			// CurrentX += 1;
+		}
 		else if (dist[0] == westDist)
-			CurrentX -= 1;
+		{
+			Move(CurrentX - 1, CurrentY);
+			// CurrentX -= 1;
+		}
 		else
 		{
 			Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
@@ -142,16 +154,28 @@ public class Enemy : BasicEntity
 					if (vDist > this.range)
 					{
 						if (this.CurrentY < entity.CurrentY)
-							CurrentY += 1; // Move down
+						{
+							Move(CurrentX, CurrentY + 1);
+							// CurrentY += 1; // Move down
+						}
 						else if (this.CurrentY > entity.CurrentY)
-							CurrentY -= 1; // Move up
+						{
+							Move(CurrentX, CurrentY - 1);
+							// CurrentY -= 1; // Move up
+						}
 						else
 						{
 							// We're out of range but on the same Y, so try horizontal movement
 							if (this.CurrentX < entity.CurrentX)
-								CurrentX += 1;
+							{
+								Move(CurrentX + 1, CurrentY);
+								// CurrentX += 1; // Move east
+							}
 							else if (this.CurrentX > entity.CurrentX)
-								CurrentX -= 1;
+							{
+								Move(CurrentX - 1, CurrentY);
+								// CurrentX -= 1; // Move west
+							}
 							else
 							{
 								// We're at the same position as the other entity but out of range, so its an error
@@ -167,16 +191,28 @@ public class Enemy : BasicEntity
 						{
 							// We're going to step closer
 							if (this.CurrentY < entity.CurrentY)
-								CurrentY += 1;
+							{
+								Move(CurrentX, CurrentY + 1);
+								// CurrentY += 1; // Move down
+							}
 							else if (this.CurrentY > entity.CurrentY)
-								CurrentY -= 1;
+							{
+								Move(CurrentX, CurrentY - 1);
+								// CurrentY -= 1; // Move up
+							}
 							else
 							{
 								// We're in range but on the same Y, so try horizontal movement
 								if (this.CurrentX < entity.CurrentX)
-									CurrentX += 1;
+								{
+									Move(CurrentX + 1, CurrentY);
+									// CurrentX += 1; // Move east
+								}
 								else if (this.CurrentX > entity.CurrentX)
-									CurrentX -= 1;
+								{
+									Move(CurrentX - 1, CurrentY);
+									// CurrentX -= 1; // Move west
+								}
 								else
 								{
 									// We're at the same position as the other entity and in range, so its an error
@@ -197,16 +233,28 @@ public class Enemy : BasicEntity
 					if (hDist > this.range)
 					{
 						if (this.CurrentX < entity.CurrentX)
-							CurrentX += 1;
+						{
+							Move(CurrentX + 1, CurrentY);
+							// CurrentX += 1; // move east
+						}
 						else if (this.CurrentX > entity.CurrentX)
-							CurrentX -= 1;
+						{
+							Move(CurrentX - 1, CurrentY);
+							// CurrentX -= 1; // move west
+						}
 						else
 						{
 							// We're out of range but on the same x, so try vertical movement
 							if (this.CurrentY < entity.CurrentY)
-								CurrentY += 1;
+							{
+								Move(CurrentX, CurrentY + 1);
+								// CurrentY += 1; // move down
+							}
 							else if (this.CurrentY > entity.CurrentY)
-								CurrentY -= 1;
+							{
+								Move(CurrentX, CurrentY - 1);
+								// CurrentY -= 1; // move up
+							}
 							else
 							{
 								// We're at the same position as the target but out of range, so its an error
@@ -222,16 +270,28 @@ public class Enemy : BasicEntity
 						{
 							// We're going to step closer
 							if (this.CurrentX < entity.CurrentX)
-								CurrentX += 1;
+							{
+								Move(CurrentX + 1, CurrentY);
+								// CurrentX += 1; // move east
+							}
 							else if (this.CurrentX > entity.CurrentX)
-								CurrentX -= 1;
+							{
+								Move(CurrentX - 1, CurrentY);
+								// CurrentX -= 1; // move west
+							}
 							else
 							{
 								// We're in range but on the same X, so try vertical movement
 								if (this.CurrentY < entity.CurrentY)
-									CurrentY += 1;
+								{
+									Move(CurrentX, CurrentY + 1);
+									// CurrentY += 1; // move down
+								}
 								else if (this.CurrentY > entity.CurrentY)
-									CurrentY -= 1;
+								{
+									Move(CurrentX, CurrentY - 1);
+									// CurrentY -= 1; // move up
+								}
 								else
 								{
 									// We're at the same position as the target and in range, so its an error
@@ -377,9 +437,15 @@ public class Enemy : BasicEntity
 
 			// Finally, see if we move vertically or horizontally
 			if (Random.value < 0.5f)
-				CurrentX += sign;
+			{
+				Move(CurrentX + sign, CurrentY);
+				// CurrentX += sign;
+			}
 			else
-				CurrentY += sign;
+			{
+				Move(CurrentX, CurrentY + sign);
+				// CurrentY += sign;
+			}
 		}
 	}
 }
