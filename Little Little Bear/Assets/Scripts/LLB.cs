@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LLB : BasicEntity
 {
-    private Animator animator; //LLB animation controller 
     private int horizontal = 0; //store direction we are moving
     private int vertical = 0;
 
@@ -19,7 +18,7 @@ public class LLB : BasicEntity
         checkInput = true;
         health = 100;
         strength = 4;
-        animator = GetComponent<Animator>();
+        
         base.Start();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
@@ -33,6 +32,43 @@ public class LLB : BasicEntity
     private void OnDisable() // When object is disabled
     {
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
+    }
+
+    private bool Move(int xDir, int yDir) // out let us return multiple values
+    {
+        board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
+        selfEntity = board.map[currentX, currentY].entityType;
+        Vector2 sPos = transform.position; //Start Position
+        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
+
+        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        {
+            switch (board.map[xDir, yDir].tileType)
+            {
+                //don't move there
+                case TileSet.BOULDER:
+                case TileSet.ROCK:
+                case TileSet.WALL:
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    //do nothing
+                    return false;
+
+                default: // Currently default since moving is only here
+                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
+                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+                    currentX = xDir;
+                    currentY = yDir;
+                    return true;
+            }
+        }
+        else //something is there
+        {
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+        }
+
+        return true; // If nothing is hit then assume move
     }
 
     private void Update()
