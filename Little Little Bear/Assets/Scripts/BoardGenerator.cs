@@ -95,6 +95,7 @@ public class BoardGenerator : MonoBehaviour
     public GameObject End_Tile;
 
     public GameObject HamsterEntity; // LLB basically
+    public ArrayList EnemyList;
 
     public float offsetforTiles = 1f;
 
@@ -141,6 +142,7 @@ public class BoardGenerator : MonoBehaviour
 		setBoardSize(2500, 2500);
 		setDungeonDepth(1);
 		// Random.seed = System.DateTime.Now.Millisecond;
+		EnemyList = new ArrayList();
 
 		// Default parameters here
 		setDefaultParameters();
@@ -151,6 +153,7 @@ public class BoardGenerator : MonoBehaviour
 		setBoardSize(width, height);
 		setDungeonDepth(1);
 		// Random.seed = System.DateTime.Now.Millisecond;
+		EnemyList = new ArrayList();
 
 		// Default parameters here
 		setDefaultParameters();
@@ -161,6 +164,7 @@ public class BoardGenerator : MonoBehaviour
 		setBoardSize(width, height);
 		setDefaultParameters();
 		// Random.seed = System.DateTime.Now.Millisecond;
+		EnemyList = new ArrayList();
 
 		setDungeonDepth(depth); // Overwrite default depth
 	}
@@ -605,7 +609,18 @@ public class BoardGenerator : MonoBehaviour
 					if (type == TileSet.TRAP)
 						this.trapCounter++;
 					else if (type == TileSet.SPAWNER)
+					{
 						this.spawnCounter++;
+
+						// Create an enemy
+						GameObject enemy = (GameObject)Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+						this.map[m.x + xx, m.y + yy].entityType = EntitySet.Enemy1;
+						enemy.GetComponent<EnemyBasic>().currentX = m.x+xx;
+						enemy.GetComponent<EnemyBasic>().currentY = m.y+yy;
+						//enemy.Set((int)(Random.value * 100), 0);
+						//EnemyList.Add(Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity));
+						EnemyList.Add(enemy);
+					}
 				}
 
 				// Place item in the room
@@ -838,6 +853,36 @@ public class BoardGenerator : MonoBehaviour
 
 		// Create the walls
 		make_walls();
+	}
+
+	public void moveEnemies()
+	{
+		for (int i = 0; i < EnemyList.Count; i++)
+		{
+			GameObject temp = (GameObject)EnemyList[i];
+
+
+			if (temp != null)
+			{
+				if (temp.GetComponent<EnemyBasic>().isAlert())
+				{
+					//if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
+					//	temp.GetComponent<EnemyBasic>().moveTowardsEntity(HamsterEntity.GetComponent<BasicEntity>());
+					//else
+						int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
+						int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
+						Debug.Log("Pathfinding to: "+goalX+", "+goalY);
+						temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
+				}
+				else
+				{
+					if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
+						temp.GetComponent<EnemyBasic>().makeAlert();
+
+					temp.GetComponent<EnemyBasic>().wander();
+				}
+			}
+		}
 	}
 
 	//*********************************//

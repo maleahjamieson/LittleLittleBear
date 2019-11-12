@@ -6,6 +6,7 @@ public class Enemy : BasicEntity
 {
 	//===== Parameters =====//
 	ArrayList visitedPoints;
+	bool alert;
 	//Vector2 visited;
 
 	//===== Stats =====//
@@ -14,13 +15,51 @@ public class Enemy : BasicEntity
 	public Enemy()
 	{
 		visitedPoints = new ArrayList();
+		alert = false;
 	}
+
+	private bool Move(int xDir, int yDir) // out let us return multiple values
+    {
+        board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
+        selfEntity = board.map[currentX, currentY].entityType;
+        Vector2 sPos = transform.position; //Start Position
+        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
+
+        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        {
+            switch (board.map[xDir, yDir].tileType)
+            {
+                //don't move there
+                case TileSet.BOULDER:
+                case TileSet.ROCK:
+                case TileSet.WALL:
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    //do nothing
+                    return false;
+
+                default: // Currently default since moving is only here
+                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
+                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+                    currentX = xDir;
+                    currentY = yDir;
+                    return true;
+            }
+        }
+        else //something is there
+        {
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+        }
+
+        return true; // If nothing is hit then assume move
+    }
 
 	public bool lineOfSight(BasicEntity entity, GridCell[,] map)
 	{
 		int sx, sy, gx, gy;
-		sx = CurrentX; sy = CurrentY;
-		gx = entity.CurrentX; gy = entity.CurrentY;
+		sx = currentX; sy = currentY;
+		gx = entity.currentX; gy = entity.currentY;
 
 		int x_slope = (int) (gx - sx);
 		int y_slope = (int) (gy - sy);
@@ -49,37 +88,37 @@ public class Enemy : BasicEntity
 	{
 		// First, update visited points
 		// Add current position to visited points
-		visitedPoints.Add(Vector2(this.CurrentX, this.CurrentY));
+		visitedPoints.Add(new Vector2(this.currentX, this.currentY));
 
 		// Don't store more than 20 visited points
 		if (visitedPoints.Count > 20)
 			visitedPoints.RemoveAt(0); // Remove oldest point
 
 		// Now, check distance from each position adjacent to entity
-		int[4] dist;
-		dist[0] = Mathf.sqrt((entity.CurrentX - this.CurrentX)*(entity.CurrentX - this.CurrentX) + (entity.CurrentY - this.CurrentY - 1)*(entity.CurrentY - this.CurrentY - 1));
-		dist[1] = Mathf.sqrt((entity.CurrentX - this.CurrentX)*(entity.CurrentX - this.CurrentX) + (entity.CurrentY - this.CurrentY + 1)*(entity.CurrentY - this.CurrentY + 1));
-		dist[2] = Mathf.sqrt((entity.CurrentX - this.CurrentX + 1)*(entity.CurrentX - this.CurrentX + 1) + (entity.CurrentY - this.CurrentY)*(entity.CurrentY - this.CurrentY));
-		dist[3] = Mathf.sqrt((entity.CurrentX - this.CurrentX - 1)*(entity.CurrentX - this.CurrentX - 1) + (entity.CurrentY - this.CurrentY)*(entity.CurrentY - this.CurrentY));
+		int[] dist = new int[4];
+		dist[0] = (int)Mathf.Sqrt((entity.currentX - this.currentX)*(entity.currentX - this.currentX) + (entity.currentY - this.currentY - 1)*(entity.currentY - this.currentY - 1));
+		dist[1] = (int)Mathf.Sqrt((entity.currentX - this.currentX)*(entity.currentX - this.currentX) + (entity.currentY - this.currentY + 1)*(entity.currentY - this.currentY + 1));
+		dist[2] = (int)Mathf.Sqrt((entity.currentX - this.currentX + 1)*(entity.currentX - this.currentX + 1) + (entity.currentY - this.currentY)*(entity.currentY - this.currentY));
+		dist[3] = (int)Mathf.Sqrt((entity.currentX - this.currentX - 1)*(entity.currentX - this.currentX - 1) + (entity.currentY - this.currentY)*(entity.currentY - this.currentY));
 
 		// Check for walls
-		if (map[this.CurrentX, this.CurrentY-1].tileType == TileSet.WALL)
+		if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
 			dist[0] = 9999;
-		if (map[this.CurrentX, this.CurrentY+1].tileType == TileSet.WALL)
+		if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
 			dist[1] = 9999;
-		if (map[this.CurrentX+1, this.CurrentY].tileType == TileSet.WALL)
+		if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
 			dist[2] = 9999;
-		if (map[this.CurrentX-1, this.CurrentY].tileType == TileSet.WALL)
+		if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
 			dist[3] = 9999;
 
 		// Check that we haven't visited these positions
-		if (visitedPoints.Contains(Vector2(this.CurrentX, this.CurrentY-1)))
+		if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY-1)))
 			dist[0] = 9999;
-		if (visitedPoints.Contains(Vector2(this.CurrentX, this.CurrentY+1)))
+		if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY+1)))
 			dist[1] = 9999;
-		if (visitedPoints.Contains(Vector2(this.CurrentX+1, this.CurrentY)))
+		if (visitedPoints.Contains(new Vector2(this.currentX+1, this.currentY)))
 			dist[2] = 9999;
-		if (visitedPoints.Contains(Vector2(this.CurrentX-1, this.CurrentY)))
+		if (visitedPoints.Contains(new Vector2(this.currentX-1, this.currentY)))
 			dist[3] = 9999;
 
 		// Store variables to reference later
@@ -106,23 +145,23 @@ public class Enemy : BasicEntity
 		// Actually move based on our findings
 		if (dist[0] == northDist)
 		{
-			Move(CurrentX, CurrentY - 1);
-			// CurrentY -= 1;
+			Move(currentX, currentY - 1);
+			// currentY -= 1;
 		}
 		else if (dist[0] == southDist)
 		{
-			Move(CurrentX, CurrentY + 1);
-			// CurrentY += 1;
+			Move(currentX, currentY + 1);
+			// currentY += 1;
 		}
 		else if (dist[0] == eastDist)
 		{
-			Move(CurrentX + 1, CurrentY);
-			// CurrentX += 1;
+			Move(currentX + 1, currentY);
+			// currentX += 1;
 		}
 		else if (dist[0] == westDist)
 		{
-			Move(CurrentX - 1, CurrentY);
-			// CurrentX -= 1;
+			Move(currentX - 1, currentY);
+			// currentX -= 1;
 		}
 		else
 		{
@@ -137,11 +176,11 @@ public class Enemy : BasicEntity
 		{
 			int hDist, vDist;
 			float tX, tY;
-			tX = Mathf.Abs(entity.CurrentX);
-			tY = Mathf.Abs(entity.CurrentY);
+			tX = Mathf.Abs(entity.currentX);
+			tY = Mathf.Abs(entity.currentY);
 
-			hDist = (int)Mathf.Abs(Mathf.Abs(CurrentX) - tX);
-			vDist = (int)Mathf.Abs(Mathf.Abs(CurrentY) - tY);
+			hDist = (int)Mathf.Abs(Mathf.Abs(currentX) - tX);
+			vDist = (int)Mathf.Abs(Mathf.Abs(currentY) - tY);
 
 			// Move towards the target x and y
 			// and randomize whether we prioritize vertical or horizontal movement
@@ -153,28 +192,28 @@ public class Enemy : BasicEntity
 					// Try moving vertically while out of range
 					if (vDist > this.range)
 					{
-						if (this.CurrentY < entity.CurrentY)
+						if (this.currentY < entity.currentY)
 						{
-							Move(CurrentX, CurrentY + 1);
-							// CurrentY += 1; // Move down
+							Move(currentX, currentY + 1);
+							// currentY += 1; // Move down
 						}
-						else if (this.CurrentY > entity.CurrentY)
+						else if (this.currentY > entity.currentY)
 						{
-							Move(CurrentX, CurrentY - 1);
-							// CurrentY -= 1; // Move up
+							Move(currentX, currentY - 1);
+							// currentY -= 1; // Move up
 						}
 						else
 						{
 							// We're out of range but on the same Y, so try horizontal movement
-							if (this.CurrentX < entity.CurrentX)
+							if (this.currentX < entity.currentX)
 							{
-								Move(CurrentX + 1, CurrentY);
-								// CurrentX += 1; // Move east
+								Move(currentX + 1, currentY);
+								// currentX += 1; // Move east
 							}
-							else if (this.CurrentX > entity.CurrentX)
+							else if (this.currentX > entity.currentX)
 							{
-								Move(CurrentX - 1, CurrentY);
-								// CurrentX -= 1; // Move west
+								Move(currentX - 1, currentY);
+								// currentX -= 1; // Move west
 							}
 							else
 							{
@@ -190,28 +229,28 @@ public class Enemy : BasicEntity
 						if (Random.value < 0.5f)
 						{
 							// We're going to step closer
-							if (this.CurrentY < entity.CurrentY)
+							if (this.currentY < entity.currentY)
 							{
-								Move(CurrentX, CurrentY + 1);
-								// CurrentY += 1; // Move down
+								Move(currentX, currentY + 1);
+								// currentY += 1; // Move down
 							}
-							else if (this.CurrentY > entity.CurrentY)
+							else if (this.currentY > entity.currentY)
 							{
-								Move(CurrentX, CurrentY - 1);
-								// CurrentY -= 1; // Move up
+								Move(currentX, currentY - 1);
+								// currentY -= 1; // Move up
 							}
 							else
 							{
 								// We're in range but on the same Y, so try horizontal movement
-								if (this.CurrentX < entity.CurrentX)
+								if (this.currentX < entity.currentX)
 								{
-									Move(CurrentX + 1, CurrentY);
-									// CurrentX += 1; // Move east
+									Move(currentX + 1, currentY);
+									// currentX += 1; // Move east
 								}
-								else if (this.CurrentX > entity.CurrentX)
+								else if (this.currentX > entity.currentX)
 								{
-									Move(CurrentX - 1, CurrentY);
-									// CurrentX -= 1; // Move west
+									Move(currentX - 1, currentY);
+									// currentX -= 1; // Move west
 								}
 								else
 								{
@@ -232,28 +271,28 @@ public class Enemy : BasicEntity
 					// Try moving horizontally while out of range
 					if (hDist > this.range)
 					{
-						if (this.CurrentX < entity.CurrentX)
+						if (this.currentX < entity.currentX)
 						{
-							Move(CurrentX + 1, CurrentY);
-							// CurrentX += 1; // move east
+							Move(currentX + 1, currentY);
+							// currentX += 1; // move east
 						}
-						else if (this.CurrentX > entity.CurrentX)
+						else if (this.currentX > entity.currentX)
 						{
-							Move(CurrentX - 1, CurrentY);
-							// CurrentX -= 1; // move west
+							Move(currentX - 1, currentY);
+							// currentX -= 1; // move west
 						}
 						else
 						{
 							// We're out of range but on the same x, so try vertical movement
-							if (this.CurrentY < entity.CurrentY)
+							if (this.currentY < entity.currentY)
 							{
-								Move(CurrentX, CurrentY + 1);
-								// CurrentY += 1; // move down
+								Move(currentX, currentY + 1);
+								// currentY += 1; // move down
 							}
-							else if (this.CurrentY > entity.CurrentY)
+							else if (this.currentY > entity.currentY)
 							{
-								Move(CurrentX, CurrentY - 1);
-								// CurrentY -= 1; // move up
+								Move(currentX, currentY - 1);
+								// currentY -= 1; // move up
 							}
 							else
 							{
@@ -269,28 +308,28 @@ public class Enemy : BasicEntity
 						if (Random.value < 0.5f)
 						{
 							// We're going to step closer
-							if (this.CurrentX < entity.CurrentX)
+							if (this.currentX < entity.currentX)
 							{
-								Move(CurrentX + 1, CurrentY);
-								// CurrentX += 1; // move east
+								Move(currentX + 1, currentY);
+								// currentX += 1; // move east
 							}
-							else if (this.CurrentX > entity.CurrentX)
+							else if (this.currentX > entity.currentX)
 							{
-								Move(CurrentX - 1, CurrentY);
-								// CurrentX -= 1; // move west
+								Move(currentX - 1, currentY);
+								// currentX -= 1; // move west
 							}
 							else
 							{
 								// We're in range but on the same X, so try vertical movement
-								if (this.CurrentY < entity.CurrentY)
+								if (this.currentY < entity.currentY)
 								{
-									Move(CurrentX, CurrentY + 1);
-									// CurrentY += 1; // move down
+									Move(currentX, currentY + 1);
+									// currentY += 1; // move down
 								}
-								else if (this.CurrentY > entity.CurrentY)
+								else if (this.currentY > entity.currentY)
 								{
-									Move(CurrentX, CurrentY - 1);
-									// CurrentY -= 1; // move up
+									Move(currentX, currentY - 1);
+									// currentY -= 1; // move up
 								}
 								else
 								{
@@ -315,17 +354,17 @@ public class Enemy : BasicEntity
 					// Try moving horizontally while out of range
 					if (hDist > this.range)
 					{
-						if (this.CurrentX < entity.CurrentX)
-							CurrentX += 1;
-						else if (this.CurrentX > entity.CurrentX)
-							CurrentX -= 1;
+						if (this.currentX < entity.currentX)
+							currentX += 1;
+						else if (this.currentX > entity.currentX)
+							currentX -= 1;
 						else
 						{
 							// We're out of range but on the same x, so try vertical movement
-							if (this.CurrentY < entity.CurrentY)
-								CurrentY += 1;
-							else if (this.CurrentY > entity.CurrentY)
-								CurrentY -= 1;
+							if (this.currentY < entity.currentY)
+								currentY += 1;
+							else if (this.currentY > entity.currentY)
+								currentY -= 1;
 							else
 							{
 								// We're at the same position as the target but out of range, so its an error
@@ -340,17 +379,17 @@ public class Enemy : BasicEntity
 						if (Random.value < 0.5f)
 						{
 							// We're going to step closer
-							if (this.CurrentX < entity.CurrentX)
-								CurrentX += 1;
-							else if (this.CurrentX > entity.CurrentX)
-								CurrentX -= 1;
+							if (this.currentX < entity.currentX)
+								currentX += 1;
+							else if (this.currentX > entity.currentX)
+								currentX -= 1;
 							else
 							{
 								// We're in range but on the same X, so try vertical movement
-								if (this.CurrentY < entity.CurrentY)
-									CurrentY += 1;
-								else if (this.CurrentY > entity.CurrentY)
-									CurrentY -= 1;
+								if (this.currentY < entity.currentY)
+									currentY += 1;
+								else if (this.currentY > entity.currentY)
+									currentY -= 1;
 								else
 								{
 									// We're at the same position as the target and in range, so its an error
@@ -370,17 +409,17 @@ public class Enemy : BasicEntity
 					// Try moving vertically while out of range
 					if (vDist > this.range)
 					{
-						if (this.CurrentY < entity.CurrentY)
-							CurrentY += 1; // Move down
-						else if (this.CurrentY > entity.CurrentY)
-							CurrentY -= 1; // Move up
+						if (this.currentY < entity.currentY)
+							currentY += 1; // Move down
+						else if (this.currentY > entity.currentY)
+							currentY -= 1; // Move up
 						else
 						{
 							// We're out of range but on the same Y, so try horizontal movement
-							if (this.CurrentX < entity.CurrentX)
-								CurrentX += 1;
-							else if (this.CurrentX > entity.CurrentX)
-								CurrentX -= 1;
+							if (this.currentX < entity.currentX)
+								currentX += 1;
+							else if (this.currentX > entity.currentX)
+								currentX -= 1;
 							else
 							{
 								// We're at the same position as the other entity but out of range, so its an error
@@ -395,17 +434,17 @@ public class Enemy : BasicEntity
 						if (Random.value < 0.5f)
 						{
 							// We're going to step closer
-							if (this.CurrentY < entity.CurrentY)
-								CurrentY += 1;
-							else if (this.CurrentY > entity.CurrentY)
-								CurrentY -= 1;
+							if (this.currentY < entity.currentY)
+								currentY += 1;
+							else if (this.currentY > entity.currentY)
+								currentY -= 1;
 							else
 							{
 								// We're in range but on the same Y, so try horizontal movement
-								if (this.CurrentX < entity.CurrentX)
-									CurrentX += 1;
-								else if (this.CurrentX > entity.CurrentX)
-									CurrentX -= 1;
+								if (this.currentX < entity.currentX)
+									currentX += 1;
+								else if (this.currentX > entity.currentX)
+									currentX -= 1;
 								else
 								{
 									// We're at the same position as the other entity and in range, so its an error
@@ -438,13 +477,13 @@ public class Enemy : BasicEntity
 			// Finally, see if we move vertically or horizontally
 			if (Random.value < 0.5f)
 			{
-				Move(CurrentX + sign, CurrentY);
-				// CurrentX += sign;
+				Move(currentX + sign, currentY);
+				// currentX += sign;
 			}
 			else
 			{
-				Move(CurrentX, CurrentY + sign);
-				// CurrentY += sign;
+				Move(currentX, currentY + sign);
+				// currentY += sign;
 			}
 		}
 	}

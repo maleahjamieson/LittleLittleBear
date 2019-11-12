@@ -81,11 +81,13 @@ public class LLB : BasicEntity
             {
                 attack = true; // player will attempt to attack
                 checkInput = false; //input has been read
+                board.moveEnemies();
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 dig = true;
                 checkInput = false;
+                board.moveEnemies();
             }
 
             //movement vector input
@@ -97,6 +99,7 @@ public class LLB : BasicEntity
 
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
+                Debug.Log("*******LLB*******");
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
 
                 {
@@ -112,7 +115,10 @@ public class LLB : BasicEntity
                         moveUp = true;
                 }
 
+                board.moveEnemies();
             }
+
+            //board.moveEnemies(); // Move all of the bad bois
         }
     }
     void FixedUpdate() // Where animation and actions take place
@@ -214,6 +220,7 @@ public class LLB : BasicEntity
                 break;
         }
         //GameManager.instance.playersTurn = false; // Action complete, player loses turn enemies go
+        //board.moveEnemies(); // Move all of the bad bois
         checkInput = true; // Inputs are able to be taken again
     }
 }
