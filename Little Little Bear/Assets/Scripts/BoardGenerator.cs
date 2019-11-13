@@ -861,6 +861,8 @@ public class BoardGenerator : MonoBehaviour
 
 	public IEnumerator moveEnemies() // IEnumerator so the game can space out their actions
 	{
+		Debug.Log("Moving "+EnemyList.Count+" enemies...");
+		
 		for (int i = 0; i < EnemyList.Count; i++)
 		{
 			GameObject temp = (GameObject)EnemyList[i];
