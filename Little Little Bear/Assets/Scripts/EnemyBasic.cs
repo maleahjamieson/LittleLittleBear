@@ -109,7 +109,23 @@ public class EnemyBasic : BasicEntity
         int y_slope = (int) (gy - sy);
         bool flag = true;
 
-        while (flag && (sx != gx && sy != gy))
+        // Check along the Y for LOS
+        while (flag && sy != gy)
+        {
+            if (map[sx, sy].tileType == TileSet.WALL)
+                flag = false;
+
+            if (y_slope > 0)
+                sy++;
+            else
+                sy--;
+        }
+
+        // Reset starting y
+        sy = currentY;
+
+        // Check along the X for LOS
+        while (flag && sx != gx)
         {
             if (map[sx, sy].tileType == TileSet.WALL)
                 flag = false;
@@ -118,11 +134,17 @@ public class EnemyBasic : BasicEntity
                 sx++;
             else
                 sx--;
+        }
 
-            if (y_slope > 0)
-                sy++;
-            else
-                sy--;
+        // If all else fails, fake close-up LOS with a distance check
+        if (flag)
+        {
+            int sq1 = x_slope*x_slope;
+            int sq2 = y_slope*y_slope;
+            float dist = Mathf.Sqrt(sq1 + sq2);
+
+            if (dist >= 5.0f)
+                flag = false;
         }
 
         return flag;
@@ -130,51 +152,61 @@ public class EnemyBasic : BasicEntity
 
     public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
-        Debug.Log("G: "+x+", "+y);
-        Debug.Log("Pos: "+this.currentX+", "+this.currentY);
+        // Debug.Log("G: "+x+", "+y);
+        // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
 
         // First, update visited points
         // Add current position to visited points
         visitedPoints.Add(new Vector2(this.currentX, this.currentY));
 
         // Don't store more than 20 visited points
-        if (visitedPoints.Count > 20)
+        if (visitedPoints.Count > 3) // Reduced memory to 3 positions
             visitedPoints.RemoveAt(0); // Remove oldest point
 
         // Now, check distance from each position adjacent to entity
         float[] dist = new float[4];
-        /*
-        dist[0] = Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY - 1)*(y - this.currentY - 1));
-        dist[1] = Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY + 1)*(y - this.currentY + 1));
-        dist[2] = Mathf.Sqrt((x - this.currentX + 1)*(x - this.currentX + 1) + (y - this.currentY)*(y - this.currentY));
-        dist[3] = Mathf.Sqrt((x - this.currentX - 1)*(x - this.currentX - 1) + (y - this.currentY)*(y - this.currentY));
-        //*/
-        ///*
         dist[0] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY - 1));
         dist[1] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY + 1));
         dist[2] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX + 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
         dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
-        //*/
 
         // Check for walls
         if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
         {
-            Debug.Log("S-Wall");
+            // Debug.Log("S-Wall");
             dist[0] = 9999.9f;
         }
         if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
         {
-            Debug.Log("N-Wall");
+            // Debug.Log("N-Wall");
             dist[1] = 9999.9f;
         }
         if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
         {
-            Debug.Log("E-Wall");
+            // Debug.Log("E-Wall");
             dist[2] = 9999.9f;
         }
         if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
         {
-            Debug.Log("W-Wall");
+            // Debug.Log("W-Wall");
+            dist[3] = 9999.9f;
+        }
+
+        // Check for entities
+        if (map[this.currentX, this.currentY-1].entityType != EntitySet.NOTHING)
+        {
+            dist[0] = 9999.9f;
+        }
+        if (map[this.currentX, this.currentY+1].entityType != EntitySet.NOTHING)
+        {
+            dist[1] = 9999.9f;
+        }
+        if (map[this.currentX+1, this.currentY].entityType != EntitySet.NOTHING)
+        {
+            dist[2] = 9999.9f;
+        }
+        if (map[this.currentX-1, this.currentY].entityType != EntitySet.NOTHING)
+        {
             dist[3] = 9999.9f;
         }
 
@@ -196,6 +228,7 @@ public class EnemyBasic : BasicEntity
         westDist = dist[3];
 
         // Sort to be the lowest
+        /*
         for (int i = 0; i < 4; i++)
         {
             for (int j = i+1; j < 4; j++)
@@ -208,33 +241,45 @@ public class EnemyBasic : BasicEntity
                 }
             }
         }
+        //*/
 
-        Debug.Log("N: "+northDist+", S: "+southDist+", E: "+eastDist+", W: "+westDist);
+        // Optimized to place smallest distance at dist[0]
+        for (int i = 0; i < 4; i++)
+        {
+            if (dist[i] < dist[0])
+            {
+                float temp = dist[i];
+                dist[i] = dist[0];
+                dist[0] = temp;
+            }
+        }
+
+        // Debug.Log("N: "+northDist+", S: "+southDist+", E: "+eastDist+", W: "+westDist);
 
         // Actually move based on our findings
-        if (dist[0] >= 1.0)
+        if (dist[0] >= 1.0f && dist[0] < 9999.9f)
         {
             if (dist[0] == southDist)
             {
-                Debug.Log("Moved south");
+                // Debug.Log("Moved south");
                 Move(currentX, currentY - 1);
                 // currentY -= 1;
             }
             else if (dist[0] == northDist)
             {
-                Debug.Log("Moved north");
+                // Debug.Log("Moved north");
                 Move(currentX, currentY + 1);
                 // currentY += 1;
             }
             else if (dist[0] == eastDist)
             {
-                Debug.Log("Moved east");
+                // Debug.Log("Moved east");
                 Move(currentX + 1, currentY);
                 // currentX += 1;
             }
             else if (dist[0] == westDist)
             {
-                Debug.Log("Moved west");
+                // Debug.Log("Moved west");
                 Move(currentX - 1, currentY);
                 // currentX -= 1;
             }
@@ -243,6 +288,8 @@ public class EnemyBasic : BasicEntity
                 Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
             }
         }
+
+        Debug.Log("Pathing!");
     }
 
     public void moveTowardsEntity(BasicEntity entity)
@@ -562,6 +609,8 @@ public class EnemyBasic : BasicEntity
                 // currentY += sign;
             }
         }
+
+        Debug.Log("Wandering!");
     }
 
     // Update is called once per frame
