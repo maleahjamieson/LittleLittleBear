@@ -89,6 +89,31 @@ public class EnemyBasic : BasicEntity
         return true; // If nothing is hit then assume move
     }
 
+    // Below is the core of the AI behaviors, written by Christopher Walen
+
+    // It uses what I will call a 'one-step A* approach' where it will choose
+    // the tile to move to based on the shortest path, and it determines
+    // this path by measuring the x-distance and y-distance, and combining
+    // this into a heuristic that we can sort by.
+
+    // We do this for the positions above, below, and to the side of every enemy.
+    // We then exclude positions depending on whats in them (i.e. is there a wall,
+    // another entity, etc.) by pushing them to the 'back of the queue' by marking
+    // them as very far away.
+
+    // Then we do a very rudimentary search for the minimum value among those
+    // distances, and compare it to the distance we stored for each position.
+
+    // We also make sure that we have a distance more than 1 tile, and a distance
+    // thats not our 'very far away' distance before we actually move.
+
+    // When we're not pathing, we're randomly choosing to move north/south/east/west
+    // based on a few Random.value comparisons to simulate a x out of 100 chance.
+
+    // There is also a pretty basic Line-Of-Sight method that will actually run
+    // LOS checks in the x and y lines, then we do a distance check to make up for
+    // not checking perfectly on diagonals.
+
     public bool isAlert()
     {
         return this.alert;
@@ -292,6 +317,7 @@ public class EnemyBasic : BasicEntity
         Debug.Log("Pathing!");
     }
 
+    // This method may be removed at a later date
     public void moveTowardsEntity(BasicEntity entity)
     {
         // If the entity we're moving towards exists
@@ -612,6 +638,7 @@ public class EnemyBasic : BasicEntity
 
         Debug.Log("Wandering!");
     }
+    // End core AI methods
 
     // Update is called once per frame
     void Update()
