@@ -30,16 +30,19 @@ public enum TileSet : short
 };
 public enum ItemSet : short
 {
-    NOTHING = -1, FLOOR = 0,
-    WALL, HALLWAY, TRAP, SPAWNER, SECRET_FLOOR,
-    PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
-    PUZZLE_HALLWAY, START_TILE, END_TILE
+    NOTHING = 0, ANT = 1,      // 0:Empty  1:Ants in a bottle
+    SKUNK = 2, SNAP = 3,        // 2:SkunkBottle    3:Snaps
+    PSNAP = 4, THORN = 5,        // 4:Puzzle Snap    5:Thorn Vines
+    BERRY = 6, SEED = 7         // 6:Blue Berries   7:Sunflower Seeds
 };
 public enum EntitySet : int
 {
-    NOTHING = 0, PLAYER = 1,
-    Enemy1, Enemy2, Item,
+    NOTHING = 0, PLAYER = 1,    // 0:Empty   1:LLB
+    Enemy = 2, WeaponM = 3,     // 2:All     3:Melee
+    WeaponR = 4, Item = 5,      // 4:Range   5: Item
+    ShopKeep = 6                // 6:Raccoon
 };
+
 public enum Direction
 {
 	ERROR = -1, NORTH = 0, SOUTH, EAST, WEST
@@ -66,7 +69,8 @@ public class Entity
 
 public class Item
 {
-	// Placeholder
+    public ItemSet type;  // Name of item on floor
+   
 }
 
 //**************************************************//
@@ -614,7 +618,7 @@ public class BoardGenerator : MonoBehaviour
 
 						// Create an enemy
 						GameObject enemy = (GameObject)Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-						this.map[m.x + xx, m.y + yy].entityType = EntitySet.Enemy1;
+						this.map[m.x + xx, m.y + yy].entityType = EntitySet.Enemy;
 						enemy.GetComponent<EnemyBasic>().currentX = m.x+xx;
 						enemy.GetComponent<EnemyBasic>().currentY = m.y+yy;
 						//enemy.Set((int)(Random.value * 100), 0);
@@ -855,7 +859,7 @@ public class BoardGenerator : MonoBehaviour
 		make_walls();
 	}
 
-	public void moveEnemies()
+	public IEnumerator moveEnemies() // IEnumerator so the game can space out their actions
 	{
 		for (int i = 0; i < EnemyList.Count; i++)
 		{
@@ -881,7 +885,9 @@ public class BoardGenerator : MonoBehaviour
 
 					temp.GetComponent<EnemyBasic>().wander();
 				}
-			}
+                
+                yield return new WaitForSeconds(0.05f); // IEnumerators must yield at some point
+            }
 		}
 	}
 

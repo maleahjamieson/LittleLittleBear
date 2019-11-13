@@ -24,10 +24,6 @@ public abstract class BasicEntity : MonoBehaviour
     public BoardGenerator board;
     public Animator animator; //animation controller 
 
-
-
-
-
     protected virtual void Start()
     {
 
