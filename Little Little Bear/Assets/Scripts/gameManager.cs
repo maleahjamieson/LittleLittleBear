@@ -12,6 +12,7 @@ public class gameManager : MonoBehaviour {
     public GameObject LLB; //LLB entity
     public GameObject BackgroundMenu; //background menu
     public GameObject InventoryMenu;
+    public GameObject TargetTile;
 
 	//for pausing
 	public bool Paused;
@@ -37,7 +38,7 @@ public class gameManager : MonoBehaviour {
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
         InventoryMenu = GameObject.Find("InventoryBackground");
-
+        //TargetTile = GameObject.Find("HighlightTile");
 
 
         Random.seed = System.DateTime.Now.Millisecond; // Seed generator
