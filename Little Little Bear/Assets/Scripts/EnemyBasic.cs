@@ -143,18 +143,18 @@ public class EnemyBasic : BasicEntity
 
         // Now, check distance from each position adjacent to entity
         float[] dist = new float[4];
-        ///*
+        /*
         dist[0] = Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY - 1)*(y - this.currentY - 1));
         dist[1] = Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY + 1)*(y - this.currentY + 1));
         dist[2] = Mathf.Sqrt((x - this.currentX + 1)*(x - this.currentX + 1) + (y - this.currentY)*(y - this.currentY));
         dist[3] = Mathf.Sqrt((x - this.currentX - 1)*(x - this.currentX - 1) + (y - this.currentY)*(y - this.currentY));
         //*/
-        /*
-        dist[0] = (int)Mathf.Abs((Mathf.Abs(x) - Mathf.Abs(this.currentX)) + (Mathf.Abs(y) - Mathf.Abs(this.currentY) - 1));
-        dist[1] = (int)Mathf.Abs((Mathf.Abs(x) - Mathf.Abs(this.currentX)) + (Mathf.Abs(y) - Mathf.Abs(this.currentY) + 1));
-        dist[2] = (int)Mathf.Abs((Mathf.Abs(x) - Mathf.Abs(this.currentX) + 1) + (Mathf.Abs(y) - Mathf.Abs(this.currentY)));
-        dist[3] = (int)Mathf.Abs((Mathf.Abs(x) - Mathf.Abs(this.currentX) - 1) + (Mathf.Abs(y) - Mathf.Abs(this.currentY)));
-        */
+        ///*
+        dist[0] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY - 1));
+        dist[1] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY + 1));
+        dist[2] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX + 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+        dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+        //*/
 
         // Check for walls
         if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
