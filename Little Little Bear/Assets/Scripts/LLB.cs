@@ -14,6 +14,7 @@ public class LLB : BasicEntity
     // List of personal boolean
     private bool dig;
     private bool turnEnd;
+    private bool attackWait;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
 
     public Highlight target;  // Targeting script
@@ -22,6 +23,7 @@ public class LLB : BasicEntity
     {
         turnEnd = false;
         dig = false;
+        attackWait = false;
         checkInput = true;
         health = 100;
         stamina = 100;
@@ -155,7 +157,7 @@ public class LLB : BasicEntity
 
             //board.moveEnemies(); // Move all of the bad bois
         }
-        else if (attack)
+        else if (attackWait) // Waiting for decided direction
         {
             aDirX = (int)Input.GetAxisRaw("Horizontal"); //using ints forces 1 unit movement
             aDirY = (int)Input.GetAxisRaw("Vertical");
@@ -173,12 +175,12 @@ public class LLB : BasicEntity
             
             if (Input.GetMouseButtonDown(0)) // Attack
             {
-                attack = false;
+                attackWait = false;
                 turnEnd = true;
             }
             if (Input.GetMouseButtonDown(1)) // Bail
             {
-                attack = false;
+                attackWait = false;
             }
         }
     }
@@ -188,6 +190,8 @@ public class LLB : BasicEntity
     {
         if (attack)
         {
+            attack = false;
+            attackWait = true;
             StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
@@ -243,7 +247,7 @@ public class LLB : BasicEntity
         {
             case 'a': //Attack
                 {
-                    while (attack)// Start combat decisions
+                    while (attackWait)// Start combat decisions
                         yield return null;
                     if (turnEnd) // if attack actually happened
                     {
