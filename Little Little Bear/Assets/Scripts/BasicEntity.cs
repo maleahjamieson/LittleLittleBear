@@ -11,6 +11,7 @@ public abstract class BasicEntity : MonoBehaviour
     public int currentX; // CurrentPosition
     public int currentY;
 
+    public int range; // Maximum range of attack
 
     // List of generic action boolean values
     public bool moveUp;
@@ -21,10 +22,7 @@ public abstract class BasicEntity : MonoBehaviour
     public bool flipped;
     public EntitySet selfEntity;
     public BoardGenerator board;
-
-
-
-
+    public Animator animator; //animation controller 
 
     protected virtual void Start()
     {
@@ -37,44 +35,7 @@ public abstract class BasicEntity : MonoBehaviour
         flipped = false;
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         offset = board.offsetforTiles;
-
-    }
-
-    protected bool Move(int xDir, int yDir) // out let us return multiple values
-    {
-        board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        selfEntity = board.map[currentX, currentY].entityType;
-        Vector2 sPos = transform.position; //Start Position
-        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
-
-        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
-        {
-            switch (board.map[xDir, yDir].tileType)
-            {
-                //don't move there
-                case TileSet.BOULDER:
-                case TileSet.ROCK:
-                case TileSet.WALL:
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    //do nothing
-                    return false;
-
-                default: // Currently default since moving is only here
-                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
-                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
-                    currentX = xDir;
-                    currentY = yDir;
-                    return true;
-            }
-        }
-        else //something is there
-        {
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
-        }
-
-        return true; // If nothing is hit then assume move
+        animator = GetComponent<Animator>();
     }
     
     // Update is called once per frame

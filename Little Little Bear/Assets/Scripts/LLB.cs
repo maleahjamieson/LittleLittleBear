@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class LLB : BasicEntity
 {
-    private Animator animator; //LLB animation controller 
     private int horizontal = 0; //store direction we are moving
     private int vertical = 0;
-
+    private char damageType;
+    private int stamina;  // Special move gague, when below a certain amount you cant use special
     // List of personal boolean
     // private bool turnEnd; // When true enemies can move
     private bool dig;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
+
     protected override void Start()
     {
         //turnEnd = false;
         dig = false;
         checkInput = true;
         health = 100;
+        stamina = 100;
         strength = 4;
-        animator = GetComponent<Animator>();
         base.Start();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
@@ -33,6 +34,73 @@ public class LLB : BasicEntity
     private void OnDisable() // When object is disabled
     {
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
+    }
+
+    private void Attack()
+    {
+
+       /* switch (damageType)
+        {
+            case 'b': // blunt
+                //Knockback + stun
+                break;
+            case 's': // slash
+                //Wide slash (3 tiles in a perpindicular line)
+                break;
+            case 'p': // pierce
+                //Multi-Hit
+                break;
+        }*/
+    }
+
+    private bool Move(int xDir, int yDir) // out let us return multiple values
+    {
+        board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
+        selfEntity = board.map[currentX, currentY].entityType;
+        Vector2 sPos = transform.position; //Start Position
+        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
+
+        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        {
+            switch (board.map[xDir, yDir].tileType)
+            {
+                //don't move there
+                case TileSet.BOULDER:
+                case TileSet.ROCK:
+                case TileSet.WALL:
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    //do nothing
+                    return false;
+
+                default: // Currently default since moving is only here
+                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
+                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+                    currentX = xDir;    // OverwritePosition
+                    currentY = yDir;
+                    //PickUp(board.map[xDir, yDir].item);           // Check ground for item
+                    return true;
+            }
+        }
+        else //something is there
+        {            
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+            return false;
+        }
+
+        return true; // If nothing is hit then assume move
+    }
+
+    private void PickUp(Item i)   // Picks up the item off the floor (In the future we can add UI)
+    {
+        switch (i.type) // Checks for any item and applies it to inventory 
+        {
+            case ItemSet.ANT:  // Ants in a bottle
+                break;
+            case ItemSet.SKUNK:
+                break;         
+        }
     }
 
     private void Update()
@@ -61,6 +129,7 @@ public class LLB : BasicEntity
 
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
+                Debug.Log("*******LLB*******");
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
 
                 {
@@ -77,12 +146,15 @@ public class LLB : BasicEntity
                 }
 
             }
+
+            //board.moveEnemies(); // Move all of the bad bois
         }
     }
     void FixedUpdate() // Where animation and actions take place
     {
         if (attack)
         {
+
             attack = false; // reset bool so input can be taken again
             animator.SetTrigger("Attack"); // Attack animation triggered
             StartCoroutine(wait2Move('o', 1.5f)); // Starts animation timer and should stop inputs
@@ -178,6 +250,9 @@ public class LLB : BasicEntity
                 break;
         }
         //GameManager.instance.playersTurn = false; // Action complete, player loses turn enemies go
+        //board.moveEnemies(); // Move all of the bad bois
+        
+        yield return StartCoroutine(board.moveEnemies());
         checkInput = true; // Inputs are able to be taken again
     }
 }
