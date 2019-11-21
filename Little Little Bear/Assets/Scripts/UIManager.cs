@@ -73,16 +73,6 @@ public class UIManager : MonoBehaviour {
                     gameManager.instance.BackgroundMenu.SetActive(false);
                 }
                 break;
-            case ClickType.Inventory:
-                if (!gameManager.instance.InventoryMenu.activeSelf)
-                {
-                    gameManager.instance.InventoryMenu.SetActive(true);
-                }
-                else
-                {
-                    gameManager.instance.InventoryMenu.SetActive(false);
-                }
-                break;
             case ClickType.Music:
                 break;
 		}

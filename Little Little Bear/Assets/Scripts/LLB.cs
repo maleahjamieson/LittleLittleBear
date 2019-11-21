@@ -16,6 +16,10 @@ public class LLB : BasicEntity
     private bool turnEnd;
     private bool attackWait;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
+    
+    // inventory variables
+    private Inventory inventory;
+    public GameObject itemButton;
 
     public Highlight target;  // Targeting script
 
@@ -30,6 +34,7 @@ public class LLB : BasicEntity
         strength = 4;
         //target = GameObject.Find("HighlightTile").GetComponent<gameManager>().TargetTile;
         base.Start();
+        inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
@@ -89,7 +94,15 @@ public class LLB : BasicEntity
                     board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
-                    //PickUp(board.map[xDir, yDir].item);           // Check ground for item
+
+                    //written by Maleah, pickup item for inventory
+                    //check ground for item
+                    if(board.map[xDir, yDir].item != null)
+                    {
+                        //try to pickup item
+                        PickUp(board.map[xDir, yDir].item);           
+                    }
+                    
                     return true;
             }
         }
@@ -103,14 +116,27 @@ public class LLB : BasicEntity
     }
     /*
     private void PickUp(Item i)   // Picks up the item off the floor (In the future we can add UI)
+    */
+    private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
     {
-        switch (i.type) // Checks for any item and applies it to inventory 
+        item.GetComponent<Item>().pickup();
+        ///*
+        Debug.Log("Running pickup function");
+        for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
         {
-            case ItemSet.ANT:  // Ants in a bottle
+            if(inventory.isFull[i] == false)    //not full, pickup item
+            {
+                Debug.Log("Picked up item");
+                //add item
+                inventory.isFull[i] = true;
+                
+                //if item is blueberry then this
+                Instantiate(itemButton, inventory.slots[i].transform, false);
+                Destroy(item);
                 break;
-            case ItemSet.SKUNK:
-                break;         
+            }
         }
+        //*/
     }
     */
     private void Update()
