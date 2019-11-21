@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4073279085208264490}
   - component: {fileID: 4073279085208264491}
   - component: {fileID: 4073279085208264488}
+  - component: {fileID: -2515862224401194499}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -99,6 +100,7 @@ MonoBehaviour:
   offset: 0
   currentX: 0
   currentY: 0
+  range: 0
   moveUp: 0
   moveDown: 0
   moveLeft: 0
@@ -107,6 +109,7 @@ MonoBehaviour:
   flipped: 0
   selfEntity: 0
   board: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!95 &4073279085208264488
 Animator:
   serializedVersion: 3
@@ -126,3 +129,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-2515862224401194499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4073279085208264489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac06ac1f803b0744d950c5f15df16a3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFull: 00000000
+  slots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

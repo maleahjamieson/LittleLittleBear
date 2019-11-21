@@ -59,7 +59,7 @@ public struct GridCell
 {
 	public TileSet tileType;
     public EntitySet entityType;
-    public Item item;
+    public GameObject item;
 }
 
 public class Entity
@@ -67,11 +67,13 @@ public class Entity
     public EntitySet entityType;
 }
 
+/* commented out because Items are instead GameObjects and its its own script - Maleah
 public class Item
 {
     public ItemSet type;  // Name of item on floor
    
 }
+*/
 
 //**************************************************//
 // The map array shall be accessed in this fashion: //
@@ -630,7 +632,8 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.general_item_chance))
 				{
-					this.map[m.x + xx, m.y + yy].item = new Item();
+					GameObject tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					this.map[m.x + xx, m.y + yy].item = tempItem;
 					this.itemCounter++;
 				}
 			}
@@ -701,7 +704,7 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.rare_item_chance))
 				{
-					this.map[m.x + xx, m.y + yy].item = new Item();
+					this.map[m.x + xx, m.y + yy].item = new GameObject();
 					this.itemCounter++;
 				}
 			}

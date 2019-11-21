@@ -60,6 +60,7 @@ public class gameManager : MonoBehaviour {
             board.HamsterEntity = GameObject.Find("Player");
             board.GenMap(0);
             Debug.Log("GM SEES " + board.map[499, 500].tileType);
+            board.printRecords();
         }
 	}
 	
