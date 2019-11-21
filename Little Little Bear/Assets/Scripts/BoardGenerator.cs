@@ -861,6 +861,8 @@ public class BoardGenerator : MonoBehaviour
 
 	public IEnumerator moveEnemies() // IEnumerator so the game can space out their actions
 	{
+		Debug.Log("Moving "+EnemyList.Count+" enemies..."); // Edit so I can make a pull request :P
+
 		for (int i = 0; i < EnemyList.Count; i++)
 		{
 			GameObject temp = (GameObject)EnemyList[i];
@@ -875,13 +877,16 @@ public class BoardGenerator : MonoBehaviour
 					//else
 						int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
 						int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
-						Debug.Log("Pathfinding to: "+goalX+", "+goalY);
+						// Debug.Log("Pathfinding to: "+goalX+", "+goalY);
 						temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
 				}
 				else
 				{
 					if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
+					{
+						Debug.Log("Found you!");
 						temp.GetComponent<EnemyBasic>().makeAlert();
+					}
 
 					temp.GetComponent<EnemyBasic>().wander();
 				}

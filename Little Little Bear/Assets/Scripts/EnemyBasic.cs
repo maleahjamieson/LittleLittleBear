@@ -89,6 +89,31 @@ public class EnemyBasic : BasicEntity
         return true; // If nothing is hit then assume move
     }
 
+    // Below is the core of the AI behaviors, written by Christopher Walen
+
+    // It uses what I will call a 'one-step A* approach' where it will choose
+    // the tile to move to based on the shortest path, and it determines
+    // this path by measuring the x-distance and y-distance, and combining
+    // this into a heuristic that we can sort by.
+
+    // We do this for the positions above, below, and to the side of every enemy.
+    // We then exclude positions depending on whats in them (i.e. is there a wall,
+    // another entity, etc.) by pushing them to the 'back of the queue' by marking
+    // them as very far away.
+
+    // Then we do a very rudimentary search for the minimum value among those
+    // distances, and compare it to the distance we stored for each position.
+
+    // We also make sure that we have a distance more than 1 tile, and a distance
+    // thats not our 'very far away' distance before we actually move.
+
+    // When we're not pathing, we're randomly choosing to move north/south/east/west
+    // based on a few Random.value comparisons to simulate a x out of 100 chance.
+
+    // There is also a pretty basic Line-Of-Sight method that will actually run
+    // LOS checks in the x and y lines, then we do a distance check to make up for
+    // not checking perfectly on diagonals.
+
     public bool isAlert()
     {
         return this.alert;
@@ -109,7 +134,23 @@ public class EnemyBasic : BasicEntity
         int y_slope = (int) (gy - sy);
         bool flag = true;
 
-        while (flag && (sx != gx && sy != gy))
+        // Check along the Y for LOS
+        while (flag && sy != gy)
+        {
+            if (map[sx, sy].tileType == TileSet.WALL)
+                flag = false;
+
+            if (y_slope > 0)
+                sy++;
+            else
+                sy--;
+        }
+
+        // Reset starting y
+        sy = currentY;
+
+        // Check along the X for LOS
+        while (flag && sx != gx)
         {
             if (map[sx, sy].tileType == TileSet.WALL)
                 flag = false;
@@ -118,11 +159,17 @@ public class EnemyBasic : BasicEntity
                 sx++;
             else
                 sx--;
+        }
 
-            if (y_slope > 0)
-                sy++;
-            else
-                sy--;
+        // If all else fails, fake close-up LOS with a distance check
+        if (flag)
+        {
+            int sq1 = x_slope*x_slope;
+            int sq2 = y_slope*y_slope;
+            float dist = Mathf.Sqrt(sq1 + sq2);
+
+            if (dist >= 5.0f)
+                flag = false;
         }
 
         return flag;
@@ -130,89 +177,147 @@ public class EnemyBasic : BasicEntity
 
     public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
+        // Debug.Log("G: "+x+", "+y);
+        // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
+
         // First, update visited points
         // Add current position to visited points
         visitedPoints.Add(new Vector2(this.currentX, this.currentY));
 
         // Don't store more than 20 visited points
-        if (visitedPoints.Count > 20)
+        if (visitedPoints.Count > 3) // Reduced memory to 3 positions
             visitedPoints.RemoveAt(0); // Remove oldest point
 
         // Now, check distance from each position adjacent to entity
-        int[] dist = new int[4];
-        dist[0] = (int)Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY - 1)*(y - this.currentY - 1));
-        dist[1] = (int)Mathf.Sqrt((x - this.currentX)*(x - this.currentX) + (y - this.currentY + 1)*(y - this.currentY + 1));
-        dist[2] = (int)Mathf.Sqrt((x - this.currentX + 1)*(x - this.currentX + 1) + (y - this.currentY)*(y - this.currentY));
-        dist[3] = (int)Mathf.Sqrt((x - this.currentX - 1)*(x - this.currentX - 1) + (y - this.currentY)*(y - this.currentY));
+        float[] dist = new float[4];
+        dist[0] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY - 1));
+        dist[1] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY + 1));
+        dist[2] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX + 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+        dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
 
         // Check for walls
         if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
-            dist[0] = 9999;
+        {
+            // Debug.Log("S-Wall");
+            dist[0] = 9999.9f;
+        }
         if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
-            dist[1] = 9999;
+        {
+            // Debug.Log("N-Wall");
+            dist[1] = 9999.9f;
+        }
         if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
-            dist[2] = 9999;
+        {
+            // Debug.Log("E-Wall");
+            dist[2] = 9999.9f;
+        }
         if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
-            dist[3] = 9999;
+        {
+            // Debug.Log("W-Wall");
+            dist[3] = 9999.9f;
+        }
+
+        // Check for entities
+        if (map[this.currentX, this.currentY-1].entityType != EntitySet.NOTHING)
+        {
+            dist[0] = 9999.9f;
+        }
+        if (map[this.currentX, this.currentY+1].entityType != EntitySet.NOTHING)
+        {
+            dist[1] = 9999.9f;
+        }
+        if (map[this.currentX+1, this.currentY].entityType != EntitySet.NOTHING)
+        {
+            dist[2] = 9999.9f;
+        }
+        if (map[this.currentX-1, this.currentY].entityType != EntitySet.NOTHING)
+        {
+            dist[3] = 9999.9f;
+        }
 
         // Check that we haven't visited these positions
         if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY-1)))
-            dist[0] = 9999;
+            dist[0] = 9999.9f;
         if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY+1)))
-            dist[1] = 9999;
+            dist[1] = 9999.9f;
         if (visitedPoints.Contains(new Vector2(this.currentX+1, this.currentY)))
-            dist[2] = 9999;
+            dist[2] = 9999.9f;
         if (visitedPoints.Contains(new Vector2(this.currentX-1, this.currentY)))
-            dist[3] = 9999;
+            dist[3] = 9999.9f;
 
         // Store variables to reference later
-        int northDist, southDist, eastDist, westDist;
-        northDist = dist[0];
-        southDist = dist[1];
+        float northDist, southDist, eastDist, westDist;
+        southDist = dist[0];
+        northDist = dist[1];
         eastDist = dist[2];
         westDist = dist[3];
 
         // Sort to be the lowest
+        /*
         for (int i = 0; i < 4; i++)
         {
-            for (int j = i; j < 4; j++)
+            for (int j = i+1; j < 4; j++)
             {
                 if (dist[j] < dist[i])
                 {
-                    int temp = dist[j];
+                    float temp = dist[j];
                     dist[j] = dist[i];
                     dist[i] = temp;
                 }
             }
         }
+        //*/
+
+        // Optimized to place smallest distance at dist[0]
+        for (int i = 0; i < 4; i++)
+        {
+            if (dist[i] < dist[0])
+            {
+                float temp = dist[i];
+                dist[i] = dist[0];
+                dist[0] = temp;
+            }
+        }
+
+        // Debug.Log("N: "+northDist+", S: "+southDist+", E: "+eastDist+", W: "+westDist);
 
         // Actually move based on our findings
-        if (dist[0] == northDist)
+        if (dist[0] >= 1.0f && dist[0] < 9999.9f)
         {
-            Move(currentX, currentY - 1);
-            // currentY -= 1;
+            if (dist[0] == southDist)
+            {
+                // Debug.Log("Moved south");
+                Move(currentX, currentY - 1);
+                // currentY -= 1;
+            }
+            else if (dist[0] == northDist)
+            {
+                // Debug.Log("Moved north");
+                Move(currentX, currentY + 1);
+                // currentY += 1;
+            }
+            else if (dist[0] == eastDist)
+            {
+                // Debug.Log("Moved east");
+                Move(currentX + 1, currentY);
+                // currentX += 1;
+            }
+            else if (dist[0] == westDist)
+            {
+                // Debug.Log("Moved west");
+                Move(currentX - 1, currentY);
+                // currentX -= 1;
+            }
+            else
+            {
+                Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
+            }
         }
-        else if (dist[0] == southDist)
-        {
-            Move(currentX, currentY + 1);
-            // currentY += 1;
-        }
-        else if (dist[0] == eastDist)
-        {
-            Move(currentX + 1, currentY);
-            // currentX += 1;
-        }
-        else if (dist[0] == westDist)
-        {
-            Move(currentX - 1, currentY);
-            // currentX -= 1;
-        }
-        else
-        {
-            Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
-        }
+
+        Debug.Log("Pathing!");
     }
 
+    // This method may be removed at a later date
     public void moveTowardsEntity(BasicEntity entity)
     {
         // If the entity we're moving towards exists
@@ -530,7 +635,10 @@ public class EnemyBasic : BasicEntity
                 // currentY += sign;
             }
         }
+
+        Debug.Log("Wandering!");
     }
+    // End core AI methods
 
     // Update is called once per frame
     void Update()
