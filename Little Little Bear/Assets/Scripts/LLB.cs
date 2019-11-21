@@ -8,33 +8,25 @@ public class LLB : BasicEntity
     private int vertical = 0;
     private char damageType;
     private int stamina;  // Special move gague, when below a certain amount you cant use special
-
-    private int aDirX, aDirY; // Attack direction x and y, how we aim
-
     // List of personal boolean
+    // private bool turnEnd; // When true enemies can move
     private bool dig;
-    private bool turnEnd;
-    private bool attackWait;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
     
-    // inventory variables
+    /*//inventory variables
     private Inventory inventory;
-    public GameObject itemButton;
-
-    public Highlight target;  // Targeting script
+    public GameObject itemButton;*/
 
     protected override void Start()
     {
-        turnEnd = false;
+        //turnEnd = false;
         dig = false;
-        attackWait = false;
         checkInput = true;
         health = 100;
         stamina = 100;
         strength = 4;
-        //target = GameObject.Find("HighlightTile").GetComponent<gameManager>().TargetTile;
         base.Start();
-        inventory = GetComponent<Inventory>();
+        //inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
@@ -49,23 +41,21 @@ public class LLB : BasicEntity
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
     }
 
-    private void Combat() // Stopped time while player decides
+    private void Attack()
     {
-        animator.SetTrigger("Attack"); // Attack animation triggered
-        attack = false;
-        /* switch (damageType)
-         {
-             case 'b': // blunt
-                 //Knockback + stun
-                 break;
-             case 's': // slash
-                 //Wide slash (3 tiles in a perpindicular line)
-                 break;
-             case 'p': // pierce
-                 //Multi-Hit
-                 break;
-         }*/
-        turnEnd = true;
+
+       /* switch (damageType)
+        {
+            case 'b': // blunt
+                //Knockback + stun
+                break;
+            case 's': // slash
+                //Wide slash (3 tiles in a perpindicular line)
+                break;
+            case 'p': // pierce
+                //Multi-Hit
+                break;
+        }*/
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -114,13 +104,11 @@ public class LLB : BasicEntity
 
         return true; // If nothing is hit then assume move
     }
-    /*
-    private void PickUp(Item i)   // Picks up the item off the floor (In the future we can add UI)
-    */
+
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
     {
         item.GetComponent<Item>().pickup();
-        ///*
+        /*
         Debug.Log("Running pickup function");
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
         {
@@ -136,11 +124,13 @@ public class LLB : BasicEntity
                 break;
             }
         }
-        //*/
+        */
     }
-    */
+
     private void Update()
     {
+        //if (!GameManager.instance.playersTurn) return; // means following code wont run unless its player turn
+
         if (checkInput) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
@@ -183,42 +173,15 @@ public class LLB : BasicEntity
 
             //board.moveEnemies(); // Move all of the bad bois
         }
-        else if (attackWait) // Waiting for decided direction
-        {
-            aDirX = (int)Input.GetAxisRaw("Horizontal"); //using ints forces 1 unit movement
-            aDirY = (int)Input.GetAxisRaw("Vertical");
-            if (aDirX != 0 || aDirY != 0) // There must be movement input
-            {
-                if (aDirX == -1)  // Identifies direction
-                    moveLeft = true;
-                else if (aDirX == 1)
-                    moveRight = true;
-                else if (vertical == -1)
-                    moveDown = true;
-                else
-                    moveUp = true;       
-            }
-            
-            if (Input.GetMouseButtonDown(0)) // Attack
-            {
-                attackWait = false;
-                turnEnd = true;
-            }
-            if (Input.GetMouseButtonDown(1)) // Bail
-            {
-                attackWait = false;
-            }
-        }
     }
-
-
     void FixedUpdate() // Where animation and actions take place
     {
         if (attack)
         {
-            attack = false;
-            attackWait = true;
-            StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
+
+            attack = false; // reset bool so input can be taken again
+            animator.SetTrigger("Attack"); // Attack animation triggered
+            StartCoroutine(wait2Move('o', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
         {
@@ -271,24 +234,12 @@ public class LLB : BasicEntity
     {
         switch (c)
         {
-            case 'a': //Attack
-                {
-                    while (attackWait)// Start combat decisions
-                        yield return null;
-                    if (turnEnd) // if attack actually happened
-                    {
-                        animator.SetTrigger("Attack");
-                        yield return new WaitForSeconds(t);
-                    }
-                }
-                break;
             case 'l':  //Move left
                 {
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
                     yield return new WaitForSeconds(t - 0.1f); // Lagtime after movement is complete
-                    turnEnd = true;
                 }
 
                 break;
@@ -298,7 +249,6 @@ public class LLB : BasicEntity
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
                     yield return new WaitForSeconds(t - 0.1f);
-                    turnEnd = true;
                 }
                 break;
             case 'u': // Move up
@@ -307,7 +257,6 @@ public class LLB : BasicEntity
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
                     yield return new WaitForSeconds(t - 0.1f);
-                    turnEnd = true;
                 }
                 break;
             case 'd': // Move Down
@@ -316,26 +265,20 @@ public class LLB : BasicEntity
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
                     yield return new WaitForSeconds(t - 0.1f);
-                    turnEnd = true;
                 }
                 break;
             case 'o': //Other, just wait for animation to end
                 {
                     yield return new WaitForSeconds(t); // Nothing special just wait t seconds
-                    turnEnd = true;
                 }
                 break;
         }
         //GameManager.instance.playersTurn = false; // Action complete, player loses turn enemies go
         //board.moveEnemies(); // Move all of the bad bois
-        if (turnEnd) // Ensures action has been made
-        {
-            yield return StartCoroutine(board.moveEnemies());
-        }
-        turnEnd = false; // Reset after enemies
+        
+        yield return StartCoroutine(board.moveEnemies());
         checkInput = true; // Inputs are able to be taken again
     }
 }
-
 
 

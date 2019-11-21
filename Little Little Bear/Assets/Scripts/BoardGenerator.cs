@@ -53,6 +53,20 @@ public struct Position
 	public int x;
 	public int y;
 	public Direction dir;
+
+	public Position(int xx, int yy)
+	{
+		x = xx;
+		y = yy;
+		dir = Direction.ERROR;
+	}
+
+	public Position(int xx, int yy, Direction d)
+	{
+		x = xx;
+		y = yy;
+		dir = d;
+	}
 }
 
 public struct GridCell
@@ -60,12 +74,35 @@ public struct GridCell
 	public TileSet tileType;
     public EntitySet entityType;
     public GameObject item;
+
+    public GridCell(TileSet t)
+    {
+    	tileType = t;
+    	entityType = 0;
+    	item = null;
+    }
+
+    public GridCell(TileSet t, EntitySet e)
+    {
+    	tileType = t;
+    	entityType = e;
+    	item = null;
+    }
+
+    public GridCell(TileSet t, EntitySet e, GameObject i)
+    {
+    	tileType = t;
+    	entityType = e;
+    	item = i;
+    }
 }
 
+/* Who left this in?
 public class Entity
 {
     public EntitySet entityType;
 }
+*/
 
 /* commented out because Items are instead GameObjects and its its own script - Maleah
 public class Item
