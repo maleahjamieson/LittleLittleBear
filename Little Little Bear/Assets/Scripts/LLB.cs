@@ -17,7 +17,7 @@ public class LLB : BasicEntity
     private bool attackWait;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
 
-    public Highlight target;  // Targeting script
+    public Highlight targetHighlight;  // Targeting script
 
     protected override void Start()
     {
@@ -28,7 +28,7 @@ public class LLB : BasicEntity
         health = 100;
         stamina = 100;
         strength = 4;
-        //target = GameObject.Find("HighlightTile").GetComponent<gameManager>().TargetTile;
+        targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
@@ -164,13 +164,31 @@ public class LLB : BasicEntity
             if (aDirX != 0 || aDirY != 0) // There must be movement input
             {
                 if (aDirX == -1)  // Identifies direction
-                    moveLeft = true;
+                {
+                    targetHighlight.Aim('l');
+                    if (!flipped)
+                    {
+                        Vector3 tempS = transform.localScale;
+                        tempS.x *= -1;  // Flips sprite
+                        transform.localScale = tempS;
+                        flipped = true;
+                    }
+                }
                 else if (aDirX == 1)
-                    moveRight = true;
-                else if (vertical == -1)
-                    moveDown = true;
-                else
-                    moveUp = true;       
+                {
+                    targetHighlight.Aim('r');
+                    if (flipped)
+                    {
+                        Vector3 tempS = transform.localScale;
+                        tempS.x *= -1;  // Flips sprite
+                        transform.localScale = tempS;
+                        flipped = false;
+                    }
+                }
+                else if (aDirY == -1)
+                    targetHighlight.Aim('d');
+                else if (aDirY == 1)
+                    targetHighlight.Aim('u');
             }
             
             if (Input.GetMouseButtonDown(0)) // Attack
@@ -182,6 +200,10 @@ public class LLB : BasicEntity
             {
                 attackWait = false;
             }
+            if (!attackWait)
+            {
+                targetHighlight.Deactivate();
+            }
         }
     }
 
@@ -192,6 +214,7 @@ public class LLB : BasicEntity
         {
             attack = false;
             attackWait = true;
+            targetHighlight.Activate(2, flipped);
             StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
