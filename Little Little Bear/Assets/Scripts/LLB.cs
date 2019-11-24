@@ -141,7 +141,7 @@ public class LLB : BasicEntity
         }
         */
     }
-    */
+    
     private void Update()
     {
         if (checkInput) //No previous actions are being executed
