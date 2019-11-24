@@ -8,10 +8,12 @@ public class LLB : BasicEntity
     private int vertical = 0;
     private char damageType;
     private int stamina;  // Special move gague, when below a certain amount you cant use special
-
     private int aDirX, aDirY; // Attack direction x and y, how we aim
+    private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
+    private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
 
     // List of personal boolean
+    private bool specialA; // special attack
     private bool dig;
     private bool turnEnd;
     private bool attackWait;
@@ -25,6 +27,9 @@ public class LLB : BasicEntity
         dig = false;
         attackWait = false;
         checkInput = true;
+        invEquipped = 0; // Start on weapon slot
+        range = 10; // base range on range weapon. I dont know if this will ever change
+        weaponType = 's'; // Start with a carrot which is blunt
         health = 100;
         stamina = 100;
         strength = 4;
@@ -122,6 +127,11 @@ public class LLB : BasicEntity
                 attack = true; // player will attempt to attack
                 checkInput = false; //input has been read
             }
+            if (Input.GetMouseButtonDown(1)) // right mouse click
+            {
+                specialA = true; // player will attempt to special attack
+                checkInput = false; //input has been read
+            }
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 dig = true;
@@ -214,8 +224,28 @@ public class LLB : BasicEntity
         {
             attack = false;
             attackWait = true;
-            targetHighlight.Activate(2, flipped);
+            targetHighlight.Activate(1, flipped, 'o'); // o = other i.e basic attack
             StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
+        }
+        else if (specialA)
+        {
+            int r = 0;
+            switch (weaponType)
+            {
+                case 'b': // bluntslide 180
+                    r = 1;
+                    break;
+                case 's': // slice
+                    r = 5;
+                    break;
+                case 't': // thrust
+                    r = 2;
+                    break;
+            }
+            specialA = false;
+            attackWait = true;
+            targetHighlight.Activate(r, flipped, weaponType);
+            StartCoroutine(wait2Move('s', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
         {
@@ -270,6 +300,18 @@ public class LLB : BasicEntity
         {
             case 'a': //Attack
                 {
+                    while (attackWait)// Start combat decisions
+                        yield return null;
+                    if (turnEnd) // if attack actually happened
+                    {
+                        animator.SetTrigger("Attack");
+                        yield return new WaitForSeconds(t);
+                    }
+                }
+                break;
+            case 's': //Special attack
+                {
+                    
                     while (attackWait)// Start combat decisions
                         yield return null;
                     if (turnEnd) // if attack actually happened

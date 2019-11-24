@@ -4,42 +4,66 @@ using UnityEngine;
 
 public class Highlight : MonoBehaviour
 {
-    /*
-     Ok so this is a bit rough right now but here is how we fix it,look up how to make
-     an array of transforms, make 10 tiles, then during activate edit the first r 
-     transforms to be on screen, deactivate changes those transforms back to (0, 0). 
-     Super sketch but no more NULLS!
-     */
-    private int max = 10;
+  
     public int range = 0;
     public char direction;
+    public char attackType;
     public bool visible = false;
     public GameObject LLB;
     public GameObject[] tileList;
 
     public void Start()
     {
-        for(int i = 0; i < tileList.Length; i++)
+        for(int i = 0; i < tileList.Length; i++) // hide all the tiles
         {
-            Debug.Log("Hide a temp!!!!" + i + "<---");
             tileList[i].SetActive(false);
         }
     }
-    public void Activate(int r, bool flipped)
+    public void Activate(int r, bool flipped, char t) // Only activate the tiles needed in the proper formation
     {
-        range = r;
-        visible = true;
-        if (tileList != null)
-        { 
-            for (int i = 0; i < r; i++)
+        range = r; // how many tiles
+        attackType = t; // which type of attack
+        visible = true; // boolean for a check, but may not need later
+        if (tileList != null) // make sure list has gameobjects
+        {
+            switch (attackType)
             {
-                tileList[i].SetActive(true);
-                if (!flipped)
+                case 's': // slice, T shape
+                    tileList[0].SetActive(true); // turn on tiles 0-4
+                    tileList[1].SetActive(true);
+                    tileList[2].SetActive(true);
+                    tileList[3].SetActive(true); 
+                    tileList[4].SetActive(true);
+
+                    if (!flipped) // Positions based off looking right
+                    {
+                        tileList[0].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y);
+                        tileList[1].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y + 1);
+                        tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
+                        tileList[3].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y - 1);
+                        tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
+                    }
+                    else        // Positions based off looking left
+                    {
+                        tileList[0].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y);
+                        tileList[1].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y + 1);
+                        tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
+                        tileList[3].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y - 1);
+                        tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
+                    }
+                    break;
+                default: // Range, thrust, blunt and basic
+                for (int i = 0; i < r; i++) // runs through range and places in a line
                 {
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x + (i + 1), LLB.transform.position.y);
+                    tileList[i].SetActive(true);
+                    if (!flipped)
+                    {
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x + (i + 1), LLB.transform.position.y);
+                    }
+                    else
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x - (i + 1), LLB.transform.position.y);
                 }
-                else
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x - (i + 1), LLB.transform.position.y);
+                break;
             }
         }
 
@@ -49,34 +73,70 @@ public class Highlight : MonoBehaviour
         visible = false;
         for (int i = 0; i < range; i++)
         {
-            Debug.Log("Hide a temp!!!!" + i + "<---");
             tileList[i].SetActive(false); // Makes the tiles invisible
         }
     }
-    private void Update()
-    {
-       // visible = false;
-    }
 
-    public void Aim(char d)
+    public void Aim(char d) // d direction, t type
     {
-        for (int i = 0; i < range; i++)
-        {
-            switch (d)
+        switch (attackType) // Special moves aiming
+        { // s = slice 
+            case 's':  //Makes T shape on all sides
+                    switch (d)
+                    {
+                        case 'l': // left
+                            tileList[0].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y);
+                            tileList[1].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y + 1);
+                            tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
+                            tileList[3].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y - 1);
+                            tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
+                            break;
+                        case 'r': // right
+                            tileList[0].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y);
+                            tileList[1].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y + 1);
+                            tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
+                            tileList[3].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y - 1);
+                            tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
+                            break;
+                        case 'u': // up
+                            tileList[0].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
+                            tileList[1].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y + 1);
+                            tileList[2].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y);
+                            tileList[3].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y + 1);
+                            tileList[4].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y);
+                        break;
+                        case 'd': // down
+                            tileList[0].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
+                            tileList[1].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y -+ 1);
+                            tileList[2].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y);
+                            tileList[3].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y - 1);
+                            tileList[4].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y);
+                        break;
+                    }
+
+                break;
+
+            default:
+            for (int i = 0; i < range; i++)
             {
-                case 'l':
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x - (i+1), LLB.transform.position.y);
-                    break;
-                case 'r':
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x + (i + 1), LLB.transform.position.y);
-                    break;
-                case 'u':
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + (i + 1));
-                    break;
-                case 'd':
-                    tileList[i].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - (i + 1));
-                    break;
+                switch (d)
+                {
+                    case 'l': // left
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x - (i + 1), LLB.transform.position.y);
+                        break;
+                    case 'r': // right
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x + (i + 1), LLB.transform.position.y);
+                        break;
+                    case 'u': // up
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + (i + 1));
+                        break;
+                    case 'd': // down
+                        tileList[i].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - (i + 1));
+                        break;
+                }
+
             }
+                break;
             
         }
     }
