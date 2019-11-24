@@ -8,6 +8,11 @@ public class Inventory : MonoBehaviour
     public GameObject[] slots;
     public int selectedSlot = 0;
 
+    void Start()
+    {
+    	
+    }
+
     void Update()
     {
 
