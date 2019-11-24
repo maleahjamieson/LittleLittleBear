@@ -59,6 +59,16 @@ MonoBehaviour:
   Boulder: {fileID: 0}
   Start_Tile: {fileID: 0}
   End_Tile: {fileID: 0}
+  spawnableItems:
+  - {fileID: 8460208083832651338, guid: c1e10bd2633e88a44a5bfdd81196d834, type: 3}
+  - {fileID: 3219788761789833612, guid: bb064d9232bd47b43932c36cdd46ca30, type: 3}
+  - {fileID: 1513057633942806342, guid: e7400c0176f13124aa308fec3c6124c5, type: 3}
+  - {fileID: 6966570650463535423, guid: ba402337f049546408bbf38d8120e63b, type: 3}
+  - {fileID: 1943334380414986030, guid: 2ba0aa58540d2244aa4dae34dc724023, type: 3}
+  - {fileID: 6152840496301209184, guid: f4f5db0c837ed0e4dafaea50ed2f0db3, type: 3}
+  - {fileID: 4996363094516396106, guid: 59bdd2b34858fcb499ab1c85627215c8, type: 3}
+  - {fileID: 1507616257591408600, guid: 3d4ae86fc3bbdb64287e797808360d5c, type: 3}
+  - {fileID: 1498160981137674331, guid: c166ccb1fc9942c4c9b6cd68cab3a73a, type: 3}
   HamsterEntity: {fileID: 0}
   offsetforTiles: 1
 --- !u!114 &6618821180493726313
