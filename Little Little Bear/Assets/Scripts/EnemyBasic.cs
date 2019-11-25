@@ -43,12 +43,21 @@ public class EnemyBasic : BasicEntity
         {
             case enemyType.Mantis:
                 animator.SetTrigger("Mantis");
+                this.strength = 10;
+                this.range = 1;
                 break;
             case enemyType.Bear:
                 animator.SetTrigger("Bear");
                 break;
 
         }
+    }
+    private void Attack()
+    {
+        BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
+        Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
+        Debug.Log("LLB HP: " + LLB.health);
+        LLB.health -= this.strength;
     }
 
     protected bool Move(int xDir, int yDir) // out let us return multiple values
@@ -177,8 +186,18 @@ public class EnemyBasic : BasicEntity
 
     public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
-        // Debug.Log("G: "+x+", "+y);
-        // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
+        int euclid = (int) Mathf.Floor(Mathf.Sqrt((this.currentX - x) ^ 2 + (this.currentY - y) ^ 2));
+        bool diagTrue = (this.currentX - x) == (this.currentY - y);
+        Debug.Log("Euclid: " + euclid);
+        Debug.Log(this.type + "'s range: " + this.range);
+
+        if (this.range <= euclid && !diagTrue)
+        {
+            Attack();
+            return;
+        }
+         // Debug.Log("G: "+x+", "+y);
+         // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
 
         // First, update visited points
         // Add current position to visited points
@@ -321,7 +340,7 @@ public class EnemyBasic : BasicEntity
     public void moveTowardsEntity(BasicEntity entity)
     {
         // If the entity we're moving towards exists
-        // if (GameObject.Find(entity) != null)
+        if (entity != null)
         {
             int hDist, vDist;
             float tX, tY;
@@ -335,6 +354,7 @@ public class EnemyBasic : BasicEntity
             // and randomize whether we prioritize vertical or horizontal movement
             if (Random.value < 0.5f)
             {
+                Debug.Log("Pathfinding to LLB: Vertical");
                 // Prioritize vertical movement
                 if (vDist > hDist)
                 {
@@ -411,12 +431,13 @@ public class EnemyBasic : BasicEntity
                         else
                         {
                             // attack! We're in range
-                            Debug.Log("TODO: Enemy Attack");
+                            Attack();
                         }
                     }
                 }
                 else
                 {
+                    Debug.Log("Pathfinding to LLB: Horizontal");
                     // Try moving horizontally while out of range
                     if (hDist > this.range)
                     {
@@ -490,7 +511,7 @@ public class EnemyBasic : BasicEntity
                         else
                         {
                             // attack! We're in range
-                            Debug.Log("TODO: Enemy Attack");
+                            Attack();
                         }
                     }
                 }
@@ -549,7 +570,7 @@ public class EnemyBasic : BasicEntity
                         else
                         {
                             // attack! We're in range
-                            Debug.Log("TODO: Enemy Attack");
+                            Attack();
                         }
                     }
                 }
@@ -604,7 +625,7 @@ public class EnemyBasic : BasicEntity
                         else
                         {
                             // attack! We're in range
-                            Debug.Log("TODO: Enemy Attack");
+                            Attack();
                         }
                     }
                 }
