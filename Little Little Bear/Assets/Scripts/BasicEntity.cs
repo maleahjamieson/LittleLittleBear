@@ -35,6 +35,7 @@ public abstract class BasicEntity : MonoBehaviour
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         offset = board.offsetforTiles;
         animator = GetComponent<Animator>();
+        GetComponent<SpriteRenderer>().sortingOrder = 2;
     }
     
     // Update is called once per frame
