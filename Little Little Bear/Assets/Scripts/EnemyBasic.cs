@@ -17,6 +17,7 @@ public class EnemyBasic : BasicEntity
 
     protected override void Start()
     {
+        health = 8;
         alert = false;
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
@@ -59,7 +60,12 @@ public class EnemyBasic : BasicEntity
         Debug.Log("LLB HP: " + LLB.health);
         LLB.health -= this.strength;
     }
-
+    public void Hurt(int damage)
+    {
+        Debug.Log("-------------------------------------------------------------\nDEALT DAMAGE OF " + damage);
+        health -= damage;
+        // run death check
+    }
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
