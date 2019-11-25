@@ -76,11 +76,11 @@ public class LLB : BasicEntity
     private bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        selfEntity = board.map[currentX, currentY].entityType;
+        // selfEntity = board.map[currentX, currentY].entityType;
         Vector2 sPos = transform.position; //Start Position
         Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
 
-        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
             switch (board.map[xDir, yDir].tileType)
             {
@@ -95,8 +95,12 @@ public class LLB : BasicEntity
                 default: // Currently default since moving is only here
                     Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
-                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+
+                    board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
+                    board.map[currentX, currentY].entity = null;
+
+                    // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
+                    // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
 
@@ -113,11 +117,11 @@ public class LLB : BasicEntity
         }
         else //something is there
         {            
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
             return false;
         }
 
-        return true; // If nothing is hit then assume move
+        // return true; // If nothing is hit then assume move
     }
 
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
@@ -202,7 +206,7 @@ public class LLB : BasicEntity
                     targetHighlight.Aim('l');
                     if (!flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = true;
@@ -213,7 +217,7 @@ public class LLB : BasicEntity
                     targetHighlight.Aim('r');
                     if (flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = false;
@@ -282,7 +286,7 @@ public class LLB : BasicEntity
             moveLeft = false;
             if (!flipped) // LLB looking right about to go left, so we flip her sprite
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = true;
@@ -295,7 +299,7 @@ public class LLB : BasicEntity
             moveRight = false;
             if (flipped)
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = false;
@@ -399,6 +403,3 @@ public class LLB : BasicEntity
         checkInput = true; // Inputs are able to be taken again
     }
 }
-
-
-
