@@ -598,10 +598,10 @@ public class BoardGenerator : MonoBehaviour
 	private void room(Position p)
 	{
 		Position m = p;
-		Debug.Log("Room is picking width ("+this.min_room_width+","+this.max_room_width+") and height ("+this.min_room_height+","+this.max_room_height+")");
+		// Debug.Log("Room is picking width ("+this.min_room_width+","+this.max_room_width+") and height ("+this.min_room_height+","+this.max_room_height+")");
 		int _width = random_range(this.min_room_width, this.max_room_width);
 		int _height = random_range(this.min_room_height, this.max_room_height);
-		Debug.Log("Picked width and height: "+_width+", "+_height);
+		// Debug.Log("Picked width and height: "+_width+", "+_height);
 
 		int lBound, rBound, uBound, dBound;
 
@@ -661,10 +661,11 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.general_item_chance))
 				{
-					//GameObject tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
 					int whichItem = Random.Range(0, 9);
-					Debug.Log("item number is " + whichItem);
-					GameObject tempItem = new GameObject();
+					GameObject tempItem;
+					
+					// Debug.Log("item number is " + whichItem);
+					// Debug.Log("Creating item at ("+(m.x+xx)+", "+(m.y+yy)+")");
 
 					switch(whichItem)
 					{
@@ -673,6 +674,7 @@ public class BoardGenerator : MonoBehaviour
 							tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
 							break;
 						}
+						default:
 						case 1:
 						{
 							tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
@@ -714,6 +716,8 @@ public class BoardGenerator : MonoBehaviour
 							break;
 						}
 					}
+
+					tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
 
 					this.map[m.x + xx, m.y + yy].item = tempItem;
 					this.itemCounter++;
