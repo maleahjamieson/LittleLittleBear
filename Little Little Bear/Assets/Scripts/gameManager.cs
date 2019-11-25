@@ -38,7 +38,7 @@ public class gameManager : MonoBehaviour {
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
         InventoryMenu = GameObject.Find("InventoryBackground");
-        //TargetTile = GameObject.Find("HighlightTile");
+        TargetTile = GameObject.Find("Highlight");
 
 
         Random.seed = System.DateTime.Now.Millisecond; // Seed generator

@@ -8,8 +8,17 @@ public class LLB : BasicEntity
     private int vertical = 0;
     private char damageType;
     private int stamina;  // Special move gague, when below a certain amount you cant use special
+// <<<<<<< HEAD
     // List of personal boolean
     // private bool turnEnd; // When true enemies can move
+// =======
+    private int aDirX, aDirY; // Attack direction x and y, how we aim
+    private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
+    private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
+
+    // List of personal boolean
+    private bool specialA; // special attack
+// >>>>>>> origin/DavidBranch
     private bool dig;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
     
@@ -17,14 +26,26 @@ public class LLB : BasicEntity
     private Inventory inventory;
     public GameObject itemButton;*/
 
+// <<<<<<< HEAD
+// =======
+    public Highlight targetHighlight;  // Targeting script
+
+// >>>>>>> origin/DavidBranch
     protected override void Start()
     {
         //turnEnd = false;
         dig = false;
         checkInput = true;
+        invEquipped = 0; // Start on weapon slot
+        range = 10; // base range on range weapon. I dont know if this will ever change
+        weaponType = 's'; // Start with a carrot which is blunt
         health = 100;
         stamina = 100;
         strength = 4;
+// <<<<<<< HEAD
+// =======
+        targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
+// >>>>>>> origin/DavidBranch
         base.Start();
         //inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
@@ -126,7 +147,11 @@ public class LLB : BasicEntity
         }
         */
     }
+// <<<<<<< HEAD
 
+// =======
+    
+// >>>>>>> origin/DavidBranch
     private void Update()
     {
         //if (!GameManager.instance.playersTurn) return; // means following code wont run unless its player turn
@@ -136,6 +161,11 @@ public class LLB : BasicEntity
             if (Input.GetMouseButtonDown(0)) // left mouse click
             {
                 attack = true; // player will attempt to attack
+                checkInput = false; //input has been read
+            }
+            if (Input.GetMouseButtonDown(1)) // right mouse click
+            {
+                specialA = true; // player will attempt to special attack
                 checkInput = false; //input has been read
             }
             if (Input.GetKeyDown(KeyCode.Q))
@@ -173,15 +203,93 @@ public class LLB : BasicEntity
 
             //board.moveEnemies(); // Move all of the bad bois
         }
+// <<<<<<< HEAD
+// =======
+        else if (attackWait) // Waiting for decided direction
+        {
+            aDirX = (int)Input.GetAxisRaw("Horizontal"); //using ints forces 1 unit movement
+            aDirY = (int)Input.GetAxisRaw("Vertical");
+            if (aDirX != 0 || aDirY != 0) // There must be movement input
+            {
+                if (aDirX == -1)  // Identifies direction
+                {
+                    targetHighlight.Aim('l');
+                    if (!flipped)
+                    {
+                        Vector3 tempS = transform.localScale;
+                        tempS.x *= -1;  // Flips sprite
+                        transform.localScale = tempS;
+                        flipped = true;
+                    }
+                }
+                else if (aDirX == 1)
+                {
+                    targetHighlight.Aim('r');
+                    if (flipped)
+                    {
+                        Vector3 tempS = transform.localScale;
+                        tempS.x *= -1;  // Flips sprite
+                        transform.localScale = tempS;
+                        flipped = false;
+                    }
+                }
+                else if (aDirY == -1)
+                    targetHighlight.Aim('d');
+                else if (aDirY == 1)
+                    targetHighlight.Aim('u');
+            }
+            
+            if (Input.GetMouseButtonDown(0)) // Attack
+            {
+                attackWait = false;
+                turnEnd = true;
+            }
+            if (Input.GetMouseButtonDown(1)) // Bail
+            {
+                attackWait = false;
+            }
+            if (!attackWait)
+            {
+                targetHighlight.Deactivate();
+            }
+        }
+// >>>>>>> origin/DavidBranch
     }
     void FixedUpdate() // Where animation and actions take place
     {
         if (attack)
         {
+// <<<<<<< HEAD
 
             attack = false; // reset bool so input can be taken again
             animator.SetTrigger("Attack"); // Attack animation triggered
             StartCoroutine(wait2Move('o', 1.5f)); // Starts animation timer and should stop inputs
+// =======
+            attack = false;
+            attackWait = true;
+            targetHighlight.Activate(1, flipped, 'o'); // o = other i.e basic attack
+            StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
+// >>>>>>> origin/DavidBranch
+        }
+        else if (specialA)
+        {
+            int r = 0;
+            switch (weaponType)
+            {
+                case 'b': // bluntslide 180
+                    r = 1;
+                    break;
+                case 's': // slice
+                    r = 5;
+                    break;
+                case 't': // thrust
+                    r = 2;
+                    break;
+            }
+            specialA = false;
+            attackWait = true;
+            targetHighlight.Activate(r, flipped, weaponType);
+            StartCoroutine(wait2Move('s', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
         {
@@ -234,6 +342,32 @@ public class LLB : BasicEntity
     {
         switch (c)
         {
+// <<<<<<< HEAD
+// =======
+            case 'a': //Attack
+                {
+                    while (attackWait)// Start combat decisions
+                        yield return null;
+                    if (turnEnd) // if attack actually happened
+                    {
+                        animator.SetTrigger("Attack");
+                        yield return new WaitForSeconds(t);
+                    }
+                }
+                break;
+            case 's': //Special attack
+                {
+                    
+                    while (attackWait)// Start combat decisions
+                        yield return null;
+                    if (turnEnd) // if attack actually happened
+                    {
+                        animator.SetTrigger("Attack");
+                        yield return new WaitForSeconds(t);
+                    }
+                }
+                break;
+// >>>>>>> origin/DavidBranch
             case 'l':  //Move left
                 {
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step

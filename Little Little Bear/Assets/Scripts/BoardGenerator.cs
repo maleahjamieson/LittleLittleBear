@@ -984,8 +984,13 @@ public class BoardGenerator : MonoBehaviour
 
 					temp.GetComponent<EnemyBasic>().wander();
 				}
+// /<<<<<<< HEAD
                 
-                yield return new WaitForSeconds(0.0005f); // IEnumerators must yield at some point
+                //yield return new WaitForSeconds(0.0005f); // IEnumerators must yield at some point
+// =======
+                // PUT BACK AT 0.05f DAVID
+                yield return new WaitForSeconds(0); // IEnumerators must yield at some point
+// >>>>>>> origin/DavidBranch
             }
 		}
 	}
