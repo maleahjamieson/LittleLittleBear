@@ -136,6 +136,7 @@ public class BoardGenerator : MonoBehaviour
     public GameObject Boulder;
     public GameObject Start_Tile;
     public GameObject End_Tile;
+    public GameObject[] spawnableItems = new GameObject[9];
 
     public GameObject HamsterEntity; // LLB basically
     public ArrayList EnemyList;
@@ -669,7 +670,60 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.general_item_chance))
 				{
-					GameObject tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					//GameObject tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					int whichItem = Random.Range(0, 9);
+					Debug.Log("item number is " + whichItem);
+					GameObject tempItem = new GameObject();
+
+					switch(whichItem)
+					{
+						case 0:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 1:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 2:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 3:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 4:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 5:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 6:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 7:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+						case 8:
+						{
+							tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+							break;
+						}
+					}
+
 					this.map[m.x + xx, m.y + yy].item = tempItem;
 					this.itemCounter++;
 				}
