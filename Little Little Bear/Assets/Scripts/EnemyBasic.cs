@@ -90,7 +90,8 @@ public class EnemyBasic : BasicEntity
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;
                     currentY = yDir;
-                    transform.position = new Vector3(currentX, currentY, 0);
+                    // transform.position = new Vector3(currentX, currentY, 0);
+                    transform.position = new Vector2(currentX, currentY);
                     return true;
             }
         }
