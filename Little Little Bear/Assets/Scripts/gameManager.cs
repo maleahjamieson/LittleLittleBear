@@ -12,6 +12,7 @@ public class gameManager : MonoBehaviour {
     public GameObject LLB; //LLB entity
     public GameObject BackgroundMenu; //background menu
     public GameObject InventoryMenu;
+    public GameObject TargetTile;
 
 	//for pausing
 	public bool Paused;
@@ -37,7 +38,7 @@ public class gameManager : MonoBehaviour {
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
         InventoryMenu = GameObject.Find("InventoryBackground");
-
+        TargetTile = GameObject.Find("Highlight");
 
 
         Random.seed = System.DateTime.Now.Millisecond; // Seed generator
@@ -60,6 +61,7 @@ public class gameManager : MonoBehaviour {
             board.HamsterEntity = GameObject.Find("Player");
             board.GenMap(0);
             Debug.Log("GM SEES " + board.map[499, 500].tileType);
+            board.printRecords();
         }
 	}
 	

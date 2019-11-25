@@ -38,8 +38,8 @@ public class Enemy : BasicEntity
                     return false;
 
                 default: // Currently default since moving is only here
-                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                   // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                   // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
                     board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;
