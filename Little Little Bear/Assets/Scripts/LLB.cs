@@ -8,7 +8,8 @@ public class LLB : BasicEntity
     private int vertical = 0;
     private char damageType;
     private int stamina;  // Special move gague, when below a certain amount you cant use special
-    private int aDirX, aDirY; // Attack direction x and y, how we aim
+    private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
+    private char attackDir; // char hold, for Combat();
     private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
     private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
 
@@ -54,23 +55,54 @@ public class LLB : BasicEntity
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
     }
 
-    private void Combat() // Stopped time while player decides
+    private void Combat(bool special) // basic : special = false, direction = d 
     {
-        animator.SetTrigger("Attack"); // Attack animation triggered
-        attack = false;
-        /* switch (damageType)
+        GameObject enemy = null;
+        Debug.Log("-------------------------------------------------------------\nATTACK STARTED");
+        if (special)
          {
-             case 'b': // blunt
-                 //Knockback + stun
-                 break;
-             case 's': // slash
-                 //Wide slash (3 tiles in a perpindicular line)
-                 break;
-             case 'p': // pierce
-                 //Multi-Hit
-                 break;
-         }*/
-        turnEnd = true;
+            switch (damageType)
+            {
+                case 'b': // blunt
+                        //Knockback + stun
+                break;
+                case 's': // slash
+                              //Wide slash (3 tiles in a perpindicular line)
+                break;
+                case 't': // thrust
+                              //Multi-Hit
+                break;
+            }
+         }
+         else
+         {
+            switch (attackDir)
+            {
+                case 'l':
+                    enemy = board.map[currentX - 1, currentY].entity;
+                    break;
+                case 'r':
+                    enemy = board.map[currentX + 1, currentY].entity;
+                    break;
+                case 'u':
+                    enemy = board.map[currentX, currentY + 1].entity;
+                    break;
+                case 'd':
+                    enemy = board.map[currentX, currentY - 1].entity;
+                    break;
+            }
+           
+            if (enemy != null)
+            {
+                Debug.Log("-------------------------------------------------------------\nATTEMPT");
+                enemy.GetComponent<EnemyBasic>().Hurt(strength);
+            }
+            else
+            {
+                Debug.Log("NULL");
+            }
+         }
+   
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -192,8 +224,6 @@ public class LLB : BasicEntity
                 }
 
             }
-
-            //board.moveEnemies(); // Move all of the bad bois
         }
         else if (attackWait) // Waiting for decided direction
         {
@@ -204,6 +234,7 @@ public class LLB : BasicEntity
                 if (aDirX == -1)  // Identifies direction
                 {
                     targetHighlight.Aim('l');
+                    attackDir = 'l';
                     if (!flipped)
                     {
                         Vector2 tempS = transform.localScale;
@@ -215,6 +246,7 @@ public class LLB : BasicEntity
                 else if (aDirX == 1)
                 {
                     targetHighlight.Aim('r');
+                    attackDir = 'r';
                     if (flipped)
                     {
                         Vector2 tempS = transform.localScale;
@@ -224,13 +256,20 @@ public class LLB : BasicEntity
                     }
                 }
                 else if (aDirY == -1)
+                {
                     targetHighlight.Aim('d');
+                    attackDir = 'd';
+                }
                 else if (aDirY == 1)
+                {
                     targetHighlight.Aim('u');
+                    attackDir = 'u';
+                }
             }
             
             if (Input.GetMouseButtonDown(0)) // Attack
             {
+                Combat(false);
                 attackWait = false;
                 turnEnd = true;
             }
