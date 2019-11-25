@@ -12,8 +12,6 @@
 // This generator was originally made for the class COP 4331, where Project Group 11
 // chose the Roguelike/Roguelite project and decided on the Little-Little-Bear theme.
 
-
-// Notes: 8 across, 14 up
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +26,7 @@ public enum TileSet : short
 	PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
 	PUZZLE_HALLWAY, START_TILE, END_TILE
 };
+
 public enum ItemSet : short
 {
     NOTHING = 0, ANT = 1,      // 0:Empty  1:Ants in a bottle
@@ -35,13 +34,14 @@ public enum ItemSet : short
     PSNAP = 4, THORN = 5,        // 4:Puzzle Snap    5:Thorn Vines
     BERRY = 6, SEED = 7         // 6:Blue Berries   7:Sunflower Seeds
 };
-public enum EntitySet : int
-{
-    NOTHING = 0, PLAYER = 1,    // 0:Empty   1:LLB
-    Enemy = 2, WeaponM = 3,     // 2:All     3:Melee
-    WeaponR = 4, Item = 5,      // 4:Range   5: Item
-    ShopKeep = 6                // 6:Raccoon
-};
+
+// public enum EntitySet : int
+// {
+//     NOTHING = 0, PLAYER = 1,    // 0:Empty   1:LLB
+//     Enemy = 2, WeaponM = 3,     // 2:All     3:Melee
+//     WeaponR = 4, Item = 5,      // 4:Range   5: Item
+//     ShopKeep = 6                // 6:Raccoon
+// };
 
 public enum Direction
 {
@@ -72,45 +72,31 @@ public struct Position
 public struct GridCell
 {
 	public TileSet tileType;
-    public EntitySet entityType;
+    // public EntitySet entityType;
+    public GameObject entity;
     public GameObject item;
 
     public GridCell(TileSet t)
     {
     	tileType = t;
-    	entityType = 0;
+    	entity = null;
     	item = null;
     }
 
-    public GridCell(TileSet t, EntitySet e)
+    public GridCell(TileSet t, GameObject e)
     {
     	tileType = t;
-    	entityType = e;
+    	entity = e;
     	item = null;
     }
 
-    public GridCell(TileSet t, EntitySet e, GameObject i)
+    public GridCell(TileSet t, GameObject e, GameObject i)
     {
     	tileType = t;
-    	entityType = e;
+    	entity = e;
     	item = i;
     }
 }
-
-/* Who left this in?
-public class Entity
-{
-    public EntitySet entityType;
-}
-*/
-
-/* commented out because Items are instead GameObjects and its its own script - Maleah
-public class Item
-{
-    public ItemSet type;  // Name of item on floor
-   
-}
-*/
 
 //**************************************************//
 // The map array shall be accessed in this fashion: //
@@ -121,6 +107,7 @@ public class BoardGenerator : MonoBehaviour
     //**********************************//
     //      Parameters & Variables      //	
     //**********************************//
+    // Variables to hold gameobjects for generation
     public GameObject Floor;
     public GameObject Wall;
     public GameObject Rock;
@@ -143,7 +130,7 @@ public class BoardGenerator : MonoBehaviour
 
     public float offsetforTiles = 1f;
 
-
+    // Generation Parameters
     private int board_width, board_height;
 	private int min_hallway_length, max_hallway_length;
 	private bool hallwayTurns;
@@ -432,11 +419,15 @@ public class BoardGenerator : MonoBehaviour
 			for (int y = 0; y < this.board_height; y++)
 			{
 				this.map[x, y].tileType = TileSet.NOTHING;
+				this.map[x, y].entity = null;
+				this.map[x, y].item = null;
 			}
-            for (int y = 0; y < this.board_height; y++)
-            {
-                this.map[x, y].entityType = EntitySet.NOTHING;
-            }
+
+			// why the fuck did I make two for loops?
+            // for (int y = 0; y < this.board_height; y++)
+            // {
+            //     this.map[x, y].entity = null;
+            // }
         }
 
 		this.createdPuzzleRoom = false;
@@ -658,7 +649,7 @@ public class BoardGenerator : MonoBehaviour
 
 						// Create an enemy
 						GameObject enemy = (GameObject)Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-						this.map[m.x + xx, m.y + yy].entityType = EntitySet.Enemy;
+						this.map[m.x + xx, m.y + yy].entity = enemy;
 						enemy.GetComponent<EnemyBasic>().currentX = m.x+xx;
 						enemy.GetComponent<EnemyBasic>().currentY = m.y+yy;
 						//enemy.Set((int)(Random.value * 100), 0);
@@ -961,18 +952,14 @@ public class BoardGenerator : MonoBehaviour
 		{
 			GameObject temp = (GameObject)EnemyList[i];
 
-
 			if (temp != null)
 			{
 				if (temp.GetComponent<EnemyBasic>().isAlert())
 				{
-					//if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
-					//	temp.GetComponent<EnemyBasic>().moveTowardsEntity(HamsterEntity.GetComponent<BasicEntity>());
-					//else
-						int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
-						int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
-						// Debug.Log("Pathfinding to: "+goalX+", "+goalY);
-						temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
+					int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
+					int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
+					// Debug.Log("Pathfinding to: "+goalX+", "+goalY);
+					temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
 				}
 				else
 				{
@@ -984,13 +971,9 @@ public class BoardGenerator : MonoBehaviour
 
 					temp.GetComponent<EnemyBasic>().wander();
 				}
-// /<<<<<<< HEAD
-                
-                //yield return new WaitForSeconds(0.0005f); // IEnumerators must yield at some point
-// =======
+
                 // PUT BACK AT 0.05f DAVID
                 yield return new WaitForSeconds(0); // IEnumerators must yield at some point
-// >>>>>>> origin/DavidBranch
             }
 		}
 	}

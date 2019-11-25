@@ -26,7 +26,7 @@ public class EnemyBasic : BasicEntity
         base.Start(); // initialize values
 
         // ---------------REMOVE LATER -----------------
-        Set(0, enemyType.Mantis); //Will be set inside gen, only here for testing
+        // Set(0, enemyType.Mantis); //Will be set inside gen, only here for testing
         // ---------------------------------------------
     }
 
@@ -63,11 +63,11 @@ public class EnemyBasic : BasicEntity
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        selfEntity = board.map[currentX, currentY].entityType;
+        // selfEntity = board.map[currentX, currentY].entityType;
         Vector2 sPos = transform.position; //Start Position
         Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
 
-        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
             switch (board.map[xDir, yDir].tileType)
             {
@@ -80,10 +80,14 @@ public class EnemyBasic : BasicEntity
                     return false;
 
                 default: // Currently default since moving is only here
-                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
-                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+                    // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+
+                    board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
+                    board.map[currentX, currentY].entity = null;
+
+                    // board.map[currentX, currentY].entity = null; // nothing where you where
+                    // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;
                     currentY = yDir;
                     transform.position = new Vector3(currentX, currentY, 0);
@@ -92,7 +96,7 @@ public class EnemyBasic : BasicEntity
         }
         else //something is there
         {
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
         }
 
         return true; // If nothing is hit then assume move
@@ -186,10 +190,6 @@ public class EnemyBasic : BasicEntity
 
     public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
-        // int euclid = (int) Mathf.Floor(Mathf.Sqrt((this.currentX - x) ^ 2 + (this.currentY - y) ^ 2));
-        // bool diagTrue = (this.currentX - x) == (this.currentY - y);
-        // Debug.Log("Euclid: " + euclid);
-        // Debug.Log(this.type + "'s range: " + this.range);
         int euclid;
 
         // On the same x plane, so use the y difference for checking range
@@ -207,14 +207,15 @@ public class EnemyBasic : BasicEntity
         {
             euclid = 999;
         }
+        // Debug.Log("Euclid: "+euclid);
 
-        if (this.range <= euclid) // && !diagTrue)
+        if (euclid <= this.range) // && !diagTrue)
         {
             Attack();
             return;
         }
-         // Debug.Log("G: "+x+", "+y);
-         // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
+        // Debug.Log("G: "+x+", "+y);
+        // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
 
         // First, update visited points
         // Add current position to visited points
@@ -254,19 +255,19 @@ public class EnemyBasic : BasicEntity
         }
 
         // Check for entities
-        if (map[this.currentX, this.currentY-1].entityType != EntitySet.NOTHING)
+        if (map[this.currentX, this.currentY-1].entity != null)
         {
             dist[0] = 9999.9f;
         }
-        if (map[this.currentX, this.currentY+1].entityType != EntitySet.NOTHING)
+        if (map[this.currentX, this.currentY+1].entity != null)
         {
             dist[1] = 9999.9f;
         }
-        if (map[this.currentX+1, this.currentY].entityType != EntitySet.NOTHING)
+        if (map[this.currentX+1, this.currentY].entity != null)
         {
             dist[2] = 9999.9f;
         }
-        if (map[this.currentX-1, this.currentY].entityType != EntitySet.NOTHING)
+        if (map[this.currentX-1, this.currentY].entity != null)
         {
             dist[3] = 9999.9f;
         }
@@ -287,22 +288,6 @@ public class EnemyBasic : BasicEntity
         northDist = dist[1];
         eastDist = dist[2];
         westDist = dist[3];
-
-        // Sort to be the lowest
-        /*
-        for (int i = 0; i < 4; i++)
-        {
-            for (int j = i+1; j < 4; j++)
-            {
-                if (dist[j] < dist[i])
-                {
-                    float temp = dist[j];
-                    dist[j] = dist[i];
-                    dist[i] = temp;
-                }
-            }
-        }
-        //*/
 
         // Optimized to place smallest distance at dist[0]
         for (int i = 0; i < 4; i++)
@@ -354,301 +339,302 @@ public class EnemyBasic : BasicEntity
     }
 
     // This method may be removed at a later date
-    public void moveTowardsEntity(BasicEntity entity)
-    {
-        // If the entity we're moving towards exists
-        if (entity != null)
-        {
-            int hDist, vDist;
-            float tX, tY;
-            tX = Mathf.Abs(entity.currentX);
-            tY = Mathf.Abs(entity.currentY);
+    // lol no one can stop me from commenting out 300 lines of my code
+    // public void moveTowardsEntity(BasicEntity entity)
+    // {
+    //     // If the entity we're moving towards exists
+    //     if (entity != null)
+    //     {
+    //         int hDist, vDist;
+    //         float tX, tY;
+    //         tX = Mathf.Abs(entity.currentX);
+    //         tY = Mathf.Abs(entity.currentY);
 
-            hDist = (int)Mathf.Abs(Mathf.Abs(currentX) - tX);
-            vDist = (int)Mathf.Abs(Mathf.Abs(currentY) - tY);
+    //         hDist = (int)Mathf.Abs(Mathf.Abs(currentX) - tX);
+    //         vDist = (int)Mathf.Abs(Mathf.Abs(currentY) - tY);
 
-            // Move towards the target x and y
-            // and randomize whether we prioritize vertical or horizontal movement
-            if (Random.value < 0.5f)
-            {
-                Debug.Log("Pathfinding to LLB: Vertical");
-                // Prioritize vertical movement
-                if (vDist > hDist)
-                {
-                    // Try moving vertically while out of range
-                    if (vDist > this.range)
-                    {
-                        if (this.currentY < entity.currentY)
-                        {
-                            Move(currentX, currentY + 1);
-                            // currentY += 1; // Move down
-                        }
-                        else if (this.currentY > entity.currentY)
-                        {
-                            Move(currentX, currentY - 1);
-                            // currentY -= 1; // Move up
-                        }
-                        else
-                        {
-                            // We're out of range but on the same Y, so try horizontal movement
-                            if (this.currentX < entity.currentX)
-                            {
-                                Move(currentX + 1, currentY);
-                                // currentX += 1; // Move east
-                            }
-                            else if (this.currentX > entity.currentX)
-                            {
-                                Move(currentX - 1, currentY);
-                                // currentX -= 1; // Move west
-                            }
-                            else
-                            {
-                                // We're at the same position as the other entity but out of range, so its an error
-                                Debug.Log("Error: matching position of target and out of range");
-                            }
-                        }
-                    }
-                    // Try moving vertically while in range
-                    else
-                    {
-                        // Try to step closer
-                        if (Random.value < 0.5f)
-                        {
-                            // We're going to step closer
-                            if (this.currentY < entity.currentY)
-                            {
-                                Move(currentX, currentY + 1);
-                                // currentY += 1; // Move down
-                            }
-                            else if (this.currentY > entity.currentY)
-                            {
-                                Move(currentX, currentY - 1);
-                                // currentY -= 1; // Move up
-                            }
-                            else
-                            {
-                                // We're in range but on the same Y, so try horizontal movement
-                                if (this.currentX < entity.currentX)
-                                {
-                                    Move(currentX + 1, currentY);
-                                    // currentX += 1; // Move east
-                                }
-                                else if (this.currentX > entity.currentX)
-                                {
-                                    Move(currentX - 1, currentY);
-                                    // currentX -= 1; // Move west
-                                }
-                                else
-                                {
-                                    // We're at the same position as the other entity and in range, so its an error
-                                    Debug.Log("Error: matching position of target and in range");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // attack! We're in range
-                            Attack();
-                        }
-                    }
-                }
-                else
-                {
-                    Debug.Log("Pathfinding to LLB: Horizontal");
-                    // Try moving horizontally while out of range
-                    if (hDist > this.range)
-                    {
-                        if (this.currentX < entity.currentX)
-                        {
-                            Move(currentX + 1, currentY);
-                            // currentX += 1; // move east
-                        }
-                        else if (this.currentX > entity.currentX)
-                        {
-                            Move(currentX - 1, currentY);
-                            // currentX -= 1; // move west
-                        }
-                        else
-                        {
-                            // We're out of range but on the same x, so try vertical movement
-                            if (this.currentY < entity.currentY)
-                            {
-                                Move(currentX, currentY + 1);
-                                // currentY += 1; // move down
-                            }
-                            else if (this.currentY > entity.currentY)
-                            {
-                                Move(currentX, currentY - 1);
-                                // currentY -= 1; // move up
-                            }
-                            else
-                            {
-                                // We're at the same position as the target but out of range, so its an error
-                                Debug.Log("Error: matching position of target and out of range");
-                            }
-                        }
-                    }
-                    // Try moving horizontally while in range
-                    else
-                    {
-                        // Try to step closer
-                        if (Random.value < 0.5f)
-                        {
-                            // We're going to step closer
-                            if (this.currentX < entity.currentX)
-                            {
-                                Move(currentX + 1, currentY);
-                                // currentX += 1; // move east
-                            }
-                            else if (this.currentX > entity.currentX)
-                            {
-                                Move(currentX - 1, currentY);
-                                // currentX -= 1; // move west
-                            }
-                            else
-                            {
-                                // We're in range but on the same X, so try vertical movement
-                                if (this.currentY < entity.currentY)
-                                {
-                                    Move(currentX, currentY + 1);
-                                    // currentY += 1; // move down
-                                }
-                                else if (this.currentY > entity.currentY)
-                                {
-                                    Move(currentX, currentY - 1);
-                                    // currentY -= 1; // move up
-                                }
-                                else
-                                {
-                                    // We're at the same position as the target and in range, so its an error
-                                    Debug.Log("Error: matching position of target and in range");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // attack! We're in range
-                            Attack();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Prioritize horizontal movement
-                if (hDist > vDist)
-                {
-                    // Try moving horizontally while out of range
-                    if (hDist > this.range)
-                    {
-                        if (this.currentX < entity.currentX)
-                            currentX += 1;
-                        else if (this.currentX > entity.currentX)
-                            currentX -= 1;
-                        else
-                        {
-                            // We're out of range but on the same x, so try vertical movement
-                            if (this.currentY < entity.currentY)
-                                currentY += 1;
-                            else if (this.currentY > entity.currentY)
-                                currentY -= 1;
-                            else
-                            {
-                                // We're at the same position as the target but out of range, so its an error
-                                Debug.Log("Error: matching position of target and out of range");
-                            }
-                        }
-                    }
-                    // Try moving horizontally while in range
-                    else
-                    {
-                        // Try to step closer
-                        if (Random.value < 0.5f)
-                        {
-                            // We're going to step closer
-                            if (this.currentX < entity.currentX)
-                                currentX += 1;
-                            else if (this.currentX > entity.currentX)
-                                currentX -= 1;
-                            else
-                            {
-                                // We're in range but on the same X, so try vertical movement
-                                if (this.currentY < entity.currentY)
-                                    currentY += 1;
-                                else if (this.currentY > entity.currentY)
-                                    currentY -= 1;
-                                else
-                                {
-                                    // We're at the same position as the target and in range, so its an error
-                                    Debug.Log("Error: matching position of target and in range");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // attack! We're in range
-                            Attack();
-                        }
-                    }
-                }
-                else
-                {
-                    // Try moving vertically while out of range
-                    if (vDist > this.range)
-                    {
-                        if (this.currentY < entity.currentY)
-                            currentY += 1; // Move down
-                        else if (this.currentY > entity.currentY)
-                            currentY -= 1; // Move up
-                        else
-                        {
-                            // We're out of range but on the same Y, so try horizontal movement
-                            if (this.currentX < entity.currentX)
-                                currentX += 1;
-                            else if (this.currentX > entity.currentX)
-                                currentX -= 1;
-                            else
-                            {
-                                // We're at the same position as the other entity but out of range, so its an error
-                                Debug.Log("Error: matching position of target and out of range");
-                            }
-                        }
-                    }
-                    // Try moving vertically while in range
-                    else
-                    {
-                        // Try to step closer
-                        if (Random.value < 0.5f)
-                        {
-                            // We're going to step closer
-                            if (this.currentY < entity.currentY)
-                                currentY += 1;
-                            else if (this.currentY > entity.currentY)
-                                currentY -= 1;
-                            else
-                            {
-                                // We're in range but on the same Y, so try horizontal movement
-                                if (this.currentX < entity.currentX)
-                                    currentX += 1;
-                                else if (this.currentX > entity.currentX)
-                                    currentX -= 1;
-                                else
-                                {
-                                    // We're at the same position as the other entity and in range, so its an error
-                                    Debug.Log("Error: matching position of target and in range");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // attack! We're in range
-                            Attack();
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //         // Move towards the target x and y
+    //         // and randomize whether we prioritize vertical or horizontal movement
+    //         if (Random.value < 0.5f)
+    //         {
+    //             Debug.Log("Pathfinding to LLB: Vertical");
+    //             // Prioritize vertical movement
+    //             if (vDist > hDist)
+    //             {
+    //                 // Try moving vertically while out of range
+    //                 if (vDist > this.range)
+    //                 {
+    //                     if (this.currentY < entity.currentY)
+    //                     {
+    //                         Move(currentX, currentY + 1);
+    //                         // currentY += 1; // Move down
+    //                     }
+    //                     else if (this.currentY > entity.currentY)
+    //                     {
+    //                         Move(currentX, currentY - 1);
+    //                         // currentY -= 1; // Move up
+    //                     }
+    //                     else
+    //                     {
+    //                         // We're out of range but on the same Y, so try horizontal movement
+    //                         if (this.currentX < entity.currentX)
+    //                         {
+    //                             Move(currentX + 1, currentY);
+    //                             // currentX += 1; // Move east
+    //                         }
+    //                         else if (this.currentX > entity.currentX)
+    //                         {
+    //                             Move(currentX - 1, currentY);
+    //                             // currentX -= 1; // Move west
+    //                         }
+    //                         else
+    //                         {
+    //                             // We're at the same position as the other entity but out of range, so its an error
+    //                             Debug.Log("Error: matching position of target and out of range");
+    //                         }
+    //                     }
+    //                 }
+    //                 // Try moving vertically while in range
+    //                 else
+    //                 {
+    //                     // Try to step closer
+    //                     if (Random.value < 0.5f)
+    //                     {
+    //                         // We're going to step closer
+    //                         if (this.currentY < entity.currentY)
+    //                         {
+    //                             Move(currentX, currentY + 1);
+    //                             // currentY += 1; // Move down
+    //                         }
+    //                         else if (this.currentY > entity.currentY)
+    //                         {
+    //                             Move(currentX, currentY - 1);
+    //                             // currentY -= 1; // Move up
+    //                         }
+    //                         else
+    //                         {
+    //                             // We're in range but on the same Y, so try horizontal movement
+    //                             if (this.currentX < entity.currentX)
+    //                             {
+    //                                 Move(currentX + 1, currentY);
+    //                                 // currentX += 1; // Move east
+    //                             }
+    //                             else if (this.currentX > entity.currentX)
+    //                             {
+    //                                 Move(currentX - 1, currentY);
+    //                                 // currentX -= 1; // Move west
+    //                             }
+    //                             else
+    //                             {
+    //                                 // We're at the same position as the other entity and in range, so its an error
+    //                                 Debug.Log("Error: matching position of target and in range");
+    //                             }
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         // attack! We're in range
+    //                         Attack();
+    //                     }
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 Debug.Log("Pathfinding to LLB: Horizontal");
+    //                 // Try moving horizontally while out of range
+    //                 if (hDist > this.range)
+    //                 {
+    //                     if (this.currentX < entity.currentX)
+    //                     {
+    //                         Move(currentX + 1, currentY);
+    //                         // currentX += 1; // move east
+    //                     }
+    //                     else if (this.currentX > entity.currentX)
+    //                     {
+    //                         Move(currentX - 1, currentY);
+    //                         // currentX -= 1; // move west
+    //                     }
+    //                     else
+    //                     {
+    //                         // We're out of range but on the same x, so try vertical movement
+    //                         if (this.currentY < entity.currentY)
+    //                         {
+    //                             Move(currentX, currentY + 1);
+    //                             // currentY += 1; // move down
+    //                         }
+    //                         else if (this.currentY > entity.currentY)
+    //                         {
+    //                             Move(currentX, currentY - 1);
+    //                             // currentY -= 1; // move up
+    //                         }
+    //                         else
+    //                         {
+    //                             // We're at the same position as the target but out of range, so its an error
+    //                             Debug.Log("Error: matching position of target and out of range");
+    //                         }
+    //                     }
+    //                 }
+    //                 // Try moving horizontally while in range
+    //                 else
+    //                 {
+    //                     // Try to step closer
+    //                     if (Random.value < 0.5f)
+    //                     {
+    //                         // We're going to step closer
+    //                         if (this.currentX < entity.currentX)
+    //                         {
+    //                             Move(currentX + 1, currentY);
+    //                             // currentX += 1; // move east
+    //                         }
+    //                         else if (this.currentX > entity.currentX)
+    //                         {
+    //                             Move(currentX - 1, currentY);
+    //                             // currentX -= 1; // move west
+    //                         }
+    //                         else
+    //                         {
+    //                             // We're in range but on the same X, so try vertical movement
+    //                             if (this.currentY < entity.currentY)
+    //                             {
+    //                                 Move(currentX, currentY + 1);
+    //                                 // currentY += 1; // move down
+    //                             }
+    //                             else if (this.currentY > entity.currentY)
+    //                             {
+    //                                 Move(currentX, currentY - 1);
+    //                                 // currentY -= 1; // move up
+    //                             }
+    //                             else
+    //                             {
+    //                                 // We're at the same position as the target and in range, so its an error
+    //                                 Debug.Log("Error: matching position of target and in range");
+    //                             }
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         // attack! We're in range
+    //                         Attack();
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         else
+    //         {
+    //             // Prioritize horizontal movement
+    //             if (hDist > vDist)
+    //             {
+    //                 // Try moving horizontally while out of range
+    //                 if (hDist > this.range)
+    //                 {
+    //                     if (this.currentX < entity.currentX)
+    //                         currentX += 1;
+    //                     else if (this.currentX > entity.currentX)
+    //                         currentX -= 1;
+    //                     else
+    //                     {
+    //                         // We're out of range but on the same x, so try vertical movement
+    //                         if (this.currentY < entity.currentY)
+    //                             currentY += 1;
+    //                         else if (this.currentY > entity.currentY)
+    //                             currentY -= 1;
+    //                         else
+    //                         {
+    //                             // We're at the same position as the target but out of range, so its an error
+    //                             Debug.Log("Error: matching position of target and out of range");
+    //                         }
+    //                     }
+    //                 }
+    //                 // Try moving horizontally while in range
+    //                 else
+    //                 {
+    //                     // Try to step closer
+    //                     if (Random.value < 0.5f)
+    //                     {
+    //                         // We're going to step closer
+    //                         if (this.currentX < entity.currentX)
+    //                             currentX += 1;
+    //                         else if (this.currentX > entity.currentX)
+    //                             currentX -= 1;
+    //                         else
+    //                         {
+    //                             // We're in range but on the same X, so try vertical movement
+    //                             if (this.currentY < entity.currentY)
+    //                                 currentY += 1;
+    //                             else if (this.currentY > entity.currentY)
+    //                                 currentY -= 1;
+    //                             else
+    //                             {
+    //                                 // We're at the same position as the target and in range, so its an error
+    //                                 Debug.Log("Error: matching position of target and in range");
+    //                             }
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         // attack! We're in range
+    //                         Attack();
+    //                     }
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 // Try moving vertically while out of range
+    //                 if (vDist > this.range)
+    //                 {
+    //                     if (this.currentY < entity.currentY)
+    //                         currentY += 1; // Move down
+    //                     else if (this.currentY > entity.currentY)
+    //                         currentY -= 1; // Move up
+    //                     else
+    //                     {
+    //                         // We're out of range but on the same Y, so try horizontal movement
+    //                         if (this.currentX < entity.currentX)
+    //                             currentX += 1;
+    //                         else if (this.currentX > entity.currentX)
+    //                             currentX -= 1;
+    //                         else
+    //                         {
+    //                             // We're at the same position as the other entity but out of range, so its an error
+    //                             Debug.Log("Error: matching position of target and out of range");
+    //                         }
+    //                     }
+    //                 }
+    //                 // Try moving vertically while in range
+    //                 else
+    //                 {
+    //                     // Try to step closer
+    //                     if (Random.value < 0.5f)
+    //                     {
+    //                         // We're going to step closer
+    //                         if (this.currentY < entity.currentY)
+    //                             currentY += 1;
+    //                         else if (this.currentY > entity.currentY)
+    //                             currentY -= 1;
+    //                         else
+    //                         {
+    //                             // We're in range but on the same Y, so try horizontal movement
+    //                             if (this.currentX < entity.currentX)
+    //                                 currentX += 1;
+    //                             else if (this.currentX > entity.currentX)
+    //                                 currentX -= 1;
+    //                             else
+    //                             {
+    //                                 // We're at the same position as the other entity and in range, so its an error
+    //                                 Debug.Log("Error: matching position of target and in range");
+    //                             }
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         // attack! We're in range
+    //                         Attack();
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     public void wander()
     {
