@@ -602,6 +602,9 @@ public class BoardGenerator : MonoBehaviour
 		int _width = random_range(this.min_room_width, this.max_room_width);
 		int _height = random_range(this.min_room_height, this.max_room_height);
 		Debug.Log("Picked width and height: "+_width+", "+_height);
+		string[] enemyArray = new string[2];
+		enemyArray[0] = "MantisEnemy";
+		enemyArray[1] = "FalconEnemy";
 
 		int lBound, rBound, uBound, dBound;
 
@@ -648,8 +651,9 @@ public class BoardGenerator : MonoBehaviour
 						this.spawnCounter++;
 
 						// Create an enemy
-						GameObject enemy = (GameObject)Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+						GameObject enemy = (GameObject)Instantiate(GameObject.Find(enemyArray[Random.Range(0,2)]), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
 						this.map[m.x + xx, m.y + yy].entity = enemy;
+						Debug.Log("Placing: " + enemy.name + " at x: " + m.x + " y: " + m.y);
 						enemy.GetComponent<EnemyBasic>().currentX = m.x+xx;
 						enemy.GetComponent<EnemyBasic>().currentY = m.y+yy;
 						//enemy.Set((int)(Random.value * 100), 0);

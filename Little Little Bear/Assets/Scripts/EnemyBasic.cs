@@ -12,7 +12,7 @@ public class EnemyBasic : BasicEntity
     public enum enemyType : short
     {
         Empty = -1, Mantis = 0, Bear = 1,
-        Bird
+        Falcon = 2
     };
 
     protected override void Start()
@@ -44,6 +44,11 @@ public class EnemyBasic : BasicEntity
             case enemyType.Mantis:
                 animator.SetTrigger("Mantis");
                 this.strength = 10;
+                this.range = 1;
+                break;
+            case enemyType.Falcon:
+                animator.SetTrigger("Falcon");
+                this.strength = 20;
                 this.range = 1;
                 break;
             case enemyType.Bear:
