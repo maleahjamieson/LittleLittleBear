@@ -206,7 +206,7 @@ public class LLB : BasicEntity
                     targetHighlight.Aim('l');
                     if (!flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = true;
@@ -217,7 +217,7 @@ public class LLB : BasicEntity
                     targetHighlight.Aim('r');
                     if (flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = false;
@@ -286,7 +286,7 @@ public class LLB : BasicEntity
             moveLeft = false;
             if (!flipped) // LLB looking right about to go left, so we flip her sprite
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = true;
@@ -299,7 +299,7 @@ public class LLB : BasicEntity
             moveRight = false;
             if (flipped)
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = false;
