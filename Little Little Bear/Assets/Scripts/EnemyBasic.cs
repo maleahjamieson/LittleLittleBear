@@ -186,12 +186,29 @@ public class EnemyBasic : BasicEntity
 
     public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
-        int euclid = (int) Mathf.Floor(Mathf.Sqrt((this.currentX - x) ^ 2 + (this.currentY - y) ^ 2));
-        bool diagTrue = (this.currentX - x) == (this.currentY - y);
-        Debug.Log("Euclid: " + euclid);
-        Debug.Log(this.type + "'s range: " + this.range);
+        // int euclid = (int) Mathf.Floor(Mathf.Sqrt((this.currentX - x) ^ 2 + (this.currentY - y) ^ 2));
+        // bool diagTrue = (this.currentX - x) == (this.currentY - y);
+        // Debug.Log("Euclid: " + euclid);
+        // Debug.Log(this.type + "'s range: " + this.range);
+        int euclid;
 
-        if (this.range <= euclid && !diagTrue)
+        // On the same x plane, so use the y difference for checking range
+        if (this.currentX == x)
+        {
+            euclid = (int)Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+        }
+        // On the same y plane, so use the x difference for checking range
+        else if (this.currentY == y)
+        {
+            euclid = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX));
+        }
+        // We're not on the same plane either way, which means we're on the diagonal (so we can't attack anyways)
+        else
+        {
+            euclid = 999;
+        }
+
+        if (this.range <= euclid) // && !diagTrue)
         {
             Attack();
             return;

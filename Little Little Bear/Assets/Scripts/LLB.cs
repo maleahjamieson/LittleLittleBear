@@ -21,6 +21,8 @@ public class LLB : BasicEntity
 // >>>>>>> origin/DavidBranch
     private bool dig;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
+    private bool attackWait;
+    private bool turnEnd;
     
     /*//inventory variables
     private Inventory inventory;
