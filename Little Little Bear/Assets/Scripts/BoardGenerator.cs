@@ -605,7 +605,6 @@ public class BoardGenerator : MonoBehaviour
 		string[] enemyArray = new string[2];
 		enemyArray[0] = "MantisEnemy";
 		enemyArray[1] = "FalconEnemy";
-		
 
 		int lBound, rBound, uBound, dBound;
 
