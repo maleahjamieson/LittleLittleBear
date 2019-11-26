@@ -19,7 +19,7 @@ public class Highlight : MonoBehaviour
             tileList[i].SetActive(false);
         }
     }
-    public void Activate(int r, bool flipped, char t) // Only activate the tiles needed in the proper formation
+    public void Activate(int r, bool flipped, char t, char d) // Only activate the tiles needed in the proper formation
     {
         range = r; // how many tiles
         attackType = t; // which type of attack
@@ -35,34 +35,15 @@ public class Highlight : MonoBehaviour
                     tileList[3].SetActive(true); 
                     tileList[4].SetActive(true);
 
-                    if (!flipped) // Positions based off looking right
-                    {
-                        tileList[0].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y);
-                        tileList[1].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y + 1);
-                        tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
-                        tileList[3].transform.position = new Vector2(LLB.transform.position.x + 1, LLB.transform.position.y - 1);
-                        tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
-                    }
-                    else        // Positions based off looking left
-                    {
-                        tileList[0].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y);
-                        tileList[1].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y + 1);
-                        tileList[2].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y + 1);
-                        tileList[3].transform.position = new Vector2(LLB.transform.position.x - 1, LLB.transform.position.y - 1);
-                        tileList[4].transform.position = new Vector2(LLB.transform.position.x, LLB.transform.position.y - 1);
-                    }
+                    Aim(d);
+                    
                     break;
                 default: // Range, thrust, blunt and basic
                 for (int i = 0; i < r; i++) // runs through range and places in a line
                 {
                     tileList[i].SetActive(true);
-                    if (!flipped)
-                    {
-                        tileList[i].transform.position = new Vector2(LLB.transform.position.x + (i + 1), LLB.transform.position.y);
-                    }
-                    else
-                        tileList[i].transform.position = new Vector2(LLB.transform.position.x - (i + 1), LLB.transform.position.y);
                 }
+                    Aim(d);
                 break;
             }
         }
