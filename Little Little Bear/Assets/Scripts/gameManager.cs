@@ -37,7 +37,9 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu.SetActive(false);
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
+        BackgroundMenu.SetActive(false);
         InventoryMenu = GameObject.Find("InventoryBackground");
+        BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
 
 
