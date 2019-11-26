@@ -127,6 +127,5 @@ MonoBehaviour:
   attack: 0
   flipped: 0
   board: {fileID: 0}
-  animator: {fileID: 0}
-  enemyTag: 0
+  animator: {fileID: 6839882926871575334}
   type: 0

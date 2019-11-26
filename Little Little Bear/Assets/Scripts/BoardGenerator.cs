@@ -602,6 +602,8 @@ public class BoardGenerator : MonoBehaviour
 		int _width = random_range(this.min_room_width, this.max_room_width);
 		int _height = random_range(this.min_room_height, this.max_room_height);
 		// Debug.Log("Picked width and height: "+_width+", "+_height);
+
+		// Strings that point to Enemy Prefabs
 		string[] enemyArray = new string[2];
 		enemyArray[0] = "MantisEnemy";
 		enemyArray[1] = "FalconEnemy";
@@ -651,13 +653,18 @@ public class BoardGenerator : MonoBehaviour
 						this.spawnCounter++;
 
 						// Create an enemy
-						GameObject enemy = (GameObject)Instantiate(GameObject.Find(enemyArray[Random.Range(0,2)]), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-						Debug.Log("Placing: " + enemy.name + " at x: " + m.x + " y: " + m.y);
+						// Picking index from enemyArray
+						int enemyTypeRand = Random.Range(0,2);
+						EnemyBasic.enemyType enemyChosenType = (EnemyBasic.enemyType) enemyTypeRand;
+
+						// Making enemy object for the board, then setting it's stats based on enemyType
+						GameObject enemy = (GameObject)Instantiate(GameObject.Find(enemyArray[enemyTypeRand]), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+						enemy.GetComponent<EnemyBasic>().Set(enemyChosenType);
+						// Debug.Log("Placing: " + enemy.name + " at x: " + m.x + " y: " + m.y);
+
 						this.map[m.x + xx, m.y + yy].entity = enemy;
 						enemy.GetComponent<EnemyBasic>().currentX = m.x+xx;
 						enemy.GetComponent<EnemyBasic>().currentY = m.y+yy;
-						//enemy.Set((int)(Random.value * 100), 0);
-						//EnemyList.Add(Instantiate(GameObject.Find("MantisEnemy"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity));
 						EnemyList.Add(enemy);
 					}
 				}

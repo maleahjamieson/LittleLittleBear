@@ -96,6 +96,7 @@ public class LLB : BasicEntity
             {
                 Debug.Log("-------------------------------------------------------------\nATTEMPT");
                 enemy.GetComponent<EnemyBasic>().Hurt(strength);
+
             }
             else
             {
@@ -207,7 +208,7 @@ public class LLB : BasicEntity
 
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
-                Debug.Log("*******LLB*******");
+                // Debug.Log("*******LLB*******");
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
 
                 {
@@ -269,7 +270,6 @@ public class LLB : BasicEntity
             
             if (Input.GetMouseButtonDown(0)) // Attack
             {
-                Combat(false);
                 attackWait = false;
                 turnEnd = true;
             }
@@ -373,6 +373,7 @@ public class LLB : BasicEntity
                     {
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
+                        Combat(false); // Once LLB attack animation ends, do damage
                     }
                 }
                 break;
