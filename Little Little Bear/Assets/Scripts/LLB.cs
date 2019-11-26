@@ -139,12 +139,16 @@ public class LLB : BasicEntity
 
                     //written by Maleah, pickup item for inventory
                     //check ground for item
-                    if(board.map[xDir, yDir].item != null)
+                    if (board.map[xDir, yDir].item != null)
                     {
                         //try to pickup item
-                        PickUp(board.map[xDir, yDir].item);           
+                        PickUp(board.map[xDir, yDir].item);
                     }
-                    
+                    //written by Thomas, change the level
+                    if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
+                    {
+                        gameManager.instance.LoadScene(1);
+                    }
                     return true;
             }
         }

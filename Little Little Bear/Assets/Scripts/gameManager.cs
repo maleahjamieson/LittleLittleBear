@@ -87,6 +87,9 @@ public class gameManager : MonoBehaviour {
 			case 1:
 			SceneManager.LoadScene("Level1");
 			break;
-		}
+            case 2:
+            SceneManager.LoadScene("Level2");
+            break;
+        }
 	}
 }
