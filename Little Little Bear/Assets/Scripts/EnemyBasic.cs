@@ -4,31 +4,23 @@ using UnityEngine;
 
 public class EnemyBasic : BasicEntity
 {
-    public int enemyTag; // int value for queue
     public enemyType type; // Name like mantis, bear, etc.
     private ArrayList visitedPoints;
     private bool alert;
 
     public enum enemyType : short
     {
-        Empty = -1, Mantis = 0, Bear = 1,
-        Bird
+        Empty = -1, Mantis = 0, Falcon = 1,
+        Bear = 2
     };
 
     protected override void Start()
     {
-        health = 8;
-        alert = false;
+        this.alert = false;
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
-        enemyTag = -1; // init number
-        type = enemyType.Empty;
         // ---------------------------------------------
         base.Start(); // initialize values
-
-        // ---------------REMOVE LATER -----------------
-        // Set(0, enemyType.Mantis); //Will be set inside gen, only here for testing
-        // ---------------------------------------------
     }
 
     private void OnEnable() // When level starts up we enable the player entity
@@ -36,21 +28,32 @@ public class EnemyBasic : BasicEntity
         flipped = false;
     }
 
-    protected void Set(int tag, enemyType t)
+    public void Set(enemyType t)
     {
-        enemyTag = tag;
-        type = t;
+        this.type = t;
         switch (type)
         {
             case enemyType.Mantis:
-                animator.SetTrigger("Mantis");
+                this.animator.SetTrigger("Mantis");
                 this.strength = 10;
                 this.range = 1;
+                this.health = 8;
+                break;
+            case enemyType.Falcon:
+                this.animator.SetTrigger("Falcon");
+                this.strength = 20;
+                this.range = 1;
+                this.health = 12;
                 break;
             case enemyType.Bear:
-                animator.SetTrigger("Bear");
+                this.animator.SetTrigger("Bear");
                 break;
-
+            default:
+                this.animator.SetTrigger("Mantis");
+                this.strength = 1;
+                this.range = 1;
+                this.health = 1;
+                break;
         }
     }
     private void Attack()
@@ -63,8 +66,10 @@ public class EnemyBasic : BasicEntity
     public void Hurt(int damage)
     {
         Debug.Log("-------------------------------------------------------------\nDEALT DAMAGE OF " + damage);
-        health -= damage;
-        // run death check
+        this.health -= damage;
+        // Kill enemy by destroying it from the board
+        if(this.health <= 0)
+            UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
     }
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
@@ -88,7 +93,8 @@ public class EnemyBasic : BasicEntity
                 default: // Currently default since moving is only here
                     // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-
+                
+                    int facingVal = this.currentX - xDir; // Moving left or right?
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
 
@@ -98,6 +104,18 @@ public class EnemyBasic : BasicEntity
                     currentY = yDir;
                     // transform.position = new Vector3(currentX, currentY, 0);
                     transform.position = new Vector2(currentX, currentY);
+
+                    // Checking if enemy sprite should flip left or right
+                    SpriteRenderer mySpriteRenderer = GetComponent<SpriteRenderer>();
+                    if (facingVal == -1) // Moving left, face left
+                    {
+                        mySpriteRenderer.flipX = true;
+                    }
+                    else if (facingVal == 1) // Moving right, face right
+                    {
+                        mySpriteRenderer.flipX = false;
+                    }
+
                     return true;
             }
         }
@@ -214,7 +232,7 @@ public class EnemyBasic : BasicEntity
         {
             euclid = 999;
         }
-        // Debug.Log("Euclid: "+euclid);
+        // Debug.Log("Euclid: "+ euclid + " " + this.type + "'s range: " + this.range);
 
         if (euclid <= this.range) // && !diagTrue)
         {
