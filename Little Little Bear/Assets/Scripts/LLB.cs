@@ -34,6 +34,7 @@ public class LLB : BasicEntity
         checkInput = true;
         invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
+        attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
         health = 100;
         stamina = 100;
@@ -128,7 +129,7 @@ public class LLB : BasicEntity
                 default: // Currently default since moving is only here
                     Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-
+                    
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
 
@@ -291,7 +292,7 @@ public class LLB : BasicEntity
         {
             attack = false;
             attackWait = true;
-            targetHighlight.Activate(1, flipped, 'o'); // o = other i.e basic attack
+            targetHighlight.Activate(1, flipped, 'o', attackDir); // o = other i.e basic attack
             StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (specialA)
@@ -311,7 +312,7 @@ public class LLB : BasicEntity
             }
             specialA = false;
             attackWait = true;
-            targetHighlight.Activate(r, flipped, weaponType);
+            targetHighlight.Activate(r, flipped, weaponType, attackDir);
             StartCoroutine(wait2Move('s', 1.5f)); // Starts animation timer and should stop inputs
         }
         else if (dig)
@@ -391,6 +392,7 @@ public class LLB : BasicEntity
                 break;
             case 'l':  //Move left
                 {
+                    attackDir = 'l'; // when we move attackDir = left
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
@@ -401,6 +403,7 @@ public class LLB : BasicEntity
                 break;
             case 'r': // Move right
                 {
+                    attackDir = 'r'; // when we move attackDir = right
                     transform.Translate((Vector2.right) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
@@ -410,6 +413,7 @@ public class LLB : BasicEntity
                 break;
             case 'u': // Move up
                 {
+                    attackDir = 'u'; // when we move attackDir = up
                     transform.Translate((Vector2.up) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
@@ -419,6 +423,7 @@ public class LLB : BasicEntity
                 break;
             case 'd': // Move Down
                 {
+                    attackDir = 'd'; // when we move attackDir = down
                     transform.Translate((Vector2.down) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
