@@ -35,13 +35,13 @@ public class EnemyBasic : BasicEntity
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 10;
+                this.strength = 5;
                 this.range = 1;
                 this.health = 8;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 20;
+                this.strength = 10;
                 this.range = 1;
                 this.health = 12;
                 break;
