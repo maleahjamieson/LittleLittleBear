@@ -8,7 +8,8 @@ public class LLB : BasicEntity
     private int vertical = 0;
     private char damageType;
     private int stamina;  // Special move gague, when below a certain amount you cant use special
-    private int aDirX, aDirY; // Attack direction x and y, how we aim
+    private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
+    private char attackDir; // char hold, for Combat();
     private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
     private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
 
@@ -54,33 +55,65 @@ public class LLB : BasicEntity
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
     }
 
-    private void Combat() // Stopped time while player decides
+    private void Combat(bool special) // basic : special = false, direction = d 
     {
-        animator.SetTrigger("Attack"); // Attack animation triggered
-        attack = false;
-        /* switch (damageType)
+        GameObject enemy = null;
+        Debug.Log("-------------------------------------------------------------\nATTACK STARTED");
+        if (special)
          {
-             case 'b': // blunt
-                 //Knockback + stun
-                 break;
-             case 's': // slash
-                 //Wide slash (3 tiles in a perpindicular line)
-                 break;
-             case 'p': // pierce
-                 //Multi-Hit
-                 break;
-         }*/
-        turnEnd = true;
+            switch (damageType)
+            {
+                case 'b': // blunt
+                        //Knockback + stun
+                break;
+                case 's': // slash
+                              //Wide slash (3 tiles in a perpindicular line)
+                break;
+                case 't': // thrust
+                              //Multi-Hit
+                break;
+            }
+         }
+         else
+         {
+            switch (attackDir)
+            {
+                case 'l':
+                    enemy = board.map[currentX - 1, currentY].entity;
+                    break;
+                case 'r':
+                    enemy = board.map[currentX + 1, currentY].entity;
+                    break;
+                case 'u':
+                    enemy = board.map[currentX, currentY + 1].entity;
+                    break;
+                case 'd':
+                    enemy = board.map[currentX, currentY - 1].entity;
+                    break;
+            }
+           
+            if (enemy != null)
+            {
+                Debug.Log("-------------------------------------------------------------\nATTEMPT");
+                enemy.GetComponent<EnemyBasic>().Hurt(strength);
+
+            }
+            else
+            {
+                Debug.Log("NULL");
+            }
+         }
+   
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        selfEntity = board.map[currentX, currentY].entityType;
+        // selfEntity = board.map[currentX, currentY].entityType;
         Vector2 sPos = transform.position; //Start Position
         Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
 
-        if (board.map[xDir, yDir].entityType == EntitySet.NOTHING) // if nothing is there(for now)
+        if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
             switch (board.map[xDir, yDir].tileType)
             {
@@ -95,8 +128,12 @@ public class LLB : BasicEntity
                 default: // Currently default since moving is only here
                     Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
-                    board.map[xDir, yDir].entityType = selfEntity; // you are here now
+
+                    board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
+                    board.map[currentX, currentY].entity = null;
+
+                    // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
+                    // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
 
@@ -113,11 +150,11 @@ public class LLB : BasicEntity
         }
         else //something is there
         {            
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entityType);
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
             return false;
         }
 
-        return true; // If nothing is hit then assume move
+        // return true; // If nothing is hit then assume move
     }
 
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
@@ -171,7 +208,7 @@ public class LLB : BasicEntity
 
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
-                Debug.Log("*******LLB*******");
+                // Debug.Log("*******LLB*******");
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
 
                 {
@@ -188,8 +225,6 @@ public class LLB : BasicEntity
                 }
 
             }
-
-            //board.moveEnemies(); // Move all of the bad bois
         }
         else if (attackWait) // Waiting for decided direction
         {
@@ -200,9 +235,10 @@ public class LLB : BasicEntity
                 if (aDirX == -1)  // Identifies direction
                 {
                     targetHighlight.Aim('l');
+                    attackDir = 'l';
                     if (!flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = true;
@@ -211,18 +247,25 @@ public class LLB : BasicEntity
                 else if (aDirX == 1)
                 {
                     targetHighlight.Aim('r');
+                    attackDir = 'r';
                     if (flipped)
                     {
-                        Vector3 tempS = transform.localScale;
+                        Vector2 tempS = transform.localScale;
                         tempS.x *= -1;  // Flips sprite
                         transform.localScale = tempS;
                         flipped = false;
                     }
                 }
                 else if (aDirY == -1)
+                {
                     targetHighlight.Aim('d');
+                    attackDir = 'd';
+                }
                 else if (aDirY == 1)
+                {
                     targetHighlight.Aim('u');
+                    attackDir = 'u';
+                }
             }
             
             if (Input.GetMouseButtonDown(0)) // Attack
@@ -282,7 +325,7 @@ public class LLB : BasicEntity
             moveLeft = false;
             if (!flipped) // LLB looking right about to go left, so we flip her sprite
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = true;
@@ -295,7 +338,7 @@ public class LLB : BasicEntity
             moveRight = false;
             if (flipped)
             {
-                Vector3 tempS = transform.localScale;
+                Vector2 tempS = transform.localScale;
                 tempS.x *= -1;  // Flips sprite
                 transform.localScale = tempS;
                 flipped = false;
@@ -330,6 +373,7 @@ public class LLB : BasicEntity
                     {
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
+                        Combat(false); // Once LLB attack animation ends, do damage
                     }
                 }
                 break;
@@ -399,6 +443,3 @@ public class LLB : BasicEntity
         checkInput = true; // Inputs are able to be taken again
     }
 }
-
-
-

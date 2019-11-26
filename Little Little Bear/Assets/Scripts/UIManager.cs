@@ -30,13 +30,14 @@ public class UIManager : MonoBehaviour {
                 {
                     gameManager.instance.SaveMenu.SetActive(false);
                 }
-                //load save from txt probs would be best here
-                break;
+
+                // Moved the break below EraseSaveFiles and the LoadScene function
                 //erase Save files
                 EraseSaveFiles();
-			//force load level 1
-			gameManager.instance.LoadScene(1);
-			break;
+                //load save from txt probs would be best here
+                //force load level 1
+				gameManager.instance.LoadScene(1);
+				break;
 			case ClickType.LoadGame:
                 if (!gameManager.instance.SaveMenu.activeSelf)
                 {

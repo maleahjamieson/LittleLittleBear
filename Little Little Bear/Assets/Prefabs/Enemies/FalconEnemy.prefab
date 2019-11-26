@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6839882926871575334}
   - component: {fileID: 6839882926871575329}
   m_Layer: 0
-  m_Name: MantisEnemy
+  m_Name: FalconEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -5219937448147995302, guid: 0269b8f6e088d294a88e5ea0912f87d9,
+  m_Sprite: {fileID: 1285624143688142037, guid: 1216e774589ac214a8a4af9e487c4a77,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -128,4 +128,4 @@ MonoBehaviour:
   flipped: 0
   board: {fileID: 0}
   animator: {fileID: 6839882926871575334}
-  type: 0
+  type: 1

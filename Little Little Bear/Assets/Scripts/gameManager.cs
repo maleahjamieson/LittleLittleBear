@@ -37,14 +37,19 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu.SetActive(false);
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
+        BackgroundMenu.SetActive(false);
         InventoryMenu = GameObject.Find("InventoryBackground");
+        BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
 
 
-        Random.seed = System.DateTime.Now.Millisecond; // Seed generator
+        // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
+        Random.InitState(System.DateTime.Now.Millisecond); // Unity's preferred way to seed the RNG
         if (board != null)                                  //if board is loaded
         {
-            board = new BoardGenerator(1000, 1000);
+            // board = new BoardGenerator(1000, 1000); // Removed this line to comply with Unity better
+            board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
+            board.setBoardSize(1000, 1000);
             board.generate();
             //board.printRecords();
             board.Floor = GameObject.Find("TileForestGround");

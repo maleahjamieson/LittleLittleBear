@@ -20,13 +20,12 @@ public abstract class BasicEntity : MonoBehaviour
     public bool moveRight;
     public bool attack;
     public bool flipped;
-    public EntitySet selfEntity;
+    // public EntitySet selfEntity;
     public BoardGenerator board;
     public Animator animator; //animation controller 
 
     protected virtual void Start()
     {
-
         moveUp = false;
         moveDown = false;
         moveLeft = false;
@@ -36,6 +35,7 @@ public abstract class BasicEntity : MonoBehaviour
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         offset = board.offsetforTiles;
         animator = GetComponent<Animator>();
+        GetComponent<SpriteRenderer>().sortingOrder = 2;
     }
     
     // Update is called once per frame
