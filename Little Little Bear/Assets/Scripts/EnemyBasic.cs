@@ -7,6 +7,7 @@ public class EnemyBasic : BasicEntity
     public enemyType type; // Name like mantis, bear, etc.
     private ArrayList visitedPoints;
     private bool alert;
+    private bool waitAttack;
 
     public enum enemyType : short
     {
@@ -17,6 +18,7 @@ public class EnemyBasic : BasicEntity
     protected override void Start()
     {
         this.alert = false;
+        this.waitAttack = false; // Ensures damage flash fully plays
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
         // ---------------------------------------------
@@ -35,13 +37,13 @@ public class EnemyBasic : BasicEntity
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 10;
+                this.strength = 5;
                 this.range = 1;
                 this.health = 8;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 20;
+                this.strength = 10;
                 this.range = 1;
                 this.health = 12;
                 break;
@@ -60,17 +62,10 @@ public class EnemyBasic : BasicEntity
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
         Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
-        Debug.Log("LLB HP: " + LLB.health);
-        LLB.health -= this.strength;
+        LLB.GetComponent<LLB>().Hurt(strength); // Inflict damage
+        Debug.Log("LLB HP: " + LLB.health);    
     }
-    public void Hurt(int damage)
-    {
-        Debug.Log("-------------------------------------------------------------\nDEALT DAMAGE OF " + damage);
-        this.health -= damage;
-        // Kill enemy by destroying it from the board
-        if(this.health <= 0)
-            UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
-    }
+    
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
