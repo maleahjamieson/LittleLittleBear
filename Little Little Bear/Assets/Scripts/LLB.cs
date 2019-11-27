@@ -19,11 +19,11 @@ public class LLB : BasicEntity
     private bool turnEnd;
     private bool attackWait;
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
-    
+
     /*//inventory variables
     private Inventory inventory;
     public GameObject itemButton;*/
-
+    public int maxHealth;
     public Highlight targetHighlight;  // Targeting script
 
     protected override void Start()
@@ -36,6 +36,7 @@ public class LLB : BasicEntity
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
+        maxHealth = 100;
         health = 100;
         stamina = 100;
         strength = 4;
@@ -59,7 +60,6 @@ public class LLB : BasicEntity
     private void Combat(bool special) // basic : special = false, direction = d 
     {
         GameObject enemy = null;
-        Debug.Log("-------------------------------------------------------------\nATTACK STARTED");
         if (special)
          {
             switch (damageType)
@@ -68,7 +68,14 @@ public class LLB : BasicEntity
                         //Knockback + stun
                 break;
                 case 's': // slash
-                              //Wide slash (3 tiles in a perpindicular line)
+                    for (int i = 0; i < 5; i++)
+                    {
+                        
+                        switch (attackDir)
+                        {
+
+                        }
+                    }
                 break;
                 case 't': // thrust
                               //Multi-Hit
@@ -95,9 +102,7 @@ public class LLB : BasicEntity
            
             if (enemy != null)
             {
-                Debug.Log("-------------------------------------------------------------\nATTEMPT");
-                enemy.GetComponent<EnemyBasic>().Hurt(strength);
-
+                enemy.GetComponent<EnemyBasic>().Hurt(strength); // Inflict damage
             }
             else
             {
@@ -350,11 +355,13 @@ public class LLB : BasicEntity
         else if (moveUp)
         {
             moveUp = false;
+            animator.SetTrigger("WalkUp");
             StartCoroutine(wait2Move('u', 0.3f));
         }
         else if (moveDown)
         {
             moveDown = false;
+            animator.SetTrigger("WalkDown");
             StartCoroutine(wait2Move('d', 0.3f));
         }
 
@@ -375,6 +382,7 @@ public class LLB : BasicEntity
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
                         Combat(false); // Once LLB attack animation ends, do damage
+                        yield return new WaitForSeconds(0.5f); // Matches damageFlash()
                     }
                 }
                 break;
@@ -387,6 +395,8 @@ public class LLB : BasicEntity
                     {
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
+                        Combat(true);
+                        yield return new WaitForSeconds(0.5f); // Matches damageFlash()
                     }
                 }
                 break;

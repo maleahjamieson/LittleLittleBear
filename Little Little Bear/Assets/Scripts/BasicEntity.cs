@@ -37,7 +37,23 @@ public abstract class BasicEntity : MonoBehaviour
         animator = GetComponent<Animator>();
         GetComponent<SpriteRenderer>().sortingOrder = 2;
     }
-    
+    public void Hurt(int damage)
+    {
+        Debug.Log("-------------------------------------------------------------\nDEALT DAMAGE OF " + damage);
+        this.health -= damage;
+        
+        StartCoroutine(damageFlash());
+
+        // Kill enemy by destroying it from the board
+        if (this.health <= 0)
+            UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
+    }
+    IEnumerator damageFlash()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.5f);
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
     // Update is called once per frame
     void Update()
     {
