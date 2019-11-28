@@ -18,6 +18,7 @@ public class LLB : BasicEntity
     private bool dig;
     private bool turnEnd;
     private bool attackWait;
+    private bool inCombat; // damage flash management 
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
 
     /*//inventory variables
@@ -31,11 +32,12 @@ public class LLB : BasicEntity
         turnEnd = false;
         dig = false;
         attackWait = false;
+        inCombat = false;
         checkInput = true;
         invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
+        weaponType = 't'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = 100;
         stamina = 100;
@@ -57,33 +59,95 @@ public class LLB : BasicEntity
         //GameManager.instance.playerHealth = health; // applies when we change levels, do this for all stats
     }
 
-    private void Combat(bool special) // basic : special = false, direction = d 
+    private GameObject ReturnEnemy(int x, int y)
     {
-        GameObject enemy = null;
+        GameObject tempEnemy = board.map[x, y].entity;
+        return tempEnemy;
+    }
+    
+    private IEnumerator Combat(bool special) // basic : special = false, direction = d 
+    {
+        Debug.Log("Combat");
+        bool flash = false;
+        GameObject[] enemyList;
         if (special)
          {
-            switch (damageType)
+            int r;// number of enemies to attack
+            if (weaponType == 's')
             {
-                case 'b': // blunt
-                        //Knockback + stun
-                break;
-                case 's': // slash
-                    for (int i = 0; i < 5; i++)
-                    {
-                        
-                        switch (attackDir)
-                        {
+                r = 5;
+                enemyList = new GameObject[r];
+            }
+            else
+            {
 
+                if (weaponType == 'b')
+                    r = 1;
+                else
+
+                    r = 2;
+
+                enemyList = new GameObject[r];
+                switch (attackDir)
+                {
+                    case 'l':
+                        for(int i = 0; i < r; i++)
+                        {
+                            enemyList[i] = ReturnEnemy(currentX - (i+1), currentY);
+                        }
+                        break;
+                    case 'r':
+                        for (int i = 0; i < r; i++)
+                        {
+                            enemyList[i] = ReturnEnemy(currentX + (i + 1), currentY);
+                        }
+                        break;
+                    case 'u':
+                        for (int i = 0; i < r; i++)
+                        {
+                            enemyList[i] = ReturnEnemy(currentX, currentY + (i + 1));
+                        }
+                        break;
+                    case 'd':
+                        for (int i = 0; i < r; i++)
+                        {
+                            enemyList[i] = ReturnEnemy(currentX, currentY - (i + 1));
+                        }
+                        break;
+                }
+
+                for(int i = 0; i < r; i++)
+                {
+                    if (enemyList[i] != null)
+                    {                     
+                        if (weaponType == 'b') // blunt
+                        {
+                            Debug.Log("Blunt");
+                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength * 2, 1)); // Inflict damage
+                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
+                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
+                            yield return new WaitForSeconds(0.5f); 
+                        }
+                        else //thust
+                        {
+                            Debug.Log("Thrust");
+                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, Random.Range(2,5))); // Inflict damage 2-4 times
+                            while (enemyList[i].GetComponent<EnemyBasic>().flash) 
+                            yield return new WaitForSeconds(0f);
+                            
                         }
                     }
-                break;
-                case 't': // thrust
-                              //Multi-Hit
-                break;
+                    else
+                    {
+                        Debug.Log("NULL");
+                    }
+                }
             }
+            
          }
          else
          {
+            GameObject enemy = null;
             switch (attackDir)
             {
                 case 'l':
@@ -102,14 +166,15 @@ public class LLB : BasicEntity
            
             if (enemy != null)
             {
-                enemy.GetComponent<EnemyBasic>().Hurt(strength); // Inflict damage
+                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
             }
             else
             {
                 Debug.Log("NULL");
             }
          }
-   
+        
+        inCombat = false;
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -381,8 +446,11 @@ public class LLB : BasicEntity
                     {
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
-                        Combat(false); // Once LLB attack animation ends, do damage
-                        yield return new WaitForSeconds(0.5f); // Matches damageFlash()
+                        inCombat = true;
+                        StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
+                      
+                        while (inCombat)
+                            yield return new WaitForSeconds(0f); // waits till combat ends
                     }
                 }
                 break;
@@ -395,8 +463,11 @@ public class LLB : BasicEntity
                     {
                         animator.SetTrigger("Attack");
                         yield return new WaitForSeconds(t);
-                        Combat(true);
-                        yield return new WaitForSeconds(0.5f); // Matches damageFlash()
+                        inCombat = true;
+                        StartCoroutine(Combat(true));
+                        
+                        while (inCombat)
+                            yield return new WaitForSeconds(0f); // waits till combat ends
                     }
                 }
                 break;

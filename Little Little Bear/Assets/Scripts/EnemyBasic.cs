@@ -62,10 +62,27 @@ public class EnemyBasic : BasicEntity
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
         Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
-        LLB.GetComponent<LLB>().Hurt(strength); // Inflict damage
+        StartCoroutine(LLB.GetComponent<LLB>().Hurt(strength, 1)); // Inflict damage
         Debug.Log("LLB HP: " + LLB.health);    
     }
-    
+    /*public void Launched(int distance, char dir) // blunt special move
+    {
+        for(int i = 0; i < distance; i++)
+        {
+            switch (dir)
+            {
+                case 'r':
+                    if(Move())
+                    break;
+                case 'r':
+                    break;
+                case 'u':
+                    break;
+                case 'd':
+                    break;
+            }
+        }
+    }*/
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;

@@ -966,29 +966,37 @@ public class BoardGenerator : MonoBehaviour
 		for (int i = 0; i < EnemyList.Count; i++)
 		{
 			GameObject temp = (GameObject)EnemyList[i];
+            if (!temp.GetComponent<BasicEntity>().stunned)
+            {
+                if (temp != null && temp.active)
+                {
+                    if (temp.GetComponent<EnemyBasic>().isAlert())
+                    {
+                        int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
+                        int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
+                        // Debug.Log("Pathfinding to: "+goalX+", "+goalY);
+                        temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
+                    }
+                    else
+                    {
+                        if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
+                        {
+                            Debug.Log("Found you!");
+                            temp.GetComponent<EnemyBasic>().makeAlert();
+                        }
 
-			if (temp != null)
-			{
-				if (temp.GetComponent<EnemyBasic>().isAlert())
-				{
-					int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
-					int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
-					// Debug.Log("Pathfinding to: "+goalX+", "+goalY);
-					temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
-				}
-				else
-				{
-					if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
-					{
-						Debug.Log("Found you!");
-						temp.GetComponent<EnemyBasic>().makeAlert();
-					}
+                        temp.GetComponent<EnemyBasic>().wander();
+                    }
 
-					temp.GetComponent<EnemyBasic>().wander();
-				}
-
-                // PUT BACK AT 0.05f DAVID
-                yield return new WaitForSeconds(0); // IEnumerators must yield at some point
+                    // PUT BACK AT 0.05f DAVID
+                    yield return new WaitForSeconds(0); // IEnumerators must yield at some point
+                }
+            }
+            else // if stunned, take a turn off
+            {
+                temp.GetComponent<BasicEntity>().stunnedTurns -= 1;
+                if (temp.GetComponent<BasicEntity>().stunnedTurns < 0)
+                    temp.GetComponent<BasicEntity>().stunned = false;
             }
 		}
 	}
