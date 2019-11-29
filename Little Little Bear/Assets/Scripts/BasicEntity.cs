@@ -10,7 +10,7 @@ public abstract class BasicEntity : MonoBehaviour
     public float offset;  // Should match level's
     public int currentX; // CurrentPosition
     public int currentY;
-    public int maxHealth;
+
     public int range; // Maximum range of attack
     public int stunnedTurns;
 
