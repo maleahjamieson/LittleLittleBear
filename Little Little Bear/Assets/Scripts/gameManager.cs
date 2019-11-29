@@ -20,6 +20,8 @@ public class gameManager : MonoBehaviour {
     //True if New game, false if Loading game within the SaveMenu Object
     public bool NewOrLoad;
     public bool SaveOn;
+
+    public int dungeonDepth; // For levels
 	// Use this for initialization
 
 	//sets up global instance of gameManager
@@ -41,6 +43,7 @@ public class gameManager : MonoBehaviour {
         InventoryMenu = GameObject.Find("InventoryBackground");
         BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
+        dungeonDepth = 4;
 
 
         // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
@@ -49,20 +52,22 @@ public class gameManager : MonoBehaviour {
         {
             // board = new BoardGenerator(1000, 1000); // Removed this line to comply with Unity better
             board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
-            board.setBoardSize(1000, 1000);
+            board.setBoardSize(2500, 2500);
+            board.setDungeonDepth(dungeonDepth);
             board.generate();
+            Debug.Log("Should be generated at depth: "+dungeonDepth);
             //board.printRecords();
-            board.Floor = GameObject.Find("TileForestGround");
-            board.Wall = GameObject.Find("TileForestWall");
-            board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
-            board.Hallway = GameObject.Find("TileForestHallway");
-            board.Puzzle_Hallway = GameObject.Find("TileForestPuzzleHallway");
-            board.Spawner = GameObject.Find("TileForestSpawner");
-            board.Secret_Floor = GameObject.Find("TileForestSecretGround");
-            board.Trap = GameObject.Find("TileForestTrap");
-            board.Dig_Tile = GameObject.Find("TileForestDig");
-            board.Start_Tile = GameObject.Find("TileForestStartTile");
-            board.End_Tile = GameObject.Find("TileForestEndTile");
+            // board.Floor = GameObject.Find("TileForestGround");
+            // board.Wall = GameObject.Find("TileForestWall");
+            // board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
+            // board.Hallway = GameObject.Find("TileForestHallway");
+            // board.Puzzle_Hallway = GameObject.Find("TileForestPuzzleHallway");
+            // board.Spawner = GameObject.Find("TileForestSpawner");
+            // board.Secret_Floor = GameObject.Find("TileForestSecretGround");
+            // board.Trap = GameObject.Find("TileForestTrap");
+            // board.Dig_Tile = GameObject.Find("TileForestDig");
+            // board.Start_Tile = GameObject.Find("TileForestStartTile");
+            // board.End_Tile = GameObject.Find("TileForestEndTile");
             board.HamsterEntity = GameObject.Find("Player");
             board.GenMap(0);
             Debug.Log("GM SEES " + board.map[499, 500].tileType);

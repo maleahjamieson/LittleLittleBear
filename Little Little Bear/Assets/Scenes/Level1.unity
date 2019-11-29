@@ -384,6 +384,91 @@ PrefabInstance:
       objectReference: {fileID: 51437577}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f853d12fe7723ea48a73de34ac57e350, type: 3}
+--- !u!1001 &525355768
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2202450970715688780, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_Name
+      value: WorldTile
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.379
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 20.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -90.58636
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2797769617374184541, guid: b2c191e664e894842a8194cab8389ce4,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4e0d89145e78f4f4197e3ebb352b4ec3,
+        type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b2c191e664e894842a8194cab8389ce4, type: 3}
 --- !u!1 &686232860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8476035205085354003, guid: 23324a91c3bc93548b0588c39033b8b9,
@@ -2380,6 +2465,65 @@ PrefabInstance:
       propertyPath: spawnableItems.Array.data[8]
       value: 
       objectReference: {fileID: 1498160981137674331, guid: c166ccb1fc9942c4c9b6cd68cab3a73a,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestFloor
+      value: 
+      objectReference: {fileID: 21300000, guid: 4e0d89145e78f4f4197e3ebb352b4ec3,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestWall
+      value: 
+      objectReference: {fileID: 21300000, guid: c4a8d49bf2ef5bb4eb55de48f81f1398,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestPuzzleFloor
+      value: 
+      objectReference: {fileID: 21300000, guid: f0df9e79e59082f4d8296b38275172bc,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestDig
+      value: 
+      objectReference: {fileID: 21300000, guid: ff8e618e10b380c4d93b40be8859562e,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestHallway
+      value: 
+      objectReference: {fileID: 21300000, guid: 2a36ca1b2a080614180973decd2a1efc,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestStart
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestSpawner
+      value: 
+      objectReference: {fileID: 21300000, guid: d88d6b460a937394086516b2c58d1191,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestSecretFloor
+      value: 
+      objectReference: {fileID: 21300000, guid: ed221b05b4e2a054aa29bb9b7c1650d6,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestPuzzleHallway
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c23ccccfc1008249a0c2672605e1826,
+        type: 3}
+    - target: {fileID: 6618821180493726318, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: spr_ForestTrap
+      value: 
+      objectReference: {fileID: 21300000, guid: e9fa7c8df8b817f47ad771e92ff77d5c,
         type: 3}
     - target: {fileID: 6618821180493726319, guid: 3ab122898303379499cc604764b1cd81,
         type: 3}

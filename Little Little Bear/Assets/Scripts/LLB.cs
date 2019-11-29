@@ -25,8 +25,12 @@ public class LLB : BasicEntity
     /*//inventory variables
     private Inventory inventory;
     public GameObject itemButton;*/
+<<<<<<< HEAD
     public int maxHealth;
     //public int stamina;  // Special move gague, when below a certain amount you cant use special
+=======
+    // public int maxHealth; // Already in BasicEntity
+>>>>>>> JellyBranch
     public Highlight targetHighlight;  // Targeting script
 
     protected override void Start()
@@ -42,7 +46,7 @@ public class LLB : BasicEntity
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
         maxHealth = 100;
-        health = 100;
+        health = maxHealth;
         stamina = 100;
         strength = 4;
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
@@ -290,6 +294,7 @@ public class LLB : BasicEntity
                     //written by Thomas, change the level
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
+                        gameManager.instance.dungeonDepth++;
                         gameManager.instance.LoadScene(1);
                     }
                     return true;
