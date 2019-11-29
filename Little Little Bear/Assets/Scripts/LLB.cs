@@ -26,7 +26,7 @@ public class LLB : BasicEntity
     private Inventory inventory;
     public GameObject itemButton;*/
     public int maxHealth;
-    public int stamina;  // Special move gague, when below a certain amount you cant use special
+    //public int stamina;  // Special move gague, when below a certain amount you cant use special
     public Highlight targetHighlight;  // Targeting script
 
     protected override void Start()
