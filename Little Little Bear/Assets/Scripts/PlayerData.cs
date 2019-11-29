@@ -2,33 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class PlayerData : MonoBehaviour
+public class PlayerData 
 {
-    public int level;
     public int health;
-    public float[] position;
+    public int stamina;
+    public int strength;
+    public int maxHealth;
 
     public PlayerData(LLB llb, Inventory inv)
     {
         //place variables in here such as
         //level = player.level
-        //health = player.health
+        health = llb.health;
+        stamina = llb.stamina;
+        strength = llb.strength;
+        maxHealth = llb.maxHealth;
     }
     
     
-    
-    // Start is called before the first frame update
-
-
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }

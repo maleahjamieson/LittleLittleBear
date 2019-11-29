@@ -7,7 +7,7 @@ public class LLB : BasicEntity
     private int horizontal = 0; //store direction we are moving
     private int vertical = 0;
     private char damageType;
-    private int stamina;  // Special move gague, when below a certain amount you cant use special
+    public int stamina;  // Special move gague, when below a certain amount you cant use special
     private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
     private char attackDir; // char hold, for Combat();
     private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
@@ -45,7 +45,7 @@ public class LLB : BasicEntity
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
-
+    
     private void OnEnable() // When level starts up we enable the player entity
     {
         flipped = false;
