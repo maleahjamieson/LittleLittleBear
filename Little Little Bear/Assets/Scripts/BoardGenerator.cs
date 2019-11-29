@@ -1131,9 +1131,9 @@ public class BoardGenerator : MonoBehaviour
     	spr_ForestPuzzleHallway = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_PuzzleHallway");
 
     	// Set Swamp Sprites
-	    // spr_SwampFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
-	    // spr_SwampWall = Resources.Load<Sprite>("Art/SwampTiles/tile_");
-	    // spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    spr_SwampFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Floor");
+	    spr_SwampWall = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Wall");
+	    spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Mud");
 	    // spr_SwampPuzzleFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    // spr_SwampDig = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    // spr_SwampHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
