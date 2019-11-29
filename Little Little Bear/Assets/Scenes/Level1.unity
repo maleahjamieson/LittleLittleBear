@@ -337,6 +337,13 @@ PrefabInstance:
       propertyPath: m_CullTransparentMesh
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8213164600157973358, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Save
+
+'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f853d12fe7723ea48a73de34ac57e350, type: 3}
 --- !u!1 &686232860 stripped
@@ -2386,6 +2393,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6618821180493726313, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: LLB
+      value: 
+      objectReference: {fileID: 955286297}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ab122898303379499cc604764b1cd81, type: 3}
 --- !u!1001 &7211846168802347820

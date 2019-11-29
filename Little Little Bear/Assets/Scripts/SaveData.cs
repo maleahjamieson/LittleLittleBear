@@ -10,6 +10,7 @@ public class SaveData : MonoBehaviour
     {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/save.stf";
+        Debug.Log(path);
         FileStream stream = new FileStream(path, FileMode.Create);
 
         PlayerData data = new PlayerData(llb, inv);
@@ -19,11 +20,12 @@ public class SaveData : MonoBehaviour
     public static PlayerData LoadPlayer()  // invoke for loading player
     {
         string path = Application.persistentDataPath + "/save.stf";
+        
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
-
+            
             PlayerData data = (PlayerData)formatter.Deserialize(stream);
             stream.Close();
 
@@ -34,6 +36,6 @@ public class SaveData : MonoBehaviour
             Debug.LogError("Shit somethings fucked in the saveData " + path);
             return null;
         }
-
+        
     }
 }

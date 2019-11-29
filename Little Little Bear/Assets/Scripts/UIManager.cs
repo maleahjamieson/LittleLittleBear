@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 //enum that contains all UI buttons
-public enum ClickType {MainMenu, Pause, NewGame, LoadGame, Settings, Credits, Music, ExitMenu, Inventory
+public enum ClickType {MainMenu, Pause, Save, NewGame, LoadGame, Settings, Credits, Music, ExitMenu, Inventory
 
 }
 public class UIManager : MonoBehaviour {
@@ -38,7 +38,16 @@ public class UIManager : MonoBehaviour {
                 //force load level 1
 				gameManager.instance.LoadScene(1);
 				break;
+            case ClickType.Save:
+                SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), null);
+                break;
 			case ClickType.LoadGame:
+
+                GlobalMan.instance.data = SaveData.LoadPlayer();
+                Debug.Log(GlobalMan.instance.data.health);
+
+                
+                /*
                 if (!gameManager.instance.SaveMenu.activeSelf)
                 {
                     gameManager.instance.NewOrLoad = false;
@@ -46,8 +55,9 @@ public class UIManager : MonoBehaviour {
                 }
                 else
                 {
+                    
                     gameManager.instance.SaveMenu.SetActive(false);
-                }
+                }*/
                 //load save from txt probs would be best here
                 break;
 			case ClickType.Pause:
