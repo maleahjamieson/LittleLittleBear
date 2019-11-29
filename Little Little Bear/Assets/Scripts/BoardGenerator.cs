@@ -40,14 +40,6 @@ public enum ItemSet : short
     BERRY = 6, SEED = 7         // 6:Blue Berries   7:Sunflower Seeds
 };
 
-// public enum EntitySet : int
-// {
-//     NOTHING = 0, PLAYER = 1,    // 0:Empty   1:LLB
-//     Enemy = 2, WeaponM = 3,     // 2:All     3:Melee
-//     WeaponR = 4, Item = 5,      // 4:Range   5: Item
-//     ShopKeep = 6                // 6:Raccoon
-// };
-
 public enum Direction
 {
 	ERROR = -1, NORTH = 0, SOUTH, EAST, WEST
@@ -112,25 +104,7 @@ public class BoardGenerator : MonoBehaviour
     //**********************************//
     //      Parameters & Variables      //	
     //**********************************//
-    // Variables to hold gameobjects for generation
-    // public GameObject Floor;
-    // public GameObject Wall;
-    // public GameObject Rock;
-    // public GameObject Mud;
-    // public GameObject Secret_Floor;
-    // public GameObject Trap;
-    // public GameObject Spawner;
-    // public GameObject Puzzle_Floor;
-    // public GameObject Dig;
-    // public GameObject Puzzle_Hallway;
-    // public GameObject Hallway;
-    // public GameObject Dig_Tile;
-    // public GameObject Boulder;
-    // public GameObject Start_Tile;
-    // public GameObject End_Tile;
-
-
-    public GameObject[] spawnableItems = new GameObject[9];
+	public GameObject[] spawnableItems = new GameObject[9];
 
     //=============//
     //   Sprites   //
