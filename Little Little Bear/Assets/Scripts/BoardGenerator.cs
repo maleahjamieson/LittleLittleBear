@@ -27,6 +27,11 @@ public enum TileSet : short
 	PUZZLE_HALLWAY, START_TILE, END_TILE
 };
 
+public enum BiomeSet : short
+{
+	NOTHING = -1, FOREST, SWAMP, CAVE
+};
+
 public enum ItemSet : short
 {
     NOTHING = 0, ANT = 1,      // 0:Empty  1:Ants in a bottle
@@ -108,22 +113,72 @@ public class BoardGenerator : MonoBehaviour
     //      Parameters & Variables      //	
     //**********************************//
     // Variables to hold gameobjects for generation
-    public GameObject Floor;
-    public GameObject Wall;
-    public GameObject Rock;
-    public GameObject Mud;
-    public GameObject Secret_Floor;
-    public GameObject Trap;
-    public GameObject Spawner;
-    public GameObject Puzzle_Floor;
-    public GameObject Dig;
-    public GameObject Puzzle_Hallway;
-    public GameObject Hallway;
-    public GameObject Dig_Tile;
-    public GameObject Boulder;
-    public GameObject Start_Tile;
-    public GameObject End_Tile;
+    // public GameObject Floor;
+    // public GameObject Wall;
+    // public GameObject Rock;
+    // public GameObject Mud;
+    // public GameObject Secret_Floor;
+    // public GameObject Trap;
+    // public GameObject Spawner;
+    // public GameObject Puzzle_Floor;
+    // public GameObject Dig;
+    // public GameObject Puzzle_Hallway;
+    // public GameObject Hallway;
+    // public GameObject Dig_Tile;
+    // public GameObject Boulder;
+    // public GameObject Start_Tile;
+    // public GameObject End_Tile;
+
+
     public GameObject[] spawnableItems = new GameObject[9];
+
+    //=============//
+    //   Sprites   //
+    //=============//
+    private BiomeSet biome;
+
+    // Forest Sprites
+    public Sprite spr_ForestFloor;
+    public Sprite spr_ForestWall;
+    public Sprite spr_ForestBranch;
+    public Sprite spr_ForestPit;
+    public Sprite spr_ForestPuzzleFloor;
+    public Sprite spr_ForestDig;
+    public Sprite spr_ForestHallway;
+    public Sprite spr_ForestStart;
+    public Sprite spr_ForestEnd;
+    public Sprite spr_ForestSpawner;
+    public Sprite spr_ForestSecretFloor;
+    public Sprite spr_ForestTrap;
+    public Sprite spr_ForestPuzzleHallway;
+
+    // Swamp Sprites
+    public Sprite spr_SwampFloor;
+    public Sprite spr_SwampWall;
+    public Sprite spr_SwampMud;
+    public Sprite spr_SwampPuzzleFloor;
+    public Sprite spr_SwampDig;
+    public Sprite spr_SwampHallway;
+    public Sprite spr_SwampStart;
+    public Sprite spr_SwampEnd;
+    public Sprite spr_SwampSpawner;
+    public Sprite spr_SwampSecretFloor;
+    public Sprite spr_SwampTrap;
+    public Sprite spr_SwampPuzzleHallway;
+
+    // Cave Sprites
+    public Sprite spr_CaveFloor;
+    public Sprite spr_CaveWall;
+    public Sprite spr_CaveRock;
+    public Sprite spr_CavePuzzleFloor;
+    public Sprite spr_CaveDig;
+    public Sprite spr_CaveHallway;
+    public Sprite spr_CaveStart;
+    public Sprite spr_CaveEnd;
+    public Sprite spr_CaveSpawner;
+    public Sprite spr_CaveSecretFloor;
+    public Sprite spr_CaveTrap;
+    public Sprite spr_CavePuzzleHallway;
 
     public GameObject HamsterEntity; // LLB basically
     public ArrayList EnemyList;
@@ -171,9 +226,9 @@ public class BoardGenerator : MonoBehaviour
 	BoardGenerator()
 	{
 		setBoardSize(2500, 2500);
-		setDungeonDepth(1);
 		// Random.seed = System.DateTime.Now.Millisecond;
 		EnemyList = new ArrayList();
+		biome = BiomeSet.FOREST;
 
 		// Default parameters here
 		setDefaultParameters();
@@ -182,9 +237,9 @@ public class BoardGenerator : MonoBehaviour
 	public BoardGenerator(int width, int height)
 	{
 		setBoardSize(width, height);
-		setDungeonDepth(1);
 		// Random.seed = System.DateTime.Now.Millisecond;
 		EnemyList = new ArrayList();
+		biome = BiomeSet.FOREST;
 
 		// Default parameters here
 		setDefaultParameters();
@@ -196,6 +251,7 @@ public class BoardGenerator : MonoBehaviour
 		setDefaultParameters();
 		// Random.seed = System.DateTime.Now.Millisecond;
 		EnemyList = new ArrayList();
+		biome = BiomeSet.FOREST;
 
 		setDungeonDepth(depth); // Overwrite default depth
 	}
@@ -273,11 +329,12 @@ public class BoardGenerator : MonoBehaviour
 	public void setDungeonDepth(int depth)
 	{
 		this.dungeonDepth = depth;
+
+		updateDungeonDepth();
 	}
 
 	public void setDefaultParameters()
 	{
-		setDungeonDepth(1);
 		setBoardParams(7, 12, 1, 999);
 		setRoomParams(5, 12, 5, 12, true); // Previously, (5, 10, 5, 10, true);
 		setSecretRoomParams(4, 7, 4, 7);
@@ -286,6 +343,33 @@ public class BoardGenerator : MonoBehaviour
 		setOffshootParams(5, 15, 5, 30);
 		setTileParams(50, 50);
 		setMiscParams(40, 70, 100);
+		setDungeonDepth(1); // This needs to go last!
+	}
+
+	public void updateDefaultParameters()
+	{
+		setBoardParams(7 + this.dungeonDepth, 12 + this.dungeonDepth, 1 + this.dungeonDepth, 999);
+		setRoomParams(5 + this.dungeonDepth, 12 + this.dungeonDepth, 5 + this.dungeonDepth, 12 + this.dungeonDepth, true); // Previously, (5, 10, 5, 10, true);
+		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
+		setHallwayParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, false);
+		setTunnelParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, 1 + this.dungeonDepth, 5 + this.dungeonDepth);
+		setOffshootParams(5 + this.dungeonDepth, 15 + this.dungeonDepth, 5 + this.dungeonDepth, 30);
+		setTileParams(50, 50);
+		setMiscParams(40, 70, 100);
+	}
+
+	public void updateDungeonDepth()
+	{
+		// First, change the biome if we need to
+		if (this.dungeonDepth <= 3)
+			biome = BiomeSet.FOREST;
+		else if (this.dungeonDepth <= 6)
+			biome = BiomeSet.SWAMP;
+		else
+			biome = BiomeSet.CAVE;
+
+		// Next, update the parameters
+		updateDefaultParameters();
 	}
 
 	//**********************************//
@@ -1020,7 +1104,7 @@ public class BoardGenerator : MonoBehaviour
 					case 2: // Prints short values without empty spaces
 						if (this.map[x, y].tileType != TileSet.NOTHING)
 							Debug.Log("["+(short)this.map[x,y].tileType+"]");
-                            Instantiate(Floor, new Vector2(x,y), Quaternion.identity);
+                            // /Instantiate(Floor, new Vector2(x,y), Quaternion.identity);
 						break;
 				}
 			}
@@ -1029,8 +1113,57 @@ public class BoardGenerator : MonoBehaviour
 		}
 	}
 
+	public void LoadTileSprites()
+	{
+		// Set Forest Sprites
+    	spr_ForestFloor = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_Ground");
+    	spr_ForestWall = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_Wall");
+    	// spr_ForestBranch = Resources.Load<Sprite>("Art/ForestTiles/tile_");
+    	// spr_ForestPit = Resources.Load<Sprite>("Art/ForestTiles/tile_");
+    	spr_ForestPuzzleFloor = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_PuzzleGround");
+    	spr_ForestDig = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_DigTile");
+    	spr_ForestHallway = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_Hallway");
+    	// spr_ForestStart = Resources.Load<Sprite>("Art/ForestTiles/tile_");
+    	// spr_ForestEnd = Resources.Load<Sprite>("Art/ForestTiles/tile_");
+    	spr_ForestSpawner = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_Spawner");
+    	spr_ForestSecretFloor = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_SecretGround");
+    	spr_ForestTrap = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_Trap");
+    	spr_ForestPuzzleHallway = Resources.Load<Sprite>("Art/ForestTiles/tile_Forest_PuzzleHallway");
+
+    	// Set Swamp Sprites
+	    // spr_SwampFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampWall = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampPuzzleFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampDig = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampStart = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampEnd = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampSpawner = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampSecretFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampTrap = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    // spr_SwampPuzzleHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+
+	    // Set Cave Sprites
+	    // spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveRock = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CavePuzzleFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveStart = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveSecretFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    // spr_CavePuzzleHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	}
+
     public void GenMap(int mode)
     {
+    	// Load in the sprites when we generate the world tiles
+    	LoadTileSprites();
+
         for (int y = 0; y < this.board_height; y++)
         {
             for (int x = 0; x < this.board_width; x++)
@@ -1044,80 +1177,125 @@ public class BoardGenerator : MonoBehaviour
 
                         } else
                         {
-                            //Debug.Log((short)this.map[x, y].tileType);
-                            //float offsetforTiles = 0.3f;
+                        	// For reference
+       						// public enum TileSet : short
+							// {
+							// 	NOTHING = -1, FLOOR = 0,
+							// 	WALL, HALLWAY, TRAP, SPAWNER, SECRET_FLOOR,
+							// 	PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
+							// 	PUZZLE_HALLWAY, START_TILE, END_TILE
+							// };
                             
-                            if (x == 499 && y == 500) {
-                                Debug.Log("GROUND IS WITH " + this.map[x, y].tileType);
-                            }
-                            switch (this.map[x, y].tileType) {
-                                case TileSet.START_TILE:
-                                    Debug.Log("START TILE POSITION X: " + x + " y: " + y);
-                                    HamsterEntity.GetComponent<BasicEntity>().currentX = x;
+                        	GameObject tile = Instantiate(GameObject.Find("WorldTile"), new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+                        	Debug.Log(tile);
+                        	tile.GetComponent<SpriteRenderer>().sortingOrder = 0;
+
+							switch (this.map[x,y].tileType)
+							{
+								default:
+								case TileSet.FLOOR:
+									// Debug.Log("Found: tiletype FLOOR");
+
+									if (biome == BiomeSet.FOREST)
+									{
+										// Debug.Log("Biome: FOREST");
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestFloor;
+									}
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampFloor;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveFloor;
+									break;
+								case TileSet.WALL:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestWall;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampWall;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveWall;
+									break;
+								case TileSet.HALLWAY:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestHallway;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampHallway;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveHallway;
+									break;
+								case TileSet.TRAP:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestTrap;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampTrap;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveTrap;
+									break;
+								case TileSet.SPAWNER:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestSpawner;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampSpawner;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveSpawner;
+									break;
+								case TileSet.SECRET_FLOOR:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestSecretFloor;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampSecretFloor;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveSecretFloor;
+									break;
+								case TileSet.PUZZLE_FLOOR:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestPuzzleFloor;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampPuzzleFloor;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CavePuzzleFloor;
+									break;
+								case TileSet.PUZZLE_HALLWAY:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestPuzzleHallway;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampPuzzleHallway;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CavePuzzleHallway;
+									break;
+								case TileSet.BOULDER:
+								case TileSet.ROCK:
+									break;
+								case TileSet.MUD:
+									break;
+								case TileSet.DIG_TILE:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestDig;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampDig;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveDig;
+									break;
+								case TileSet.START_TILE:
+									HamsterEntity.GetComponent<BasicEntity>().currentX = x;
                                     HamsterEntity.GetComponent<BasicEntity>().currentY = y;
                                     HamsterEntity.transform.position = new Vector2(x * offsetforTiles, y * offsetforTiles);
-                                    Instantiate(Start_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    //LLB starts here put their currentposition to here
-                                    break;
-                                case TileSet.END_TILE:
-                                    Instantiate(End_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    //LLB starts here put their currentposition to here
-                                    break;
-                                case TileSet.FLOOR:
-                                    //Debug.Log("[Floor]");
-                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                break;
-                                case TileSet.DIG_TILE:
-                                	//Debug.Log("[DigTile]");
-                                	Instantiate(Dig_Tile, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                break;
-                                case TileSet.WALL:
-                                   // Debug.Log("[Wall]");
-                                    Instantiate(Wall, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                break;
-                                case TileSet.ROCK:
-                                    //Debug.Log("[Rock]");
-                                    Instantiate(Rock, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.MUD:
-                                    //Debug.Log("[Mud]");
-                                    Instantiate(Mud, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                 break;
-                                case TileSet.HALLWAY:
-                                    //Debug.Log("[Hallway]");
-                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.SPAWNER:
-                                    //Debug.Log("[Spawner]");
-                                    Instantiate(Spawner, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.SECRET_FLOOR:
-                                    //Debug.Log("[Secret_Floor]");
-                                    Instantiate(Secret_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.PUZZLE_FLOOR:
-                                    //Debug.Log("[Puzzle_Floor]");
-                                    Instantiate(Puzzle_Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.PUZZLE_HALLWAY:
-                                   // Debug.Log("[Puzzle_Hallway]");
-                                    Instantiate(Puzzle_Hallway, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.TRAP:
-                                    //Debug.Log("[Trap]");
-                                    Instantiate(Trap, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                case TileSet.NOTHING:
-                                    break;
-                                case TileSet.BOULDER:
-                                    //Debug.Log("[Boulder]");
-                                    Instantiate(Boulder, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
-                                default:
-                                    Instantiate(Floor, new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
-                                    break;
 
-                            }
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestStart;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampStart;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveStart;
+									break;
+								case TileSet.END_TILE:
+									if (biome == BiomeSet.FOREST)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_ForestEnd;
+									else if (biome == BiomeSet.SWAMP)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_SwampEnd;
+									else if (biome == BiomeSet.CAVE)
+										tile.GetComponent<SpriteRenderer>().sprite = spr_CaveEnd;
+									break;
+							}
                         }
                         break;
                     case 1: // Prints enum names
@@ -1126,7 +1304,7 @@ public class BoardGenerator : MonoBehaviour
                     case 2: // Prints short values without empty spaces
                         if (this.map[x, y].tileType != TileSet.NOTHING)
                             Debug.Log("[" + (short)this.map[x, y].tileType + "]");
-                        Instantiate(Floor, new Vector2(x * 10, y * 10), Quaternion.identity);
+                        // Instantiate(Floor, new Vector2(x * 10, y * 10), Quaternion.identity);
                         break;
                 }
             }
