@@ -58,13 +58,12 @@ public class EnemyBasic : BasicEntity
                 break;
         }
     }
-    private IEnumerator Attack()
+    private void Attack()
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
         Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
         StartCoroutine(LLB.GetComponent<LLB>().Hurt(strength, 1)); // Inflict damage
-        Debug.Log("LLB HP: " + LLB.health);
-        yield return new WaitForSeconds(0f);
+        Debug.Log("LLB HP: " + LLB.health);    
     }
     /*public void Launched(int distance, char dir) // blunt special move
     {
@@ -132,9 +131,9 @@ public class EnemyBasic : BasicEntity
                     return true;
             }
         }
-        else //something is there, commented out debug to make it more readable
+        else //something is there
         {
-            //Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
+            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
         }
 
         return true; // If nothing is hit then assume move
@@ -226,7 +225,7 @@ public class EnemyBasic : BasicEntity
         return flag;
     }
 
-    public IEnumerator pathfindTowardsPoint(int x, int y, GridCell[,] map)
+    public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
         int euclid;
 
@@ -249,8 +248,8 @@ public class EnemyBasic : BasicEntity
 
         if (euclid <= this.range) // && !diagTrue)
         {
-            yield return StartCoroutine(Attack());
-            //return;
+            Attack();
+            return;
         }
         // Debug.Log("G: "+x+", "+y);
         // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
@@ -373,7 +372,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        // Debug.Log("Pathing!"); commented out debug to make it more readable
+        Debug.Log("Pathing!");
     }
 
     // This method may be removed at a later date
@@ -698,7 +697,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        //Debug.Log("Wandering!"); commented out debug to make it more readable
+        Debug.Log("Wandering!");
     }
     // End core AI methods
 

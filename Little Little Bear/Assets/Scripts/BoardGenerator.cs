@@ -129,7 +129,7 @@ public class BoardGenerator : MonoBehaviour
     public ArrayList EnemyList;
 
     public float offsetforTiles = 1f;
-    public bool enemyActive = false; // to keep coroutine organized
+
     // Generation Parameters
     private int board_width, board_height;
 	private int min_hallway_length, max_hallway_length;
@@ -968,14 +968,14 @@ public class BoardGenerator : MonoBehaviour
 			GameObject temp = (GameObject)EnemyList[i];
             if (!temp.GetComponent<BasicEntity>().stunned)
             {
-                if (temp != null && temp.GetComponent<BasicEntity>().active)
+                if (temp != null && temp.active)
                 {
                     if (temp.GetComponent<EnemyBasic>().isAlert())
                     {
                         int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
                         int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
                         // Debug.Log("Pathfinding to: "+goalX+", "+goalY);
-                        yield return StartCoroutine(temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map));
+                        temp.GetComponent<EnemyBasic>().pathfindTowardsPoint(goalX, goalY, this.map);
                     }
                     else
                     {

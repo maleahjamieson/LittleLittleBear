@@ -55,9 +55,8 @@ public abstract class BasicEntity : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (this.health <= 0) // Kill enemy by destroying it from the board
             {
-                Debug.Log("DEACTIVATED");
-                this.active = false; // Keeps enemy from being active after death
-                this.gameObject.SetActive(false);               
+                board.map[this.currentX, this.currentY].entity.SetActive(false);
+                board.map[this.currentX, this.currentY].entity.active = false;
                 // UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
                 board.map[this.currentX, this.currentY].entity = null;
                 break;
