@@ -454,12 +454,12 @@ PrefabInstance:
     - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1231887816560153914, guid: b2c191e664e894842a8194cab8389ce4,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2797769617374184541, guid: b2c191e664e894842a8194cab8389ce4,
         type: 3}
@@ -469,6 +469,56 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2c191e664e894842a8194cab8389ce4, type: 3}
+--- !u!1 &640247652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 640247654}
+  - component: {fileID: 640247653}
+  m_Layer: 0
+  m_Name: GlobalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &640247653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640247652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1a4493450737834ab5a92e694064716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    health: 0
+    stamina: 0
+    strength: 0
+    maxHealth: 0
+    depth: 5
+  depth: 5
+--- !u!4 &640247654
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640247652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 504.70407, y: 498.93106, z: -149.47803}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 34
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &686232860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8476035205085354003, guid: 23324a91c3bc93548b0588c39033b8b9,

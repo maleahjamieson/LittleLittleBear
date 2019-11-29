@@ -8,6 +8,7 @@ public class PlayerData
     public int stamina;
     public int strength;
     public int maxHealth;
+    public int depth;
 
     public PlayerData(LLB llb, Inventory inv)
     {
@@ -17,6 +18,7 @@ public class PlayerData
         stamina = llb.stamina;
         strength = llb.strength;
         maxHealth = llb.maxHealth;
+        depth = llb.DungeonDepth;
     }
     
     
