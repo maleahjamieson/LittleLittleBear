@@ -58,14 +58,32 @@ public class EnemyBasic : BasicEntity
                 break;
         }
     }
-    private void Attack()
+    private IEnumerator Attack()
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
         Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
-        LLB.GetComponent<LLB>().Hurt(strength); // Inflict damage
-        Debug.Log("LLB HP: " + LLB.health);    
+        StartCoroutine(LLB.GetComponent<LLB>().Hurt(strength, 1)); // Inflict damage
+        Debug.Log("LLB HP: " + LLB.health);
+        yield return new WaitForSeconds(0f);
     }
-    
+    /*public void Launched(int distance, char dir) // blunt special move
+    {
+        for(int i = 0; i < distance; i++)
+        {
+            switch (dir)
+            {
+                case 'r':
+                    if(Move())
+                    break;
+                case 'r':
+                    break;
+                case 'u':
+                    break;
+                case 'd':
+                    break;
+            }
+        }
+    }*/
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
@@ -114,9 +132,9 @@ public class EnemyBasic : BasicEntity
                     return true;
             }
         }
-        else //something is there
+        else //something is there, commented out debug to make it more readable
         {
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
+            //Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
         }
 
         return true; // If nothing is hit then assume move
@@ -208,7 +226,7 @@ public class EnemyBasic : BasicEntity
         return flag;
     }
 
-    public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
+    public IEnumerator pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
         int euclid;
 
@@ -231,8 +249,8 @@ public class EnemyBasic : BasicEntity
 
         if (euclid <= this.range) // && !diagTrue)
         {
-            Attack();
-            return;
+            yield return StartCoroutine(Attack());
+            //return;
         }
         // Debug.Log("G: "+x+", "+y);
         // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
@@ -355,7 +373,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        Debug.Log("Pathing!");
+        // Debug.Log("Pathing!"); commented out debug to make it more readable
     }
 
     // This method may be removed at a later date
@@ -680,7 +698,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        Debug.Log("Wandering!");
+        //Debug.Log("Wandering!"); commented out debug to make it more readable
     }
     // End core AI methods
 
