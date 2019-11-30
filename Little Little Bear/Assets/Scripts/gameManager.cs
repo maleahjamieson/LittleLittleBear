@@ -43,8 +43,7 @@ public class gameManager : MonoBehaviour {
         InventoryMenu = GameObject.Find("InventoryBackground");
         BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
-        dungeonDepth = 4;
-
+        dungeonDepth = 1;
 
         // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         Random.InitState(System.DateTime.Now.Millisecond); // Unity's preferred way to seed the RNG
