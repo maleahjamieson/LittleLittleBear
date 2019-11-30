@@ -807,62 +807,6 @@ public class BoardGenerator : MonoBehaviour
 				if (chance(this.general_item_chance))
 				{
 					spawnItem(m.x + xx, m.y + yy);
-					// int whichItem = Random.Range(0, 9);
-					// GameObject tempItem;
-
-					// switch(whichItem)
-					// {
-					// 	case 0:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	default:
-					// 	case 1:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 2:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 3:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 4:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 5:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 6:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 7:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// 	case 8:
-					// 	{
-					// 		tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-					// 		break;
-					// 	}
-					// }
-
-					// tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-
-					// this.map[m.x + xx, m.y + yy].item = tempItem;
 					this.itemCounter++;
 				}
 			}
@@ -935,7 +879,7 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.rare_item_chance))
 				{
-					this.map[m.x + xx, m.y + yy].item = new GameObject();
+					spawnItem(m.x + xx, m.y + yy);
 					this.itemCounter++;
 				}
 			}
