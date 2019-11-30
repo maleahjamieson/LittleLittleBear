@@ -13,13 +13,16 @@ public class gameManager : MonoBehaviour {
     public GameObject BackgroundMenu; //background menu
     public GameObject InventoryMenu;
     public GameObject TargetTile;
-
+    public GameObject GlobalMan;
+    public int depth;
 	//for pausing
 	public bool Paused;
 	public bool CreditsOn;
     //True if New game, false if Loading game within the SaveMenu Object
     public bool NewOrLoad;
     public bool SaveOn;
+
+    public int dungeonDepth; // For levels
 	// Use this for initialization
 
 	//sets up global instance of gameManager
@@ -37,11 +40,29 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu.SetActive(false);
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
-        BackgroundMenu.SetActive(false);
+      
         InventoryMenu = GameObject.Find("InventoryBackground");
         BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
 
+        if (GameObject.Find("GlobalManager").GetComponent<GlobalMan>())
+        {
+            if (GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth != 0)
+            {
+                dungeonDepth = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth;
+                Debug.Log("1DEPTH REEEEEEE " + dungeonDepth);
+                GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth = 0;
+            }
+            else
+            {
+                dungeonDepth = 1;
+            }
+        }
+        else {
+            dungeonDepth = 1;
+        }
+        LLB.GetComponent<LLB>().DungeonDepth = dungeonDepth;
+        Debug.Log("2DEPTH REEEEEEE " + dungeonDepth);
 
         // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         Random.InitState(System.DateTime.Now.Millisecond); // Unity's preferred way to seed the RNG
@@ -49,20 +70,22 @@ public class gameManager : MonoBehaviour {
         {
             // board = new BoardGenerator(1000, 1000); // Removed this line to comply with Unity better
             board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
-            board.setBoardSize(1000, 1000);
+            board.setBoardSize(2500, 2500);
+            board.setDungeonDepth(dungeonDepth);
             board.generate();
+            Debug.Log("Should be generated at depth: "+dungeonDepth);
             //board.printRecords();
-            board.Floor = GameObject.Find("TileForestGround");
-            board.Wall = GameObject.Find("TileForestWall");
-            board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
-            board.Hallway = GameObject.Find("TileForestHallway");
-            board.Puzzle_Hallway = GameObject.Find("TileForestPuzzleHallway");
-            board.Spawner = GameObject.Find("TileForestSpawner");
-            board.Secret_Floor = GameObject.Find("TileForestSecretGround");
-            board.Trap = GameObject.Find("TileForestTrap");
-            board.Dig_Tile = GameObject.Find("TileForestDig");
-            board.Start_Tile = GameObject.Find("TileForestStartTile");
-            board.End_Tile = GameObject.Find("TileForestEndTile");
+            // board.Floor = GameObject.Find("TileForestGround");
+            // board.Wall = GameObject.Find("TileForestWall");
+            // board.Puzzle_Floor = GameObject.Find("TileForestPuzzleGround");
+            // board.Hallway = GameObject.Find("TileForestHallway");
+            // board.Puzzle_Hallway = GameObject.Find("TileForestPuzzleHallway");
+            // board.Spawner = GameObject.Find("TileForestSpawner");
+            // board.Secret_Floor = GameObject.Find("TileForestSecretGround");
+            // board.Trap = GameObject.Find("TileForestTrap");
+            // board.Dig_Tile = GameObject.Find("TileForestDig");
+            // board.Start_Tile = GameObject.Find("TileForestStartTile");
+            // board.End_Tile = GameObject.Find("TileForestEndTile");
             board.HamsterEntity = GameObject.Find("Player");
             board.GenMap(0);
             Debug.Log("GM SEES " + board.map[499, 500].tileType);
@@ -72,8 +95,16 @@ public class gameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.P)) { // if keypress P pause menu is brought up
-            BackgroundMenu.SetActive(true);
+        if (Input.GetKeyUp(KeyCode.P)) { // if keypress P pause menu is brought up
+
+            if (!BackgroundMenu.activeSelf)
+            {
+                BackgroundMenu.SetActive(true);
+            }
+            else
+            {
+                BackgroundMenu.SetActive(false);
+            }
         }
         if (Input.GetKey(KeyCode.I)) // if keypress I then inventory is brought up
         {
