@@ -319,7 +319,7 @@ public class LLB : BasicEntity
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
-
+                    
                     // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition

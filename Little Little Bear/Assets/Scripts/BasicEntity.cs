@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public abstract class BasicEntity : MonoBehaviour
 {
     public int health;
@@ -60,6 +60,7 @@ public abstract class BasicEntity : MonoBehaviour
                 this.gameObject.SetActive(false);               
                 // UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
                 board.map[this.currentX, this.currentY].entity = null;
+                SceneManager.LoadScene("StartScene");
                 break;
             }
             GetComponent<SpriteRenderer>().color = Color.white;
