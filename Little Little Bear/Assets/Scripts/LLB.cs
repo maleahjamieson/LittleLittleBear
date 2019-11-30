@@ -7,6 +7,8 @@ public class LLB : BasicEntity
     private int horizontal = 0; //store direction we are moving
     private int vertical = 0;
     private char damageType;
+    public int stamina;  // Special move gague, when below a certain amount you cant use special
+    public int DungeonDepth;
     private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
     private char attackDir; // char hold, for Combat();
     private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
@@ -24,8 +26,9 @@ public class LLB : BasicEntity
     /*//inventory variables
     private Inventory inventory;
     public GameObject itemButton;*/
-    public int maxHealth;
-    public int stamina;  // Special move gague, when below a certain amount you cant use special
+
+    //public int stamina;  // Special move gague, when below a certain amount you cant use special
+
     public Highlight targetHighlight;  // Targeting script
 
     protected override void Start()
@@ -41,7 +44,7 @@ public class LLB : BasicEntity
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
         maxHealth = 100;
-        health = 100;
+        health = maxHealth;
         stamina = 100;
         strength = 4;
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
@@ -289,6 +292,7 @@ public class LLB : BasicEntity
                     //written by Thomas, change the level
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
+                        gameManager.instance.dungeonDepth++;
                         gameManager.instance.LoadScene(1);
                     }
                     return true;
