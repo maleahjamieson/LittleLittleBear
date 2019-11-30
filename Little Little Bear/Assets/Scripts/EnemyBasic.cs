@@ -250,130 +250,139 @@ public class EnemyBasic : BasicEntity
         if (euclid <= this.range) // && !diagTrue)
         {
             yield return StartCoroutine(Attack());
-            //return;
-        }
-        // Debug.Log("G: "+x+", "+y);
-        // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
+            // This return statement prevents the AI from running away
+            // after hitting LLB. Please do not comment out this return
 
-        // First, update visited points
-        // Add current position to visited points
-        visitedPoints.Add(new Vector2(this.currentX, this.currentY));
+            // ...is what I would say if this had not been changed to a coroutine when it had no reason to.
+            // Now the whole rest of the method must be changed.
+            // return;
+        }
+        else
+        {
+            // Debug.Log("G: "+x+", "+y);
+            // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
 
-        // Don't store more than 20 visited points
-        if (visitedPoints.Count > 3) // Reduced memory to 3 positions
-            visitedPoints.RemoveAt(0); // Remove oldest point
+            // First, update visited points
+            // Add current position to visited points
+            visitedPoints.Add(new Vector2(this.currentX, this.currentY));
 
-        // Now, check distance from each position adjacent to entity
-        float[] dist = new float[4];
-        dist[0] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY - 1));
-        dist[1] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY + 1));
-        dist[2] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX + 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
-        dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+            // Don't store more than 20 visited points
+            if (visitedPoints.Count > 3) // Reduced memory to 3 positions
+                visitedPoints.RemoveAt(0); // Remove oldest point
 
-        // Check for walls
-        if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
-        {
-            // Debug.Log("S-Wall");
-            dist[0] = 9999.9f;
-        }
-        if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
-        {
-            // Debug.Log("N-Wall");
-            dist[1] = 9999.9f;
-        }
-        if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
-        {
-            // Debug.Log("E-Wall");
-            dist[2] = 9999.9f;
-        }
-        if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
-        {
-            // Debug.Log("W-Wall");
-            dist[3] = 9999.9f;
-        }
+            // Now, check distance from each position adjacent to entity
+            float[] dist = new float[4];
+            dist[0] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY - 1));
+            dist[1] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY + 1));
+            dist[2] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX + 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
+            dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
 
-        // Check for entities
-        if (map[this.currentX, this.currentY-1].entity != null)
-        {
-            dist[0] = 9999.9f;
-        }
-        if (map[this.currentX, this.currentY+1].entity != null)
-        {
-            dist[1] = 9999.9f;
-        }
-        if (map[this.currentX+1, this.currentY].entity != null)
-        {
-            dist[2] = 9999.9f;
-        }
-        if (map[this.currentX-1, this.currentY].entity != null)
-        {
-            dist[3] = 9999.9f;
-        }
-
-        // Check that we haven't visited these positions
-        if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY-1)))
-            dist[0] = 9999.9f;
-        if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY+1)))
-            dist[1] = 9999.9f;
-        if (visitedPoints.Contains(new Vector2(this.currentX+1, this.currentY)))
-            dist[2] = 9999.9f;
-        if (visitedPoints.Contains(new Vector2(this.currentX-1, this.currentY)))
-            dist[3] = 9999.9f;
-
-        // Store variables to reference later
-        float northDist, southDist, eastDist, westDist;
-        southDist = dist[0];
-        northDist = dist[1];
-        eastDist = dist[2];
-        westDist = dist[3];
-
-        // Optimized to place smallest distance at dist[0]
-        for (int i = 0; i < 4; i++)
-        {
-            if (dist[i] < dist[0])
+            // Check for walls
+            if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
             {
-                float temp = dist[i];
-                dist[i] = dist[0];
-                dist[0] = temp;
+                // Debug.Log("S-Wall");
+                dist[0] = 9999.9f;
             }
+            if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
+            {
+                // Debug.Log("N-Wall");
+                dist[1] = 9999.9f;
+            }
+            if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
+            {
+                // Debug.Log("E-Wall");
+                dist[2] = 9999.9f;
+            }
+            if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
+            {
+                // Debug.Log("W-Wall");
+                dist[3] = 9999.9f;
+            }
+
+            // Check for entities
+            if (map[this.currentX, this.currentY-1].entity != null)
+            {
+                dist[0] = 9999.9f;
+            }
+            if (map[this.currentX, this.currentY+1].entity != null)
+            {
+                dist[1] = 9999.9f;
+            }
+            if (map[this.currentX+1, this.currentY].entity != null)
+            {
+                dist[2] = 9999.9f;
+            }
+            if (map[this.currentX-1, this.currentY].entity != null)
+            {
+                dist[3] = 9999.9f;
+            }
+
+            // Check that we haven't visited these positions
+            if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY-1)))
+                dist[0] = 9999.9f;
+            if (visitedPoints.Contains(new Vector2(this.currentX, this.currentY+1)))
+                dist[1] = 9999.9f;
+            if (visitedPoints.Contains(new Vector2(this.currentX+1, this.currentY)))
+                dist[2] = 9999.9f;
+            if (visitedPoints.Contains(new Vector2(this.currentX-1, this.currentY)))
+                dist[3] = 9999.9f;
+
+            // Store variables to reference later
+            float northDist, southDist, eastDist, westDist;
+            southDist = dist[0];
+            northDist = dist[1];
+            eastDist = dist[2];
+            westDist = dist[3];
+
+            // Optimized to place smallest distance at dist[0]
+            for (int i = 0; i < 4; i++)
+            {
+                if (dist[i] < dist[0])
+                {
+                    float temp = dist[i];
+                    dist[i] = dist[0];
+                    dist[0] = temp;
+                }
+            }
+
+            // Debug.Log("N: "+northDist+", S: "+southDist+", E: "+eastDist+", W: "+westDist);
+
+            // Actually move based on our findings
+            if (dist[0] >= 1.0f && dist[0] < 9999.9f)
+            {
+                if (dist[0] == southDist)
+                {
+                    // Debug.Log("Moved south");
+                    Move(currentX, currentY - 1);
+                    // currentY -= 1;
+                }
+                else if (dist[0] == northDist)
+                {
+                    // Debug.Log("Moved north");
+                    Move(currentX, currentY + 1);
+                    // currentY += 1;
+                }
+                else if (dist[0] == eastDist)
+                {
+                    // Debug.Log("Moved east");
+                    Move(currentX + 1, currentY);
+                    // currentX += 1;
+                }
+                else if (dist[0] == westDist)
+                {
+                    // Debug.Log("Moved west");
+                    Move(currentX - 1, currentY);
+                    // currentX -= 1;
+                }
+                else
+                {
+                    Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
+                }
+            }
+
+            // This is only here because the method was changed to a coroutine.
+            yield return new WaitForSeconds(0.00001f);
         }
-
-        // Debug.Log("N: "+northDist+", S: "+southDist+", E: "+eastDist+", W: "+westDist);
-
-        // Actually move based on our findings
-        if (dist[0] >= 1.0f && dist[0] < 9999.9f)
-        {
-            if (dist[0] == southDist)
-            {
-                // Debug.Log("Moved south");
-                Move(currentX, currentY - 1);
-                // currentY -= 1;
-            }
-            else if (dist[0] == northDist)
-            {
-                // Debug.Log("Moved north");
-                Move(currentX, currentY + 1);
-                // currentY += 1;
-            }
-            else if (dist[0] == eastDist)
-            {
-                // Debug.Log("Moved east");
-                Move(currentX + 1, currentY);
-                // currentX += 1;
-            }
-            else if (dist[0] == westDist)
-            {
-                // Debug.Log("Moved west");
-                Move(currentX - 1, currentY);
-                // currentX -= 1;
-            }
-            else
-            {
-                Debug.Log("Error: enemy attempted to pathfind with non-existant distance");
-            }
-        }
-
-        // Debug.Log("Pathing!"); commented out debug to make it more readable
     }
 
     // This method may be removed at a later date
