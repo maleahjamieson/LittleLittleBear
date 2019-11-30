@@ -6,7 +6,7 @@ public abstract class BasicEntity : MonoBehaviour
 {
     public int health;
     public int strength; // Generic damage for now
-
+    public int maxHealth;
     public float offset;  // Should match level's
     public int currentX; // CurrentPosition
     public int currentY;
