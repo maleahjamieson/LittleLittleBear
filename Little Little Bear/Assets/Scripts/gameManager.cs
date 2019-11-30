@@ -13,7 +13,8 @@ public class gameManager : MonoBehaviour {
     public GameObject BackgroundMenu; //background menu
     public GameObject InventoryMenu;
     public GameObject TargetTile;
-
+    public GameObject GlobalMan;
+    public int depth;
 	//for pausing
 	public bool Paused;
 	public bool CreditsOn;
@@ -39,11 +40,29 @@ public class gameManager : MonoBehaviour {
 			CreditsMenu.SetActive(false);
 		}
         BackgroundMenu = GameObject.Find("MenuBackground");
-        BackgroundMenu.SetActive(false);
+      
         InventoryMenu = GameObject.Find("InventoryBackground");
         BackgroundMenu.SetActive(false);
         TargetTile = GameObject.Find("Highlight");
-        dungeonDepth = 1;
+
+        if (GameObject.Find("GlobalManager").GetComponent<GlobalMan>())
+        {
+            if (GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth != 0)
+            {
+                dungeonDepth = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth;
+                Debug.Log("1DEPTH REEEEEEE " + dungeonDepth);
+                GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data.depth = 0;
+            }
+            else
+            {
+                dungeonDepth = 1;
+            }
+        }
+        else {
+            dungeonDepth = 1;
+        }
+        LLB.GetComponent<LLB>().DungeonDepth = dungeonDepth;
+        Debug.Log("2DEPTH REEEEEEE " + dungeonDepth);
 
         // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         Random.InitState(System.DateTime.Now.Millisecond); // Unity's preferred way to seed the RNG
@@ -64,8 +83,16 @@ public class gameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey(KeyCode.P)) { // if keypress P pause menu is brought up
-            BackgroundMenu.SetActive(true);
+        if (Input.GetKeyUp(KeyCode.P)) { // if keypress P pause menu is brought up
+
+            if (!BackgroundMenu.activeSelf)
+            {
+                BackgroundMenu.SetActive(true);
+            }
+            else
+            {
+                BackgroundMenu.SetActive(false);
+            }
         }
         if (Input.GetKey(KeyCode.I)) // if keypress I then inventory is brought up
         {

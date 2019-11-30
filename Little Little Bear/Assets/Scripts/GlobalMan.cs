@@ -6,7 +6,6 @@ public class GlobalMan : MonoBehaviour
 {
     static public GlobalMan instance;
     public PlayerData data;
-
     //more stuff to be loaded into llb
 
 
