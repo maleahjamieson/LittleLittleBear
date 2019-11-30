@@ -25,7 +25,7 @@ public enum TileSet : short
 	WALL, HALLWAY, TRAP, SPAWNER, SECRET_FLOOR,
 	PUZZLE_FLOOR, ROCK, MUD, BOULDER, DIG_TILE,
 	PUZZLE_HALLWAY, START_TILE, END_TILE, TUNNEL, BRANCH,
-	PIT
+	PIT, KEY_TILE
 };
 
 public enum BiomeSet : short
@@ -345,14 +345,19 @@ public class BoardGenerator : MonoBehaviour
 	{
 		// First, change the biome if we need to
 		if (this.dungeonDepth <= 3)
-			biome = BiomeSet.FOREST;
+			this.biome = BiomeSet.FOREST;
 		else if (this.dungeonDepth <= 6)
-			biome = BiomeSet.SWAMP;
+			this.biome = BiomeSet.SWAMP;
 		else
-			biome = BiomeSet.CAVE;
+			this.biome = BiomeSet.CAVE;
 
 		// Next, update the parameters
 		updateDefaultParameters();
+	}
+
+	public BiomeSet getBiome()
+	{
+		return this.biome;
 	}
 
 	//**********************************//
@@ -661,6 +666,66 @@ public class BoardGenerator : MonoBehaviour
 		}
 	}
 
+	public void spawnItem(int xx, int yy)
+	{
+		int whichItem = Random.Range(0, 9);
+		GameObject tempItem;
+
+		switch(whichItem)
+		{
+			case 0:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			default:
+			case 1:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 2:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 3:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 4:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 5:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 6:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 7:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+			case 8:
+			{
+				tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				break;
+			}
+		}
+
+		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
+		this.map[xx, yy].item = tempItem;
+	}
+
 	// Done [ ]
 	private void room(Position p)
 	{
@@ -741,65 +806,63 @@ public class BoardGenerator : MonoBehaviour
 				// Place item in the room
 				if (chance(this.general_item_chance))
 				{
-					int whichItem = Random.Range(0, 9);
-					GameObject tempItem;
-					
-					// Debug.Log("item number is " + whichItem);
-					// Debug.Log("Creating item at ("+(m.x+xx)+", "+(m.y+yy)+")");
+					spawnItem(m.x + xx, m.y + yy);
+					// int whichItem = Random.Range(0, 9);
+					// GameObject tempItem;
 
-					switch(whichItem)
-					{
-						case 0:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						default:
-						case 1:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 2:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 3:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 4:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 5:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 6:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 7:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-						case 8:
-						{
-							tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-							break;
-						}
-					}
+					// switch(whichItem)
+					// {
+					// 	case 0:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	default:
+					// 	case 1:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 2:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 3:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 4:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 5:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 6:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 7:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// 	case 8:
+					// 	{
+					// 		tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
+					// 		break;
+					// 	}
+					// }
 
-					tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
+					// tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
 
-					this.map[m.x + xx, m.y + yy].item = tempItem;
+					// this.map[m.x + xx, m.y + yy].item = tempItem;
 					this.itemCounter++;
 				}
 			}
@@ -987,7 +1050,7 @@ public class BoardGenerator : MonoBehaviour
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
-					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
+					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
 					{new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR), new GridCell(TileSet.FLOOR)},
@@ -996,135 +1059,145 @@ public class BoardGenerator : MonoBehaviour
 				};
 				break;
 			// Falling Puzzles
+			// Done [x]
 			case 1:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), 	new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 2:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 3:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 4:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.BRANCH), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.PIT), new GridCell(TileSet.BRANCH), new GridCell(TileSet.PIT), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+
 			// Sliding Puzzles
+			// Done [x]
 			case 5:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.ROCK), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 6:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 7:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// Done [x]
 			case 8:
 				puzzle = new GridCell[,]
 				{
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
-					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.ROCK), new GridCell(TileSet.KEY_TILE), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.WALL)},
+					{new GridCell(TileSet.WALL), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.MUD), new GridCell(TileSet.ROCK), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.PUZZLE_FLOOR), new GridCell(TileSet.WALL)},
 					{new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.FLOOR), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL), new GridCell(TileSet.WALL)}
 				};
 				break;
+			// TODO: MAKE BOULDER ARRAYS 11x11 AND FILL THEM ACCORDING TO PLANS
 			// Boulder Puzzles
 			case 9:
 				puzzle = new GridCell[,]
@@ -1271,7 +1344,7 @@ public class BoardGenerator : MonoBehaviour
                     if (temp.GetComponent<EnemyBasic>().isAlert())
                     {
 
-                        yield return new WaitForSeconds(0.0005f); // IEnumerators must yield at some point
+                        yield return new WaitForSeconds(0.00005f); // IEnumerators must yield at some point
                         int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
                         int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
                         // Debug.Log("Pathfinding to: "+goalX+", "+goalY);
@@ -1281,7 +1354,7 @@ public class BoardGenerator : MonoBehaviour
                     {
                         if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
                         {
-                            yield return new WaitForSeconds(0.0005f); // IEnumerators must yield at some point
+                            yield return new WaitForSeconds(0.00005f); // IEnumerators must yield at some point
                             Debug.Log("Found you!");
                             temp.GetComponent<EnemyBasic>().makeAlert();
                         }
@@ -1364,13 +1437,13 @@ public class BoardGenerator : MonoBehaviour
 	    spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Mud");
 	    spr_SwampPuzzleFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_PuzzleGround");
 	    // spr_SwampTunnel = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Tunnel");
-	    // spr_SwampDig = Resources.Load<Sprite>("Art/SwampTiles/tile_");
-	    // spr_SwampHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    spr_SwampDig = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_DigTile");
+	    spr_SwampHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Hallway");
 	    // spr_SwampStart = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    spr_SwampEnd = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_EndTile");
 	    spr_SwampSpawner = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Spawner");
 	    // spr_SwampSecretFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
-	    // spr_SwampTrap = Resources.Load<Sprite>("Art/SwampTiles/tile_");
+	    spr_SwampTrap = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Trap");
 	    // spr_SwampPuzzleHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    spr_SwampSecretFloor = spr_SwampFloor;
 	    spr_SwampStart = spr_SwampFloor;

@@ -278,22 +278,22 @@ public class EnemyBasic : BasicEntity
             dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
 
             // Check for walls
-            if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL)
+            if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL || map[this.currentX, this.currentY-1].tileType == TileSet.TUNNEL)
             {
                 // Debug.Log("S-Wall");
                 dist[0] = 9999.9f;
             }
-            if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL)
+            if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL || map[this.currentX, this.currentY+1].tileType == TileSet.TUNNEL)
             {
                 // Debug.Log("N-Wall");
                 dist[1] = 9999.9f;
             }
-            if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL)
+            if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL || map[this.currentX+1, this.currentY].tileType == TileSet.TUNNEL)
             {
                 // Debug.Log("E-Wall");
                 dist[2] = 9999.9f;
             }
-            if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL)
+            if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL || map[this.currentX-1, this.currentY].tileType == TileSet.TUNNEL)
             {
                 // Debug.Log("W-Wall");
                 dist[3] = 9999.9f;
