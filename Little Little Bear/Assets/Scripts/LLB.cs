@@ -228,27 +228,50 @@ public class LLB : BasicEntity
 
     private void Dig(int x, int y)
     {
-        GameObject item = board.map[x, y].item;
-        if (item == null)
-            Debug.Log("Nothing was found");
-        else
+        if (board.map[x, y].worldTile != null)
         {
-            switch (item.GetComponent<Item>().itemType)
+            if (board.map[x, y].tileType == TileSet.DIG_TILE)
             {
-                case 'a':
-                    Debug.Log("Picked up ants in a bottle!");
-                    break;
-                case 'b':
-                    Debug.Log("Picked up blue berries!");
-                    break;
-                case 's':
-                    Debug.Log("Picked up skunk gas!");
-                    break;
-                case 't':
-                    Debug.Log("Picked up a treat!");
-                    break;
+                // Testing with 90% item spawn chance on dig -> TODO: set spawn chance back to <50%
+                if (Random.value <= 0.9f) // 35% chance
+                {
+                    board.spawnItem(x, y);
+                    // PickUp(board.map[x, y].item); // Why doesn't this work??
+                }
+
+                // Change the sprite of the worldTile that's there
+                if (board.getBiome() == BiomeSet.FOREST)
+                    board.map[x, y].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestFloor;
+                else if (board.getBiome() == BiomeSet.SWAMP)
+                    board.map[x, y].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
+                else if (board.getBiome() == BiomeSet.CAVE)
+                    board.map[x, y].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+
+                board.map[x, y].tileType = TileSet.FLOOR;
             }
         }
+
+        // GameObject item = board.map[x, y].item;
+        // if (item == null)
+        //     Debug.Log("Nothing was found");
+        // else
+        // {
+        //     switch (item.GetComponent<Item>().itemType)
+        //     {
+        //         case 'a':
+        //             Debug.Log("Picked up ants in a bottle!");
+        //             break;
+        //         case 'b':
+        //             Debug.Log("Picked up blue berries!");
+        //             break;
+        //         case 's':
+        //             Debug.Log("Picked up skunk gas!");
+        //             break;
+        //         case 't':
+        //             Debug.Log("Picked up a treat!");
+        //             break;
+        //     }
+        // }
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -271,9 +294,29 @@ public class LLB : BasicEntity
                     return false;
 
                 default: // Currently default since moving is only here
-                    Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    // // DO NOT MOVE THIS OUT OF HERE
+                    // if (board.map[xDir, yDir].tileType == TileSet.TUNNEL)
+                    // {
+                    //     board.map[xDir, yDir].tileType = TileSet.FLOOR;
+
+                    //     if (Random.value < 0.2f) // 20% chance to spawn
+                    //     {
+                    //         board.spawnItem(xDir, yDir);
+                    //     }
+
+                    //     // Change the sprite of the worldTile that's there
+                    //     if (board.getBiome() == BiomeSet.FOREST)
+                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestFloor;
+                    //     else if (board.getBiome() == BiomeSet.SWAMP)
+                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
+                    //     else if (board.getBiome() == BiomeSet.CAVE)
+                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+                    // }
+
+                    // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
+                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     
+                    Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
 
@@ -281,6 +324,26 @@ public class LLB : BasicEntity
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
+
+                    // DO NOT MOVE THIS OUT OF HERE
+                    if (board.map[currentX, currentY].tileType == TileSet.TUNNEL)
+                    {
+                        board.map[currentX, currentY].tileType = TileSet.FLOOR;
+
+                        if (Random.value < 0.2f) // 20% chance to spawn
+                        {
+                            Debug.Log("Item would be spawned from tunnel");
+                            // board.spawnItem(currentX, currentY);
+                        }
+
+                        // Change the sprite of the worldTile that's there
+                        if (board.getBiome() == BiomeSet.FOREST)
+                            board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestFloor;
+                        else if (board.getBiome() == BiomeSet.SWAMP)
+                            board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
+                        else if (board.getBiome() == BiomeSet.CAVE)
+                            board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+                    }
 
                     //written by Maleah, pickup item for inventory
                     //check ground for item
@@ -364,9 +427,8 @@ public class LLB : BasicEntity
 
             if (horizontal != 0 || vertical != 0) // There must be movement input
             {
-                // Debug.Log("*******LLB*******");
+                Debug.Log("*******LLB*******");
                 if (Move(currentX + horizontal, currentY + vertical)) //Current location + moveVector
-
                 {
                     checkInput = false;
 
@@ -536,6 +598,7 @@ public class LLB : BasicEntity
                       
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
+                        yield return new WaitForSeconds(0.5f);
                     }
                 }
                 break;
@@ -553,6 +616,7 @@ public class LLB : BasicEntity
                         
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
+                        yield return new WaitForSeconds(0.5f);
                     }
                 }
                 break;

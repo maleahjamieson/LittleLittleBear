@@ -6,11 +6,10 @@ public abstract class BasicEntity : MonoBehaviour
 {
     public int health;
     public int strength; // Generic damage for now
-
+    public int maxHealth;
     public float offset;  // Should match level's
     public int currentX; // CurrentPosition
     public int currentY;
-    public int maxHealth;
     public int range; // Maximum range of attack
     public int stunnedTurns;
 
@@ -57,6 +56,7 @@ public abstract class BasicEntity : MonoBehaviour
             {
                 Debug.Log("DEACTIVATED");
                 this.active = false; // Keeps enemy from being active after death
+                yield return new WaitForSeconds(0.5f);
                 this.gameObject.SetActive(false);               
                 // UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
                 board.map[this.currentX, this.currentY].entity = null;
@@ -64,6 +64,7 @@ public abstract class BasicEntity : MonoBehaviour
             }
             GetComponent<SpriteRenderer>().color = Color.white;
             yield return new WaitForSeconds(0.5f);
+            Debug.Log("Wait for white");
         }
         
         flash = false;
