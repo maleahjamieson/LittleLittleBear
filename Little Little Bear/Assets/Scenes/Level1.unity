@@ -337,6 +337,13 @@ PrefabInstance:
       propertyPath: m_CullTransparentMesh
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8213164600157973358, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Save
+
+'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f853d12fe7723ea48a73de34ac57e350, type: 3}
 --- !u!1 &686232860 stripped
@@ -644,11 +651,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4073279085208264489, guid: ce0729685708faf449e3a5f99f3544c6,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 4073279085192205497, guid: ce0729685708faf449e3a5f99f3544c6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -703,6 +705,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4073279085208264489, guid: ce0729685708faf449e3a5f99f3544c6,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: -2515862224401194499, guid: ce0729685708faf449e3a5f99f3544c6,
         type: 3}
@@ -2386,6 +2393,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6618821180493726313, guid: 3ab122898303379499cc604764b1cd81,
+        type: 3}
+      propertyPath: LLB
+      value: 
+      objectReference: {fileID: 955286297}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ab122898303379499cc604764b1cd81, type: 3}
 --- !u!1001 &7211846168802347820

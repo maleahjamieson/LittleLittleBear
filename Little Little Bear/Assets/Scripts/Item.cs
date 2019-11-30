@@ -8,11 +8,16 @@ public class Item : MonoBehaviour
 	//inventory variables
 	private Inventory inventory;
 	public GameObject itemButton;
-
+    public GameObject LLB; // player
+    public char itemType; // a ants, b berry, etc
+    int playerHealth; // LLB health
+    int maxHealth; // This will be updated by treats
 	// Start is called before the first frame update
     void Start()
     {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        LLB = GameObject.Find("Player");
+        playerHealth = LLB.GetComponent<LLB>().health;
     }
 
     public void pickup()
@@ -32,6 +37,28 @@ public class Item : MonoBehaviour
 	            break;
         	}
     	}
+    }
+    public void use() 
+    {
+        switch (itemType)
+        {
+            case 'a': // ants
+                break;
+            case 'b': // berry
+                if (playerHealth >= (maxHealth - 20))
+                    playerHealth = maxHealth; // Only goes as high as max health
+                else
+                    playerHealth += 20; // increase by 20
+                
+                break;
+            case 's': // skunk
+                break;
+            case 't': // treat
+                break;
+            default:
+                Debug.Log("UH OH, item isnt set!");
+                break;
+        }
     }
 
     

@@ -7,6 +7,7 @@ public class EnemyBasic : BasicEntity
     public enemyType type; // Name like mantis, bear, etc.
     private ArrayList visitedPoints;
     private bool alert;
+    private bool waitAttack;
 
     public enum enemyType : short
     {
@@ -17,6 +18,7 @@ public class EnemyBasic : BasicEntity
     protected override void Start()
     {
         this.alert = false;
+        this.waitAttack = false; // Ensures damage flash fully plays
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
         // ---------------------------------------------
@@ -35,13 +37,13 @@ public class EnemyBasic : BasicEntity
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 10;
+                this.strength = 5;
                 this.range = 1;
                 this.health = 8;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 20;
+                this.strength = 10;
                 this.range = 1;
                 this.health = 12;
                 break;
@@ -56,21 +58,32 @@ public class EnemyBasic : BasicEntity
                 break;
         }
     }
-    private void Attack()
+    private IEnumerator Attack()
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
         Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
+        StartCoroutine(LLB.GetComponent<LLB>().Hurt(strength, 1)); // Inflict damage
         Debug.Log("LLB HP: " + LLB.health);
-        LLB.health -= this.strength;
+        yield return new WaitForSeconds(0f);
     }
-    public void Hurt(int damage)
+    /*public void Launched(int distance, char dir) // blunt special move
     {
-        Debug.Log("-------------------------------------------------------------\nDEALT DAMAGE OF " + damage);
-        this.health -= damage;
-        // Kill enemy by destroying it from the board
-        if(this.health <= 0)
-            UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
-    }
+        for(int i = 0; i < distance; i++)
+        {
+            switch (dir)
+            {
+                case 'r':
+                    if(Move())
+                    break;
+                case 'r':
+                    break;
+                case 'u':
+                    break;
+                case 'd':
+                    break;
+            }
+        }
+    }*/
     protected bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
@@ -119,9 +132,9 @@ public class EnemyBasic : BasicEntity
                     return true;
             }
         }
-        else //something is there
+        else //something is there, commented out debug to make it more readable
         {
-            Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
+            //Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
         }
 
         return true; // If nothing is hit then assume move
@@ -213,7 +226,7 @@ public class EnemyBasic : BasicEntity
         return flag;
     }
 
-    public void pathfindTowardsPoint(int x, int y, GridCell[,] map)
+    public IEnumerator pathfindTowardsPoint(int x, int y, GridCell[,] map)
     {
         int euclid;
 
@@ -236,8 +249,8 @@ public class EnemyBasic : BasicEntity
 
         if (euclid <= this.range) // && !diagTrue)
         {
-            Attack();
-            return;
+            yield return StartCoroutine(Attack());
+            //return;
         }
         // Debug.Log("G: "+x+", "+y);
         // Debug.Log("Pos: "+this.currentX+", "+this.currentY);
@@ -360,7 +373,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        Debug.Log("Pathing!");
+        // Debug.Log("Pathing!"); commented out debug to make it more readable
     }
 
     // This method may be removed at a later date
@@ -685,7 +698,7 @@ public class EnemyBasic : BasicEntity
             }
         }
 
-        Debug.Log("Wandering!");
+        //Debug.Log("Wandering!"); commented out debug to make it more readable
     }
     // End core AI methods
 
