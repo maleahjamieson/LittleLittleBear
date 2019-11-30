@@ -10,7 +10,8 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        HealthbarFill = GameObject.Find("Health").GetComponent<Image>();
+        text = GameObject.Find("HealthText").GetComponent<Text>();
     }
 
     // Update is called once per frame
