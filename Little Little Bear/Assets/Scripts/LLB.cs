@@ -528,6 +528,7 @@ public class LLB : BasicEntity
                       
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
+                        yield return new WaitForSeconds(0.5f);
                     }
                 }
                 break;
@@ -545,6 +546,7 @@ public class LLB : BasicEntity
                         
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
+                        yield return new WaitForSeconds(0.5f);
                     }
                 }
                 break;

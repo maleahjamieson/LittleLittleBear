@@ -57,6 +57,7 @@ public abstract class BasicEntity : MonoBehaviour
             {
                 Debug.Log("DEACTIVATED");
                 this.active = false; // Keeps enemy from being active after death
+                yield return new WaitForSeconds(0.5f);
                 this.gameObject.SetActive(false);               
                 // UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
                 board.map[this.currentX, this.currentY].entity = null;
@@ -64,6 +65,7 @@ public abstract class BasicEntity : MonoBehaviour
             }
             GetComponent<SpriteRenderer>().color = Color.white;
             yield return new WaitForSeconds(0.5f);
+            Debug.Log("Wait for white");
         }
         
         flash = false;
