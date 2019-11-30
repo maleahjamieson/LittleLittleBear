@@ -1056,6 +1056,8 @@ public class BoardGenerator : MonoBehaviour
                 {
                     if (temp.GetComponent<EnemyBasic>().isAlert())
                     {
+
+                        yield return new WaitForSeconds(0.5f); // IEnumerators must yield at some point
                         int goalX = HamsterEntity.GetComponent<BasicEntity>().currentX;
                         int goalY = HamsterEntity.GetComponent<BasicEntity>().currentY;
                         // Debug.Log("Pathfinding to: "+goalX+", "+goalY);
@@ -1065,6 +1067,7 @@ public class BoardGenerator : MonoBehaviour
                     {
                         if (temp.GetComponent<EnemyBasic>().lineOfSight(HamsterEntity.GetComponent<BasicEntity>(), this.map))
                         {
+                            yield return new WaitForSeconds(0.5f); // IEnumerators must yield at some point
                             Debug.Log("Found you!");
                             temp.GetComponent<EnemyBasic>().makeAlert();
                         }
@@ -1072,8 +1075,6 @@ public class BoardGenerator : MonoBehaviour
                         temp.GetComponent<EnemyBasic>().wander();
                     }
 
-                    // PUT BACK AT 0.05f DAVID
-                    yield return new WaitForSeconds(0); // IEnumerators must yield at some point
                 }
             }
             else // if stunned, take a turn off
