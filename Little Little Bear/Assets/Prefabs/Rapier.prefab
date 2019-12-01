@@ -46,6 +46,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -98,5 +99,6 @@ MonoBehaviour:
   LLB: {fileID: 0}
   itemType: 0
   damage: 0
-  damageType: 0
+  ammoCount: 0
+  damageType: 116
   range: 0

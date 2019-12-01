@@ -62,7 +62,7 @@ public class LLB : BasicEntity
         invEquipped = 1; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 'b'; // Start with a carrot which is blunt
+        weaponType = 's'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -123,11 +123,13 @@ public class LLB : BasicEntity
                                 case ItemType.POCKETKNIFE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
                                     button.GetComponent<Item>().itemType = ii.type;
+                                   	weaponType = ii.damageType;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.RAPIER:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
                                     button.GetComponent<Item>().itemType = ii.type;
+                                    weaponType = ii.damageType;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SKUNK_GAS:
@@ -143,6 +145,7 @@ public class LLB : BasicEntity
                                 case ItemType.STICK_ROCK:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
                                     button.GetComponent<Item>().itemType = ii.type;
+                                    weaponType = ii.damageType;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SUNFLOWER_SEED:
@@ -158,6 +161,7 @@ public class LLB : BasicEntity
                                 case ItemType.CARROT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Carrot");
                                     button.GetComponent<Item>().itemType = ii.type;
+                                    weaponType = ii.damageType;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.TREAT:
