@@ -126,7 +126,6 @@ public class LLB : BasicEntity
                     if (weaponType == 'b')
                         r = 1;
                     else
-
                         r = 2;
 
                     enemyList = new GameObject[r];
@@ -304,28 +303,6 @@ public class LLB : BasicEntity
                     return false;
 
                 default: // Currently default since moving is only here
-                    // // DO NOT MOVE THIS OUT OF HERE
-                    // if (board.map[xDir, yDir].tileType == TileSet.TUNNEL)
-                    // {
-                    //     board.map[xDir, yDir].tileType = TileSet.FLOOR;
-
-                    //     if (Random.value < 0.2f) // 20% chance to spawn
-                    //     {
-                    //         board.spawnItem(xDir, yDir);
-                    //     }
-
-                    //     // Change the sprite of the worldTile that's there
-                    //     if (board.getBiome() == BiomeSet.FOREST)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestFloor;
-                    //     else if (board.getBiome() == BiomeSet.SWAMP)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
-                    //     else if (board.getBiome() == BiomeSet.CAVE)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
-                    // }
-
-                    // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;

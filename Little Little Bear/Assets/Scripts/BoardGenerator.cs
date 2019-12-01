@@ -365,6 +365,11 @@ public class BoardGenerator : MonoBehaviour
 		return this.biome;
 	}
 
+	public int getDepth()
+	{
+		return this.dungeonDepth;
+	}
+
 	//**********************************//
 	//          Helper Methods          //
 	//**********************************//
@@ -692,53 +697,62 @@ public class BoardGenerator : MonoBehaviour
 			case 0:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
 			}
 			default:
 			case 1:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
 				break;
 			}
 			case 2:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
 				break;
 			}
 			case 3:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
 				break;
 			}
 			case 4:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
 				break;
 			}
 			case 5:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SNAPS;
 				break;
 			}
 			case 6:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
 				break;
 			}
 			case 7:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 				break;
 			}
 			case 8:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.THORN_VINE;
 				break;
 			}
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-
+		tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 
@@ -809,7 +823,7 @@ public class BoardGenerator : MonoBehaviour
 
 						// Making enemy object for the board, then setting it's stats based on enemyType
 						GameObject enemy = (GameObject)Instantiate(GameObject.Find(enemyArray[enemyTypeRand]), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-						enemy.GetComponent<EnemyBasic>().Set(enemyChosenType);
+						enemy.GetComponent<EnemyBasic>().Set(enemyChosenType, this.dungeonDepth);
 						// Debug.Log("Placing: " + enemy.name + " at x: " + m.x + " y: " + m.y);
 
 						this.map[m.x + xx, m.y + yy].entity = enemy;
@@ -1554,16 +1568,17 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_SwampRock = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Rock");
 
 	    // Set Cave Sprites
-	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Placeholder");
-	    // this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Ground");
+	    this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Wall");
 	    // this.spr_CaveRock = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CavePuzzleFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveStart = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_DigTile");
+	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
+	    this.spr_CaveStart = this.spr_CaveFloor;
+	    this.spr_CavePuzzleFloor = this.spr_CaveFloor;
+	    this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_EndTile");
+	    this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Spawner");
 	    // this.spr_CaveSecretFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CavePuzzleHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");

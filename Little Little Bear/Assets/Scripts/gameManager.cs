@@ -66,14 +66,17 @@ public class gameManager : MonoBehaviour {
 
         // Random.seed = System.DateTime.Now.Millisecond; // Seed generator
         Random.InitState(System.DateTime.Now.Millisecond); // Unity's preferred way to seed the RNG
+        Debug.Log(board);
         if (board != null)                                  //if board is loaded
         {
+            Debug.Log("We're about to instantiate the board generator");
             // board = new BoardGenerator(1000, 1000); // Removed this line to comply with Unity better
             board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
             board.setBoardSize(2500, 2500);
-            board.setDungeonDepth(dungeonDepth);
+            // board.setDungeonDepth(dungeonDepth);
             // board.setDungeonDepth(10); // Testing boss level
-            // board.setDungeonDepth(4); // Testing mud sliding
+            board.setDungeonDepth(4); // Testing mud sliding
+            Debug.Log("Generate!");
             board.generate();
             Debug.Log("Should be generated at depth: "+dungeonDepth);
             board.HamsterEntity = GameObject.Find("Player");
