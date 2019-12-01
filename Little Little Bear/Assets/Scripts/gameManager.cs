@@ -21,7 +21,7 @@ public class gameManager : MonoBehaviour {
     //True if New game, false if Loading game within the SaveMenu Object
     public bool NewOrLoad;
     public bool SaveOn;
-
+    public PlayerData playerData;
     public int dungeonDepth; // For levels
 	// Use this for initialization
 
@@ -61,6 +61,14 @@ public class gameManager : MonoBehaviour {
         else {
             dungeonDepth = 1;
         }
+
+
+
+        //LLB.GetComponent<Inventory>().isFull = playerData.isFull;
+        //LLB.GetComponent<Inventory>().items = playerData.items;
+        //LLB.GetComponent<Inventory>().slots = GameObject.FindGameObjectsWithTag("InventorySlot");
+
+        //LLB.GetComponent<LLB>().health = playerData.health;
         LLB.GetComponent<LLB>().DungeonDepth = dungeonDepth;
         Debug.Log("2DEPTH REEEEEEE " + dungeonDepth);
 
