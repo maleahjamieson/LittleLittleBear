@@ -78,7 +78,6 @@ public class LLB : BasicEntity
                                 {
                                     button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
                                     inv.isFull[i] = true;
-                                    Debug.Log("OH FUCK WTF AAAAAAA " + o.name);
                                     break;
                                 }
                             }
