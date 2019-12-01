@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LLB : BasicEntity
 {
@@ -306,6 +307,7 @@ public class LLB : BasicEntity
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
 
+
                     int xDiff = xDir - currentX;
                     int yDiff = yDir - currentY;
                     Debug.Log("XDIFF: "+xDiff);
@@ -399,9 +401,13 @@ public class LLB : BasicEntity
         }
         */
     }
-    
+
     private void Update()
     {
+        if (health <= 0) {
+            SceneManager.LoadScene("StartScene");
+        }
+    
         if (checkInput && active) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
