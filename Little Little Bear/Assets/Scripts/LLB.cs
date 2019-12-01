@@ -66,6 +66,7 @@ public class LLB : BasicEntity
         seedXFlip = false;
         seedYFlip = false;
         projectile = GameObject.Find("Projectile");
+        projectile.SetActive(false);
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
         //inventory = GetComponent<Inventory>();
@@ -311,9 +312,10 @@ public class LLB : BasicEntity
                     enemyLocation = enemyList[i].transform.position;
                     Debug.Log("Before " + projectile.transform.position);
                     //rangeWait = true;
+                    projectile.SetActive(true);
                     while(rangeWait) // wait for projectile
 						yield return null;
-
+					projectile.SetActive(false);
 					Debug.Log("After " + projectile.transform.position);
 					enemyList[i].GetComponent<EnemyBasic>().makeAlert(); // piss the enemy off
                     
@@ -680,10 +682,6 @@ public class LLB : BasicEntity
         else if (rangeWait) // Waiting for seed to travel
         {
 
-        	switch(attackDir)
-        	{
-
-        	}
         	if (timer <= seconds)
         	{
         		timer += Time.deltaTime;
@@ -693,7 +691,7 @@ public class LLB : BasicEntity
         	else
         	{
         		rangeWait = false;
-        		projectile.transform.position = new Vector2 (-500, 500);
+        		projectile.SetActive(false);
         	}
         }
     }
@@ -826,6 +824,7 @@ public class LLB : BasicEntity
                 break;
             case 'x': // range attack
 	            { 
+	            	projectile.transform.position = transform.position;
 	            	while (attackWait)
 	            		yield return null;
 	            	if (turnEnd) // if attack actually happened
