@@ -59,7 +59,7 @@ public class LLB : BasicEntity
         invEquipped = 1; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 'b'; // Start with a carrot which is blunt
+        weaponType = 's'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -587,6 +587,19 @@ public class LLB : BasicEntity
             {
             	if (invEquipped == 0)
             	{
+            		switch(weaponType)
+            		{
+            			case 'b':
+            			animator.SetInteger("WeaponType", 0);
+            			break;
+            			case 't':
+            			animator.SetInteger("WeaponType", 1);
+            			break;
+            			case 's':
+            			animator.SetInteger("WeaponType", 2);
+            			break;
+            		}
+            		
             		attack = true; // player will attempt to attack
         			checkInput = false; //input has been read	 
             	}
@@ -828,7 +841,18 @@ public class LLB : BasicEntity
                         yield return null;
                     if (turnEnd) // if attack actually happened
                     {
-                        animator.SetTrigger("Attack");
+                    	switch(weaponType)
+                    	{
+                    		case 'b':
+                    		animator.SetTrigger("Blunt");
+                    		break;
+                    		case 't':
+                    		animator.SetTrigger("Thrust");
+                    		break;
+                    		case 's':
+                    		animator.SetTrigger("Slice");
+                    		break;
+                    	}
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
@@ -846,7 +870,18 @@ public class LLB : BasicEntity
                         yield return null;
                     if (turnEnd) // if attack actually happened
                     {
-                        animator.SetTrigger("Attack");
+                        switch(weaponType)
+                    	{
+                    		case 'b':
+                    		animator.SetTrigger("Blunt");
+                    		break;
+                    		case 't':
+                    		animator.SetTrigger("Thrust");
+                    		break;
+                    		case 's':
+                    		animator.SetTrigger("Slice");
+                    		break;
+                    	}
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(true));
