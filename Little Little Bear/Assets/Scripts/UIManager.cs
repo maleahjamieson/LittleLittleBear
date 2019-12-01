@@ -86,6 +86,10 @@ public class UIManager : MonoBehaviour {
                 break;
             case ClickType.Music:
                 break;
+            case ClickType.Inventory:
+                GetComponent<Item>().use();
+
+                break;
 		}
 
 	}

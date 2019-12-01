@@ -91,6 +91,7 @@ public class Item : MonoBehaviour
 	            //if item is blueberry then this
 	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
                 button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+                button.GetComponent<Item>().itemType = this.itemType;
 	            Destroy(gameObject);
 	            break;
         	}
@@ -101,25 +102,42 @@ public class Item : MonoBehaviour
         switch (itemType)
         {
             case ItemType.RED_ANTS_BOTTLE: // ants
+                Debug.Log("ants everywhere (no function rn)");
+                Destroy(gameObject);
                 break;
             case ItemType.BLUEBERRIES: // berry
+                Debug.Log("munchin a blueberry");
                 if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
                     LLB.GetComponent<LLB>().health = LLB.GetComponent<LLB>().maxHealth; // Only goes as high as max health
                 else
                     LLB.GetComponent<LLB>().health += 20; // increase by 20
-                
+                Destroy(gameObject);
                 break;
             case ItemType.SKUNK_GAS: // skunk
+                Debug.Log("used smelly (no function rn)");
+                Destroy(gameObject);
                 break;
             case ItemType.TREAT: // treat
+                Debug.Log("what a treat");
+                LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20; // increase max health by 20
+                Destroy(gameObject);
                 break;
             case ItemType.STICK_ROCK:
+                Debug.Log("used stick rock (no function rn)");
+                Destroy(gameObject);
                 break;
             case ItemType.RAPIER:
+                Debug.Log("used sword (no function rn)");
+                Destroy(gameObject);
                 break;
             case ItemType.CARROT:
+                Debug.Log("used carrot (no function rn)");
+                //Destroy(gameObject); no destroy cause carrot is base item
+                //in fact we should probably get rid of this
                 break;
             case ItemType.POCKETKNIFE:
+                Debug.Log("used knife (no function rn)");
+                Destroy(gameObject);
                 break;
             default:
                 Debug.Log("UH OH, item isnt set!");
