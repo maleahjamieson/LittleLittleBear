@@ -143,6 +143,10 @@ public class Item : MonoBehaviour
                 Debug.Log("ants everywhere (no function rn)");
                 Destroy(gameObject);
                 break;
+            case ItemType.THORN_VINE: // ants
+                Debug.Log("thorns (no function rn)");
+                Destroy(gameObject);
+                break;
             case ItemType.BLUEBERRIES: // berry
                 Debug.Log("munchin a blueberry");
                 if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
