@@ -99,6 +99,14 @@ public class Item : MonoBehaviour
     }
     public void use() 
     {
+        for(int i = 0; i < inventory.slots.Length; i++)
+        {
+            if (inventory.items[i].type == itemType)
+            {
+                inventory.isFull[i] = false;
+                break;
+            }
+        }
         switch (itemType)
         {
             case ItemType.RED_ANTS_BOTTLE: // ants
