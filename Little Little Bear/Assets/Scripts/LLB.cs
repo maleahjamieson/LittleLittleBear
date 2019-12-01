@@ -406,15 +406,18 @@ public class LLB : BasicEntity
             {
                 //don't move there
                 case TileSet.BOULDER:
-                    Debug.Log("Found boulder");
+                    // Debug.Log("Found boulder");
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
-                    Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
+                    // Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
 
                     if (xDiff != 0 || yDiff != 0)
                     {
-                        Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
-                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER && board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL)
+                        // Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
+                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.TUNNEL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.DIG_TILE)
                         {
                             board.map[xDir + xDiff, yDir + yDiff].tileType = TileSet.BOULDER;
                             board.map[xDir + xDiff, yDir + yDiff].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveBoulder;
@@ -435,7 +438,7 @@ public class LLB : BasicEntity
                     break;
                 case TileSet.ROCK:
                 case TileSet.WALL:
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
                     return false;
                 case TileSet.PIT:
@@ -489,10 +492,10 @@ public class LLB : BasicEntity
                     {
                         board.map[currentX, currentY].tileType = TileSet.FLOOR;
 
-                        if (Random.value < 0.2f) // 20% chance to spawn
+                        if (Random.value < 0.05f) // 5% chance to spawn
                         {
                             Debug.Log("Item would be spawned from tunnel");
-                            // board.spawnItem(currentX, currentY);
+                            board.spawnItem(currentX, currentY);
                         }
 
                         // Change the sprite of the worldTile that's there
@@ -502,6 +505,8 @@ public class LLB : BasicEntity
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
                         else if (board.getBiome() == BiomeSet.CAVE)
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+
+                        return true;
                     }
 
                     //written by Maleah, pickup item for inventory
