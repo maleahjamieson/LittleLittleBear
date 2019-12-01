@@ -458,6 +458,7 @@ public class LLB : BasicEntity
                     {
                         gameManager.instance.dungeonDepth++;
                         SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
+                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
 
                     }
