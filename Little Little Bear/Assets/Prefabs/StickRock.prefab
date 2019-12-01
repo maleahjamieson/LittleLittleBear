@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 765766437365125254}
   m_Layer: 0
   m_Name: StickRock
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,3 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemButton: {fileID: 7442785387222722921, guid: 08722dc005351dd49b9f4ead42456333,
     type: 3}
+  LLB: {fileID: 0}
+  itemType: 0
+  damage: 0
+  damageType: 0
+  range: 0

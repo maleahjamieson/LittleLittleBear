@@ -244,6 +244,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9113354499830865181, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113354499830865181, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 492209395873587446, guid: f853d12fe7723ea48a73de34ac57e350,
         type: 3}
       propertyPath: m_Sprite
@@ -264,16 +274,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FillMethod
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9113354499830865181, guid: f853d12fe7723ea48a73de34ac57e350,
-        type: 3}
-      propertyPath: m_Name
-      value: Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 9113354499830865181, guid: f853d12fe7723ea48a73de34ac57e350,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9113354499830865153, guid: f853d12fe7723ea48a73de34ac57e350,
         type: 3}
@@ -407,11 +407,6 @@ PrefabInstance:
       propertyPath: HealthbarFill
       value: 
       objectReference: {fileID: 51437577}
-    - target: {fileID: 4205374838280554372, guid: f853d12fe7723ea48a73de34ac57e350,
-        type: 3}
-      propertyPath: m_Name
-      value: StaminaBase
-      objectReference: {fileID: 0}
     - target: {fileID: 69780932664976027, guid: f853d12fe7723ea48a73de34ac57e350,
         type: 3}
       propertyPath: m_Sprite
@@ -427,6 +422,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FillMethod
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205374838280554372, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_Name
+      value: StaminaBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 3812144671229896007, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_TagString
+      value: InventorySlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 5795318008420000238, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_TagString
+      value: InventorySlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511718575670390260, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_TagString
+      value: InventorySlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2054978715442186169, guid: f853d12fe7723ea48a73de34ac57e350,
+        type: 3}
+      propertyPath: m_TagString
+      value: InventorySlot
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f853d12fe7723ea48a73de34ac57e350, type: 3}
@@ -550,6 +570,8 @@ MonoBehaviour:
     strength: 0
     maxHealth: 0
     depth: 5
+    isFull: 
+    items: []
 --- !u!4 &640247654
 Transform:
   m_ObjectHideFlags: 0
@@ -894,6 +916,26 @@ PrefabInstance:
       propertyPath: slots.Array.data[3]
       value: 
       objectReference: {fileID: 1653339372}
+    - target: {fileID: -2515862224401194499, guid: ce0729685708faf449e3a5f99f3544c6,
+        type: 3}
+      propertyPath: items.Array.data[0].type
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2515862224401194499, guid: ce0729685708faf449e3a5f99f3544c6,
+        type: 3}
+      propertyPath: items.Array.data[1].type
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2515862224401194499, guid: ce0729685708faf449e3a5f99f3544c6,
+        type: 3}
+      propertyPath: items.Array.data[2].type
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2515862224401194499, guid: ce0729685708faf449e3a5f99f3544c6,
+        type: 3}
+      propertyPath: items.Array.data[3].type
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 4073279085208264491, guid: ce0729685708faf449e3a5f99f3544c6,
         type: 3}
       propertyPath: maxHealth

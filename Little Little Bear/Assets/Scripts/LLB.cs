@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LLB : BasicEntity
 {
@@ -23,6 +24,7 @@ public class LLB : BasicEntity
     private bool inCombat; // damage flash management
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
     public bool staminaUsed;
+    public PlayerData playerData;
 
     /*//inventory variables
     private Inventory inventory;
@@ -44,10 +46,57 @@ public class LLB : BasicEntity
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
-        maxHealth = 100;
-        health = maxHealth;
-        stamina = 100;
-        strength = 4;
+
+
+        playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
+        if (playerData != null)
+        {
+            health = playerData.health;
+            stamina = playerData.stamina;
+            strength = playerData.strength;
+            maxHealth = playerData.maxHealth;
+
+            Inventory inv = gameObject.GetComponent<Inventory>();
+            //inv.isFull = playerData.isFull;
+            inv.items = playerData.items;
+            //inv.slots = GameObject.FindGameObjectsWithTag("InventorySlot");
+            foreach (InventoryItem ii in playerData.items)
+            {
+
+                for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
+                {
+                    if (inv.isFull[i] == false)    //not full, pickup item
+                    {
+
+
+                        //if item is blueberry then this
+                        GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
+                        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item")) {
+                            if (o.GetComponent<Item>().itemType == ii.type) {
+                                button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
+                                inv.isFull[i] = true;
+                                Debug.Log("OH FUCK WTF AAAAAAA " + o.name);
+                                break;
+                            }
+                        }
+
+                        
+                        break;
+                    }
+                }
+            }
+
+
+
+        }
+
+        else
+        {
+            maxHealth = 100;
+            health = maxHealth;
+            stamina = 100;
+            strength = 4;
+        }
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
         //inventory = GetComponent<Inventory>();
@@ -365,7 +414,9 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
+
                     }
                     return true;
             }

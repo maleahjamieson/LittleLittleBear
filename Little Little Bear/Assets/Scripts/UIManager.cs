@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour {
 				gameManager.instance.LoadScene(1);
 				break;
             case ClickType.Save:
-                SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), null);
+                SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                 break;
 			case ClickType.LoadGame:
 

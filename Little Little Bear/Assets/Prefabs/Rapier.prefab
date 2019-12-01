@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8018675856687704418}
   m_Layer: 0
   m_Name: Rapier
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,3 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemButton: {fileID: 4230708379432350489, guid: 60733530d57157341affb74de2fb168e,
     type: 3}
+  LLB: {fileID: 0}
+  itemType: 0
+  damage: 0
+  damageType: 0
+  range: 0

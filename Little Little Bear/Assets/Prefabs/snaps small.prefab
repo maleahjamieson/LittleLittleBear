@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2821509150977952620}
   m_Layer: 0
   m_Name: snaps small
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &2821509150977952620
@@ -95,3 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemButton: {fileID: 9070501688465611815, guid: bd056d15f807af84ba7db733f7802b40,
     type: 3}
+  LLB: {fileID: 0}
+  itemType: 0
+  damage: 0
+  damageType: 0
+  range: 0
