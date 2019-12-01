@@ -365,6 +365,11 @@ public class BoardGenerator : MonoBehaviour
 		return this.biome;
 	}
 
+	public int getDepth()
+	{
+		return this.dungeonDepth;
+	}
+
 	//**********************************//
 	//          Helper Methods          //
 	//**********************************//
@@ -747,7 +752,7 @@ public class BoardGenerator : MonoBehaviour
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-		tempItem.generateWeaponStats(this.dungeonDepth);
+		tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 
