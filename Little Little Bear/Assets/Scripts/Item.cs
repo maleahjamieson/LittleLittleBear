@@ -10,7 +10,7 @@ public enum ItemType
     SNAPS, STICK_ROCK, SUNFLOWER_SEED, THORN_VINE, CARROT,
     TREAT, KEY
 };
-
+[System.Serializable]
 public struct InventoryItem
 {
     public int damage;

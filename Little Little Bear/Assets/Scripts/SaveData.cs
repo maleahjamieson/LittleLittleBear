@@ -9,7 +9,7 @@ public class SaveData : MonoBehaviour
     public static void SavePlayer(LLB llb, Inventory inv)  //invoke for saving player
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/save.stf";
+        string path = Application.persistentDataPath + "/save.ebml";
         Debug.Log(path);
         FileStream stream = new FileStream(path, FileMode.Create);
 
@@ -19,7 +19,7 @@ public class SaveData : MonoBehaviour
     }
     public static PlayerData LoadPlayer()  // invoke for loading player
     {
-        string path = Application.persistentDataPath + "/save.stf";
+        string path = Application.persistentDataPath + "/save.ebml";
         
         if (File.Exists(path))
         {

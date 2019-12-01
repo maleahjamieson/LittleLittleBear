@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8049554494681677780}
   m_Layer: 0
   m_Name: PocketKnife
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,3 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemButton: {fileID: 4543061027096346463, guid: 1789c6c8d3d05ac44acac88e45282c12,
     type: 3}
+  LLB: {fileID: 0}
+  itemType: 0
+  damage: 0
+  damageType: 0
+  range: 0

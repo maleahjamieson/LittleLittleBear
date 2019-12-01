@@ -2629,6 +2629,8 @@ MonoBehaviour:
     strength: 0
     maxHealth: 0
     depth: 0
+    isFull: 
+    items: []
 --- !u!1 &2050583789
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2642,7 @@ GameObject:
   - component: {fileID: 2050583791}
   - component: {fileID: 2050583790}
   m_Layer: 0
-  m_Name: GlobalManager
+  m_Name: GobalManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2671,6 +2673,14 @@ MonoBehaviour:
   CreditsOn: 0
   NewOrLoad: 0
   SaveOn: 0
+  playerData:
+    health: 0
+    stamina: 0
+    strength: 0
+    maxHealth: 0
+    depth: 0
+    isFull: 
+    items: []
   dungeonDepth: 0
 --- !u!4 &2050583791
 Transform:

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6790317614905186}
   m_Layer: 0
   m_Name: thorn_vines3
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,3 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemButton: {fileID: 2320706865342774164, guid: d26d3adc5e8090f4587cdf39ac24a970,
     type: 3}
+  LLB: {fileID: 0}
+  itemType: 0
+  damage: 0
+  damageType: 0
+  range: 0

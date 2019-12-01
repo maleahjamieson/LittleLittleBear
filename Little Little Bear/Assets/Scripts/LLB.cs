@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LLB : BasicEntity
 {
@@ -20,9 +21,10 @@ public class LLB : BasicEntity
     private bool dig;
     private bool turnEnd;
     private bool attackWait;
-    private bool inCombat; // damage flash management 
+    private bool inCombat; // damage flash management
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
     public bool staminaUsed;
+    public PlayerData playerData;
 
     /*//inventory variables
     private Inventory inventory;
@@ -44,17 +46,65 @@ public class LLB : BasicEntity
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
-        maxHealth = 100;
-        health = maxHealth;
-        stamina = 100;
-        strength = 4;
+
+
+        playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
+        if (playerData.health != 0)
+        {
+            health = playerData.health;
+            stamina = playerData.stamina;
+            strength = playerData.strength;
+            maxHealth = playerData.maxHealth;
+
+            Inventory inv = gameObject.GetComponent<Inventory>();
+            //inv.isFull = playerData.isFull;
+            inv.items = playerData.items;
+            //inv.slots = GameObject.FindGameObjectsWithTag("InventorySlot");
+            foreach (InventoryItem ii in playerData.items)
+            {
+                if (ii.type != ItemType.NOTHING)
+                {
+                    for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
+                    {
+                        if (inv.isFull[i] == false)    //not full, pickup item
+                        {
+                            //if item is blueberry then this
+                            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
+                            foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item"))
+                            {
+                                if (o.GetComponent<Item>().itemType == ii.type)
+                                {
+                                    button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
+                                    inv.isFull[i] = true;
+                                    break;
+                                }
+                            }
+
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
+        }
+
+        else
+        {
+            maxHealth = 100;
+            health = maxHealth;
+            stamina = 100;
+            strength = 4;
+        }
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
         //inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
-    
+
     private void OnEnable() // When level starts up we enable the player entity
     {
         flipped = false;
@@ -70,11 +120,11 @@ public class LLB : BasicEntity
         GameObject tempEnemy = board.map[x, y].entity;
         return tempEnemy;
     }
-    
-    private IEnumerator Combat(bool special) // basic : special = false, direction = d 
+
+    private IEnumerator Combat(bool special) // basic : special = false, direction = d
     {
         Debug.Log("Combat");
-        bool flash = false; // currently, pretty sure we dont need this 
+        bool flash = false; // currently, pretty sure we dont need this
         GameObject[] enemyList;
         if (special)
          {
@@ -157,7 +207,7 @@ public class LLB : BasicEntity
                             break;
                     }
 
-                    
+
                 }
                 for (int i = 0; i < r; i++)
                 {
@@ -192,7 +242,7 @@ public class LLB : BasicEntity
                         Debug.Log("NULL");
                     }
                 }
-            } 
+            }
          }
          else
          {
@@ -212,7 +262,7 @@ public class LLB : BasicEntity
                     enemy = board.map[currentX, currentY - 1].entity;
                     break;
             }
-           
+
             if (enemy != null)
             {
                 StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
@@ -222,7 +272,7 @@ public class LLB : BasicEntity
                 Debug.Log("NULL");
             }
          }
-        
+
         inCombat = false;
     }
 
@@ -407,13 +457,16 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
+                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
+
                     }
                     return true;
             }
         }
         else //something is there
-        {            
+        {
             Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
             return false;
         }
@@ -433,7 +486,7 @@ public class LLB : BasicEntity
                 Debug.Log("Picked up item");
                 //add item
                 inventory.isFull[i] = true;
-                
+
                 //if item is blueberry then this
                 Instantiate(itemButton, inventory.slots[i].transform, false);
                 Destroy(item);
@@ -448,7 +501,7 @@ public class LLB : BasicEntity
         if (health <= 0) {
             SceneManager.LoadScene("StartScene");
         }
-    
+
         if (checkInput && active) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
@@ -465,7 +518,7 @@ public class LLB : BasicEntity
                 }
                 else
                     Debug.Log("Stamina is too low");
-                
+
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -540,7 +593,7 @@ public class LLB : BasicEntity
                     attackDir = 'u';
                 }
             }
-            
+
             if (Input.GetMouseButtonDown(0)) // Attack
             {
                 attackWait = false;
@@ -650,7 +703,7 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
-                      
+
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
@@ -659,7 +712,7 @@ public class LLB : BasicEntity
                 break;
             case 's': //Special attack
                 {
-                    
+
                     while (attackWait)// Start combat decisions
                         yield return null;
                     if (turnEnd) // if attack actually happened
@@ -668,7 +721,7 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(true));
-                        
+
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
@@ -744,7 +797,7 @@ public class LLB : BasicEntity
             else
                 staminaUsed = false;
         }
-        
+
 
         turnEnd = false; // Reset after enemies
         checkInput = true; // Inputs are able to be taken again
