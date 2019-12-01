@@ -99,6 +99,7 @@ public class EnemyBasic : BasicEntity
                 case TileSet.BOULDER:
                 case TileSet.ROCK:
                 case TileSet.WALL:
+                case TileSet.TUNNEL:
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
                     return false;
