@@ -89,18 +89,21 @@ public class Item : MonoBehaviour
         }
         else if(this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT || this.itemType == ItemType.POCKETKNIFE) //if weapon
         {
-            //put weapon in first slot and destroy on ground
-            inventory.isFull[0] = true;
-            inventory.items[0].damage = this.damage;
-            inventory.items[0].damageType = this.damageType;
-            inventory.items[0].range = this.range;
-            inventory.items[0].type = this.itemType;
-            //adds item button to slot
-            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
-            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
-            button.GetComponent<Item>().itemType = this.itemType;
-            LLB.GetComponent<LLB>().weaponType = this.damageType;
-            Destroy(gameObject);
+        	if(!inventory.isFull[0])
+        	{
+        		//put weapon in first slot and destroy on ground
+	            inventory.isFull[0] = true;
+	            inventory.items[0].damage = this.damage;
+	            inventory.items[0].damageType = this.damageType;
+	            inventory.items[0].range = this.range;
+	            inventory.items[0].type = this.itemType;
+	            //adds item button to slot
+	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
+	            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+	            button.GetComponent<Item>().itemType = this.itemType;
+	            LLB.GetComponent<LLB>().weaponType = this.damageType;
+	            Destroy(gameObject);
+        	}
         }
         else
         {
@@ -141,6 +144,10 @@ public class Item : MonoBehaviour
         {
             case ItemType.RED_ANTS_BOTTLE: // ants
                 Debug.Log("ants everywhere (no function rn)");
+                Destroy(gameObject);
+                break;
+            case ItemType.THORN_VINE: // ants
+                Debug.Log("thorns (no function rn)");
                 Destroy(gameObject);
                 break;
             case ItemType.BLUEBERRIES: // berry
