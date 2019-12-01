@@ -286,9 +286,6 @@ public class LLB : BasicEntity
     private bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        // selfEntity = board.map[currentX, currentY].entityType;
-        Vector2 sPos = transform.position; //Start Position
-        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
 
         if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
@@ -296,16 +293,13 @@ public class LLB : BasicEntity
             int yDiff = 0;
             switch (board.map[xDir, yDir].tileType)
             {
-                //don't move there
+                // Moveable boulders
                 case TileSet.BOULDER:
-                    // Debug.Log("Found boulder");
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
-                    // Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
 
                     if (xDiff != 0 || yDiff != 0)
                     {
-                        // Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
                         if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER &&
                             board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL &&
                             board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.TUNNEL &&
@@ -327,23 +321,26 @@ public class LLB : BasicEntity
                     }
                     else
                         return false;
-                    break;
+                    // break;
+
+                // Collision with solid, immobile walls
                 case TileSet.ROCK:
                 case TileSet.WALL:
-                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    //do nothing
+                    // Do nothing
                     return false;
+
+                // Falling into forest puzzle pit
                 case TileSet.PIT:
                     board.respawnPuzzle();
                     StartCoroutine(Hurt(10, 1));
                     return false;
-                    break;
+                    // break;
 
-                default: // Currently default since moving is only here
+                // Moving on normal tiles -> default movement
+                default:
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
-
 
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
