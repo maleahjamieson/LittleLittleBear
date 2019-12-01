@@ -1573,7 +1573,7 @@ public class BoardGenerator : MonoBehaviour
 	    // this.spr_CaveRock = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CavePuzzleFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_DigTile");
 	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
 	    // this.spr_CaveStart = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_");
