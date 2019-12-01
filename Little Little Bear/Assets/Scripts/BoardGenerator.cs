@@ -652,6 +652,12 @@ public class BoardGenerator : MonoBehaviour
 							this.map[m.x + j, m.y + k].entity = null;
 						}
 
+						if (this.map[m.x + j, m.y + k].item != null)
+						{
+							Destroy(this.map[m.x + j, m.y + k].item);
+							this.map[m.x + j, m.y + k].item = null;
+						}
+
 						this.tileCounter++;
 						this.digCounter++;
 					}
@@ -678,6 +684,12 @@ public class BoardGenerator : MonoBehaviour
 
 								Destroy(this.map[m.x + j, m.y + k].entity);
 								this.map[m.x + j, m.y + k].entity = null;
+							}
+
+							if (this.map[m.x + j, m.y + k].item != null)
+							{
+								Destroy(this.map[m.x + j, m.y + k].item);
+								this.map[m.x + j, m.y + k].item = null;
 							}
 
 							this.tileCounter++;
