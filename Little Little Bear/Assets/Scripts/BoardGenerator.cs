@@ -153,7 +153,6 @@ public class BoardGenerator : MonoBehaviour
     // Cave Sprites
     public Sprite spr_CaveFloor;
     public Sprite spr_CaveWall;
-    public Sprite spr_CaveRock;
     public Sprite spr_CavePuzzleFloor;
     public Sprite spr_CaveTunnel;
     public Sprite spr_CaveDig;
@@ -1547,31 +1546,23 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_SwampFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Ground");
 	    this.spr_SwampWall = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Wall");
 	    this.spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Mud");
-	    // this.spr_SwampPuzzleFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_PuzzleGround");
-	    // this.spr_SwampMud = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_PuzzleGround");
 	    this.spr_SwampPuzzleFloor = this.spr_SwampFloor;
 	    this.spr_SwampTunnel = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_PuzzleGround");
-	    // this.spr_SwampTunnel = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Mud");
 	    this.spr_SwampDig = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_DigTile");
 	    this.spr_SwampHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Hallway");
-	    // this.spr_SwampStart = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    this.spr_SwampEnd = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_EndTile");
 	    this.spr_SwampSpawner = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Spawner");
-	    // this.spr_SwampSecretFloor = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    this.spr_SwampTrap = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Trap");
-	    // this.spr_SwampPuzzleHallway = Resources.Load<Sprite>("Art/SwampTiles/tile_");
 	    this.spr_SwampSecretFloor = this.spr_SwampFloor;
 	    this.spr_SwampStart = this.spr_SwampFloor;
 	    this.spr_SwampPuzzleHallway = this.spr_SwampFloor;
-	    // this.spr_SwampPuzzleFloor = this.spr_SwampFloor;
 	    this.spr_SwampKeyTile = this.spr_SwampFloor;
 	    this.spr_SwampRock = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Rock");
 
 	    // Set Cave Sprites
 	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Ground");
 	    this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Wall");
-	    // this.spr_CaveRock = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CavePuzzleFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveBoulder = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Boulder");
 	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_DigTile");
 	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
@@ -1579,11 +1570,10 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_CavePuzzleFloor = this.spr_CaveFloor;
 	    this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_EndTile");
 	    this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Spawner");
-	    // this.spr_CaveSecretFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveSecretFloor = this.spr_CaveFloor;
 	    // this.spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CavePuzzleHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveKeyTile = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveBoulder = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CavePuzzleHallway = this.spr_CaveFloor;
+	    this.spr_CaveKeyTile = this.spr_CaveFloor;
 	}
 
     public void GenMap(int mode)
