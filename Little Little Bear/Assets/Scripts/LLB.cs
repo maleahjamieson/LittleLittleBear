@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LLB : BasicEntity
 {
@@ -391,9 +392,13 @@ public class LLB : BasicEntity
         }
         */
     }
-    
+
     private void Update()
     {
+        if (health <= 0) {
+            SceneManager.LoadScene("StartScene");
+        }
+    
         if (checkInput && active) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click

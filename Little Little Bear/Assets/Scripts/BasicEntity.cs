@@ -60,7 +60,6 @@ public abstract class BasicEntity : MonoBehaviour
                 this.gameObject.SetActive(false);               
                 // UnityEngine.Object.Destroy(board.map[this.currentX, this.currentY].entity);
                 board.map[this.currentX, this.currentY].entity = null;
-                SceneManager.LoadScene("StartScene");
                 break;
             }
             GetComponent<SpriteRenderer>().color = Color.white;
