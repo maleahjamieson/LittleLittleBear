@@ -692,53 +692,62 @@ public class BoardGenerator : MonoBehaviour
 			case 0:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
 			}
 			default:
 			case 1:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
 				break;
 			}
 			case 2:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
 				break;
 			}
 			case 3:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
 				break;
 			}
 			case 4:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
 				break;
 			}
 			case 5:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SNAPS;
 				break;
 			}
 			case 6:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
 				break;
 			}
 			case 7:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 				break;
 			}
 			case 8:
 			{
 				tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<Item>().itemType = ItemType.THORN_VINE;
 				break;
 			}
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-
+		tempItem.generateWeaponStats(this.dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 
@@ -1554,13 +1563,13 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_SwampRock = Resources.Load<Sprite>("Art/SwampTiles/tile_Swamp_Rock");
 
 	    // Set Cave Sprites
-	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Placeholder");
-	    // this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Ground");
+	    this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Wall");
 	    // this.spr_CaveRock = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CavePuzzleFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
 	    // this.spr_CaveStart = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_");

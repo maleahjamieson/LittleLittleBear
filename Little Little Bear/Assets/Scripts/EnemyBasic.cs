@@ -37,15 +37,15 @@ public class EnemyBasic : BasicEntity
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 5;
+                this.strength = 5 + ((int)(board.dungeonDepth / 2));
                 this.range = 1;
-                this.health = 8;
+                this.health = 8 + board.dungeonDepth;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 10;
+                this.strength = 10 + board.dungeonDepth;
                 this.range = 1;
-                this.health = 12;
+                this.health = 12 + (board.dungeonDepth * 2);
                 break;
             case enemyType.Bear:
                 this.animator.SetTrigger("Bear");
