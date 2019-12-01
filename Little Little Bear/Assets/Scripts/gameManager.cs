@@ -72,6 +72,8 @@ public class gameManager : MonoBehaviour {
             Debug.Log("We're about to instantiate the board generator");
             // board = new BoardGenerator(1000, 1000); // Removed this line to comply with Unity better
             board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
+            board.LoadTileSprites();
+            board.LoadItemSprites();
             board.setBoardSize(2500, 2500);
             // board.setDungeonDepth(dungeonDepth);
             // board.setDungeonDepth(10); // Testing boss level

@@ -1,14 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ItemType
 {
     NOTHING = -1,
     RED_ANTS_BOTTLE, BLUEBERRIES, POCKETKNIFE, RAPIER, SKUNK_GAS,
     SNAPS, STICK_ROCK, SUNFLOWER_SEED, THORN_VINE, CARROT,
-    TREAT
+    TREAT, KEY
 };
+
+public struct InventoryItem
+{
+    public int damage;
+    public char damageType;
+    public int range;
+    public ItemType type;
+}
 
 public class Item : MonoBehaviour
 {
@@ -73,9 +82,15 @@ public class Item : MonoBehaviour
 	            Debug.Log("Picked up item");
 	            //add item
 	            inventory.isFull[i] = true;
+
+                inventory.items[i].damage = this.damage;
+                inventory.items[i].damageType = this.damageType;
+                inventory.items[i].range = this.range;
+                inventory.items[i].type = this.itemType;
 	            
 	            //if item is blueberry then this
-	            Instantiate(itemButton, inventory.slots[i].transform, false);
+	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
+                button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
 	            Destroy(gameObject);
 	            break;
         	}

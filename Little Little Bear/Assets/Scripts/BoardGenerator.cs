@@ -166,6 +166,20 @@ public class BoardGenerator : MonoBehaviour
     public Sprite spr_CaveKeyTile;
     public Sprite spr_CaveBoulder;
 
+    // Item Sprites
+    public Sprite spr_RedAntsBottle;
+    public Sprite spr_Blueberries;
+    public Sprite spr_Pocketknife;
+    public Sprite spr_Rapier;
+    public Sprite spr_SkunkGas;
+    public Sprite spr_Snaps;
+    public Sprite spr_StickRock;
+    public Sprite spr_SunflowerSeed;
+    public Sprite spr_ThornVine;
+    public Sprite spr_Carrot;
+    public Sprite spr_Treat;
+    public Sprite spr_Key;
+
     public GameObject HamsterEntity; // LLB basically
     public ArrayList EnemyList;
 
@@ -686,65 +700,81 @@ public class BoardGenerator : MonoBehaviour
 		}
 	}
 
+	public void LoadItemSprites()
+	{
+		spr_RedAntsBottle = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
+	    spr_Blueberries = Resources.Load<Sprite>("Art/Items/Blueberries");
+	    spr_Pocketknife = Resources.Load<Sprite>("Art/Items/PocketKnfe");
+	    spr_Rapier = Resources.Load<Sprite>("Art/Items/Rapier");
+	    spr_SkunkGas = Resources.Load<Sprite>("Art/Items/SkunkGas");
+	    spr_Snaps = Resources.Load<Sprite>("Art/Items/Snaps");
+	    spr_StickRock = Resources.Load<Sprite>("Art/Items/StickRock");
+	    spr_SunflowerSeed = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
+	    spr_ThornVine = Resources.Load<Sprite>("Art/Items/ThornVines");
+	    spr_Carrot = Resources.Load<Sprite>("Art/Items/Carrot");
+	    spr_Treat = Resources.Load<Sprite>("Art/Items/Treat");
+	    spr_Key = Resources.Load<Sprite>("Art/Items/Key");
+	}
+
 	public void spawnItem(int xx, int yy)
 	{
 		int whichItem = Random.Range(0, 9);
-		GameObject tempItem;
+		GameObject tempItem = Instantiate(GameObject.Find("WorldItem"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
 
 		switch(whichItem)
 		{
 			case 0:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("antsBottle"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_RedAntsBottle;
 				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
 			}
 			default:
 			case 1:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("blueberriesHealth"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Blueberries;
 				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
 				break;
 			}
 			case 2:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("PocketKnife"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Pocketknife;
 				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
 				break;
 			}
 			case 3:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("Rapier"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Rapier;
 				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
 				break;
 			}
 			case 4:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("skunk_gas_bubbles_brown_1"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_SkunkGas;
 				tempItem.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
 				break;
 			}
 			case 5:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("snaps small"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Snaps;
 				tempItem.GetComponent<Item>().itemType = ItemType.SNAPS;
 				break;
 			}
 			case 6:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("StickRock"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_StickRock;
 				tempItem.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
 				break;
 			}
 			case 7:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("sunflower"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_SunflowerSeed;
 				tempItem.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 				break;
 			}
 			case 8:
 			{
-				tempItem = (GameObject)Instantiate(GameObject.Find("thorn_vines3"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_ThornVine;
 				tempItem.GetComponent<Item>().itemType = ItemType.THORN_VINE;
 				break;
 			}
@@ -1571,7 +1601,7 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_EndTile");
 	    this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Spawner");
 	    this.spr_CaveSecretFloor = this.spr_CaveFloor;
-	    // this.spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Trap");
 	    this.spr_CavePuzzleHallway = this.spr_CaveFloor;
 	    this.spr_CaveKeyTile = this.spr_CaveFloor;
 	}
@@ -1579,7 +1609,7 @@ public class BoardGenerator : MonoBehaviour
     public void GenMap(int mode)
     {
     	// Load in the sprites when we generate the world tiles
-    	LoadTileSprites();
+    	// LoadTileSprites();
 
         for (int y = 0; y < this.board_height; y++)
         {
