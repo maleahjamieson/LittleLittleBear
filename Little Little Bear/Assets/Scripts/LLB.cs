@@ -298,15 +298,18 @@ public class LLB : BasicEntity
             {
                 //don't move there
                 case TileSet.BOULDER:
-                    Debug.Log("Found boulder");
+                    // Debug.Log("Found boulder");
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
-                    Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
+                    // Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
 
                     if (xDiff != 0 || yDiff != 0)
                     {
-                        Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
-                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER && board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL)
+                        // Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
+                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.TUNNEL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.DIG_TILE)
                         {
                             board.map[xDir + xDiff, yDir + yDiff].tileType = TileSet.BOULDER;
                             board.map[xDir + xDiff, yDir + yDiff].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveBoulder;
@@ -327,7 +330,7 @@ public class LLB : BasicEntity
                     break;
                 case TileSet.ROCK:
                 case TileSet.WALL:
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
+                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
                     return false;
                 case TileSet.PIT:
