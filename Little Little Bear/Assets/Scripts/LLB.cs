@@ -68,8 +68,6 @@ public class LLB : BasicEntity
                     {
                         if (inv.isFull[i] == false)    //not full, pickup item
                         {
-
-
                             //if item is blueberry then this
                             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
                             foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item"))
@@ -459,7 +457,7 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
-                        GlobalMan.instance.data = SaveData.LoadPlayer();
+                        SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                         gameManager.instance.LoadScene(1);
 
                     }
