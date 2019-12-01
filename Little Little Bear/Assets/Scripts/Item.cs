@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemType
+{
+    NOTHING = -1,
+    RED_ANTS_BOTTLE, BLUEBERRIES, POCKETKNIFE, RAPIER, SKUNK_GAS,
+    SNAPS, STICK_ROCK, SUNFLOWER_SEED, THORN_VINE, CARROT,
+    TREAT
+};
+
 public class Item : MonoBehaviour
 {
 
@@ -9,15 +17,50 @@ public class Item : MonoBehaviour
 	private Inventory inventory;
 	public GameObject itemButton;
     public GameObject LLB; // player
-    public char itemType; // a ants, b berry, etc
+    public ItemType itemType; // a ants, b berry, etc
+
+    public int damage;
+    public char damageType;
+    public int range;
+
     int playerHealth; // LLB health
     int maxHealth; // This will be updated by treats
 	// Start is called before the first frame update
     void Start()
     {
+        this.damage = 4;
+        this.damageType = 'b';
+        this.range = 1;
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         LLB = GameObject.Find("Player");
-        playerHealth = LLB.GetComponent<LLB>().health;
+        // playerHealth = LLB.GetComponent<LLB>().health;
+    }
+
+    public void generateWeaponStats(int depth)
+    {
+        // Define the damage type based on the weapon
+        switch (this.itemType)
+        {
+            default:
+            case ItemType.STICK_ROCK:
+            case ItemType.CARROT:
+                this.damageType = 'b';
+                break;
+            case ItemType.RAPIER:
+                this.damageType = 't';
+                break;
+            case ItemType.POCKETKNIFE:
+                this.damageType = 's';
+                break;
+        }
+
+        // Randomize the damage and add on to the base damage
+        int modifier = (int)(Random.value * depth);
+        this.damage += modifier;
+
+        // Flip
+        // while (Random.value < 0.25f)
+        //     this.range++;
     }
 
     public void pickup()
@@ -42,18 +85,26 @@ public class Item : MonoBehaviour
     {
         switch (itemType)
         {
-            case 'a': // ants
+            case ItemType.RED_ANTS_BOTTLE: // ants
                 break;
-            case 'b': // berry
-                if (playerHealth >= (maxHealth - 20))
-                    playerHealth = maxHealth; // Only goes as high as max health
+            case ItemType.BLUEBERRIES: // berry
+                if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
+                    LLB.GetComponent<LLB>().health = LLB.GetComponent<LLB>().maxHealth; // Only goes as high as max health
                 else
-                    playerHealth += 20; // increase by 20
+                    LLB.GetComponent<LLB>().health += 20; // increase by 20
                 
                 break;
-            case 's': // skunk
+            case ItemType.SKUNK_GAS: // skunk
                 break;
-            case 't': // treat
+            case ItemType.TREAT: // treat
+                break;
+            case ItemType.STICK_ROCK:
+                break;
+            case ItemType.RAPIER:
+                break;
+            case ItemType.CARROT:
+                break;
+            case ItemType.POCKETKNIFE:
                 break;
             default:
                 Debug.Log("UH OH, item isnt set!");
