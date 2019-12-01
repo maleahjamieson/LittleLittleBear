@@ -125,9 +125,9 @@ public class Item : MonoBehaviour
                 Debug.Log("used smelly (no function rn)");
                 Destroy(gameObject);
                 break;
-            case ItemType.TREAT: // treat
+            case ItemType.TREAT:
                 Debug.Log("what a treat");
-                LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20; // increase max health by 20
+                LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20;
                 Destroy(gameObject);
                 break;
             case ItemType.STICK_ROCK:
@@ -145,6 +145,29 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");
+                Destroy(gameObject);
+                break;
+            case ItemType.SNAPS:
+                BoardGenerator board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
+                int xx = (int)(Random.value * board.getBoardWidth());
+                int yy = (int)(Random.value * board.getBoardHeight());
+
+                while (board.map[xx, yy].tileType != TileSet.FLOOR)
+                {
+                    xx = (int)(Random.value * board.getBoardWidth());
+                    yy = (int)(Random.value * board.getBoardHeight());
+                }
+                int cx, cy;
+                cx = LLB.GetComponent<LLB>().currentX;
+                cy = LLB.GetComponent<LLB>().currentY;
+
+                board.map[xx, yy].entity = board.map[cx, cy].entity;
+                board.map[cx, cy].entity = null;
+                LLB.GetComponent<LLB>().currentX = xx;
+                LLB.GetComponent<LLB>().currentY = yy;
+                LLB.GetComponent<LLB>().AttachSpriteToPosition();
+
+                // Need to free the inventory positions
                 Destroy(gameObject);
                 break;
             default:
