@@ -74,7 +74,7 @@ public class LLB : BasicEntity
 
 
         PlayerData playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        if (playerData.health != 0 && playerData != null)
+        if (playerData.health > 0 )
         {
             health = playerData.health;
             stamina = playerData.stamina;
@@ -183,6 +183,7 @@ public class LLB : BasicEntity
 
         else
         {
+            
             maxHealth = 100;
             health = maxHealth;
             stamina = 100;
@@ -652,6 +653,8 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
+                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
                     }
                     return true;
