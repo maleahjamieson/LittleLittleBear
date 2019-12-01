@@ -733,7 +733,7 @@ public class BoardGenerator : MonoBehaviour
 	{
 		spr_RedAntsBottle = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
 	    spr_Blueberries = Resources.Load<Sprite>("Art/Items/Blueberries");
-	    spr_Pocketknife = Resources.Load<Sprite>("Art/Items/PocketKnfe");
+	    spr_Pocketknife = Resources.Load<Sprite>("Art/Items/PocketKnife");
 	    spr_Rapier = Resources.Load<Sprite>("Art/Items/Rapier");
 	    spr_SkunkGas = Resources.Load<Sprite>("Art/Items/SkunkGas");
 	    spr_Snaps = Resources.Load<Sprite>("Art/Items/Snaps");
