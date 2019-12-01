@@ -62,7 +62,7 @@ public class LLB : BasicEntity
         invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
+        weaponType = 'b'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -465,8 +465,10 @@ public class LLB : BasicEntity
 			if(missed)
 			{
 				enemyLocation = missPos;
+				projectile.SetActive(true);
 				while(rangeWait) // wait for projectile
 						yield return null;
+				projectile.SetActive(false);
 			}
 
         }
