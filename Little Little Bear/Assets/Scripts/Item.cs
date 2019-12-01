@@ -99,6 +99,7 @@ public class Item : MonoBehaviour
             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
             button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
             button.GetComponent<Item>().itemType = this.itemType;
+            LLB.GetComponent<LLB>().weaponType = this.damageType;
             Destroy(gameObject);
         }
         else
