@@ -49,7 +49,7 @@ public class LLB : BasicEntity
 
 
         playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        if (playerData != null)
+        if (playerData.health != 0)
         {
             health = playerData.health;
             stamina = playerData.stamina;
@@ -62,26 +62,30 @@ public class LLB : BasicEntity
             //inv.slots = GameObject.FindGameObjectsWithTag("InventorySlot");
             foreach (InventoryItem ii in playerData.items)
             {
-
-                for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
+                if (ii.type != ItemType.NOTHING)
                 {
-                    if (inv.isFull[i] == false)    //not full, pickup item
+                    for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
                     {
+                        if (inv.isFull[i] == false)    //not full, pickup item
+                        {
 
 
-                        //if item is blueberry then this
-                        GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
-                        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item")) {
-                            if (o.GetComponent<Item>().itemType == ii.type) {
-                                button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
-                                inv.isFull[i] = true;
-                                Debug.Log("OH FUCK WTF AAAAAAA " + o.name);
-                                break;
+                            //if item is blueberry then this
+                            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
+                            foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item"))
+                            {
+                                if (o.GetComponent<Item>().itemType == ii.type)
+                                {
+                                    button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
+                                    inv.isFull[i] = true;
+                                    Debug.Log("OH FUCK WTF AAAAAAA " + o.name);
+                                    break;
+                                }
                             }
+
+
+                            break;
                         }
-
-
-                        break;
                     }
                 }
             }
