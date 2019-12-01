@@ -381,10 +381,10 @@ public class LLB : BasicEntity
                     {
                         board.map[currentX, currentY].tileType = TileSet.FLOOR;
 
-                        if (Random.value < 0.2f) // 20% chance to spawn
+                        if (Random.value < 0.05f) // 5% chance to spawn
                         {
                             Debug.Log("Item would be spawned from tunnel");
-                            // board.spawnItem(currentX, currentY);
+                            board.spawnItem(currentX, currentY);
                         }
 
                         // Change the sprite of the worldTile that's there
@@ -394,6 +394,8 @@ public class LLB : BasicEntity
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
                         else if (board.getBiome() == BiomeSet.CAVE)
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+
+                        return true;
                     }
 
                     //written by Maleah, pickup item for inventory
