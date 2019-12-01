@@ -2,29 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LLB : BasicEntity
 {
     private int horizontal = 0; //store direction we are moving
     private int vertical = 0;
     private char damageType;
-    public int stamina;  // Special move gague, when below a certain amount you cant use special
     public int DungeonDepth;
     private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
     private char attackDir; // char hold, for Combat();
     private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
     private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
+    private float seconds; // time of flight for projectile
+    private float timer; // delta.time
+    private float percent; // time / seconds
+
+    private Vector2 playerLocation;
+    private Vector2 enemyLocation;
+    private Vector2 difference; // between llb and enemy
 
     // List of personal boolean
     private bool specialA; // special attack
     private bool dig;
     private bool turnEnd;
     private bool attackWait;
-    private bool inCombat; // damage flash management
+    private bool rangeWait;
+    private bool inCombat; // damage flash management 
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
-    public bool staminaUsed;
-    public PlayerData playerData;
+    private bool seedXFlip;
+    private bool seedYFlip;
 
     /*//inventory variables
     private Inventory inventory;
@@ -33,78 +39,40 @@ public class LLB : BasicEntity
     //public int stamina;  // Special move gague, when below a certain amount you cant use special
 
     public Highlight targetHighlight;  // Targeting script
+    public GameObject projectile;
+    public int stamina;  // Special move gague, when below a certain amount you cant use special
+    public int ammo; // amount of seeds
+    public bool staminaUsed;
 
     protected override void Start()
     {
         turnEnd = false;
         dig = false;
         attackWait = false;
+        rangeWait = false;
         inCombat = false;
         checkInput = true;
         staminaUsed = false;
-        invEquipped = 0; // Start on weapon slot
+        invEquipped = 1; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
-
-
-        playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        if (playerData.health != 0)
-        {
-            health = playerData.health;
-            stamina = playerData.stamina;
-            strength = playerData.strength;
-            maxHealth = playerData.maxHealth;
-
-            Inventory inv = gameObject.GetComponent<Inventory>();
-            //inv.isFull = playerData.isFull;
-            inv.items = playerData.items;
-            //inv.slots = GameObject.FindGameObjectsWithTag("InventorySlot");
-            foreach (InventoryItem ii in playerData.items)
-            {
-                if (ii.type != ItemType.NOTHING)
-                {
-                    for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
-                    {
-                        if (inv.isFull[i] == false)    //not full, pickup item
-                        {
-                            //if item is blueberry then this
-                            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
-                            foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item"))
-                            {
-                                if (o.GetComponent<Item>().itemType == ii.type)
-                                {
-                                    button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
-                                    inv.isFull[i] = true;
-                                    break;
-                                }
-                            }
-
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-
-
-        }
-
-        else
-        {
-            maxHealth = 100;
-            health = maxHealth;
-            stamina = 100;
-            strength = 4;
-        }
+        weaponType = 'b'; // Start with a carrot which is blunt
+        maxHealth = 100;
+        health = maxHealth;
+        stamina = 100;
+        strength = 4;
+        ammo = 10; // set to 0 JOEY
+        seconds = 1;
+        seedXFlip = false;
+        seedYFlip = false;
+        projectile = GameObject.Find("Projectile");
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
         //inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
-
+    
     private void OnEnable() // When level starts up we enable the player entity
     {
         flipped = false;
@@ -120,159 +88,250 @@ public class LLB : BasicEntity
         GameObject tempEnemy = board.map[x, y].entity;
         return tempEnemy;
     }
-
-    private IEnumerator Combat(bool special) // basic : special = false, direction = d
+    
+    private IEnumerator Combat(bool special) // basic : special = false, direction = d 
     {
         Debug.Log("Combat");
-        bool flash = false; // currently, pretty sure we dont need this
+        bool flash = false; // currently, pretty sure we dont need this 
         GameObject[] enemyList;
-        if (special)
-         {
-            if (stamina > 30)
-            {
-                stamina -= 30;
-                staminaUsed = true;
-                int r;// number of enemies to attack
-                if (weaponType == 's')
-                {
-                    r = 5;
-                    enemyList = new GameObject[r];
-                    switch (attackDir)
-                    {
-                        case 'l': // left
-                            enemyList[0] = ReturnEnemy(currentX - 1, currentY);
-                            enemyList[1] = ReturnEnemy(currentX - 1, currentY + 1);
-                            enemyList[2] = ReturnEnemy(currentX, currentY + 1);
-                            enemyList[3] = ReturnEnemy(currentX - 1, currentY - 1);
-                            enemyList[4] = ReturnEnemy(currentX, currentY - 1);
-                            break;
-                        case 'r': // right
-                            enemyList[0] = ReturnEnemy(currentX + 1, currentY);
-                            enemyList[1] = ReturnEnemy(currentX + 1, currentY + 1);
-                            enemyList[2] = ReturnEnemy(currentX, currentY + 1);
-                            enemyList[3] = ReturnEnemy(currentX + 1, currentY - 1);
-                            enemyList[4] = ReturnEnemy(currentX, currentY - 1);
-                            break;
-                        case 'u': // up
-                            enemyList[0] = ReturnEnemy(currentX, currentY + 1);
-                            enemyList[1] = ReturnEnemy(currentX - 1, currentY + 1);
-                            enemyList[2] = ReturnEnemy(currentX - 1, currentY);
-                            enemyList[3] = ReturnEnemy(currentX + 1, currentY + 1);
-                            enemyList[4] = ReturnEnemy(currentX + 1, currentY);
-                            break;
-                        case 'd': // down
-                            enemyList[0] = ReturnEnemy(currentX, currentY - 1);
-                            enemyList[1] = ReturnEnemy(currentX - 1, currentY - 1);
-                            enemyList[2] = ReturnEnemy(currentX - 1, currentY);
-                            enemyList[3] = ReturnEnemy(currentX + 1, currentY - 1);
-                            enemyList[4] = ReturnEnemy(currentX + 1, currentY);
-                            break;
-                    }
+        int r;// number of enemies to attack
+	    if(invEquipped == 0) // melee
+	    {
+	        if (special)
+	         {
+	            if (stamina > 30)
+	            {
+	                stamina -= 30;
+	                staminaUsed = true;
+	                if (weaponType == 's')
+	                {
+	                    r = 5;
+	                    enemyList = new GameObject[r];
+	                    switch (attackDir)
+	                    {
+	                        case 'l': // left
+	                            enemyList[0] = ReturnEnemy(currentX - 1, currentY);
+	                            enemyList[1] = ReturnEnemy(currentX - 1, currentY + 1);
+	                            enemyList[2] = ReturnEnemy(currentX, currentY + 1);
+	                            enemyList[3] = ReturnEnemy(currentX - 1, currentY - 1);
+	                            enemyList[4] = ReturnEnemy(currentX, currentY - 1);
+	                            break;
+	                        case 'r': // right
+	                            enemyList[0] = ReturnEnemy(currentX + 1, currentY);
+	                            enemyList[1] = ReturnEnemy(currentX + 1, currentY + 1);
+	                            enemyList[2] = ReturnEnemy(currentX, currentY + 1);
+	                            enemyList[3] = ReturnEnemy(currentX + 1, currentY - 1);
+	                            enemyList[4] = ReturnEnemy(currentX, currentY - 1);
+	                            break;
+	                        case 'u': // up
+	                            enemyList[0] = ReturnEnemy(currentX, currentY + 1);
+	                            enemyList[1] = ReturnEnemy(currentX - 1, currentY + 1);
+	                            enemyList[2] = ReturnEnemy(currentX - 1, currentY);
+	                            enemyList[3] = ReturnEnemy(currentX + 1, currentY + 1);
+	                            enemyList[4] = ReturnEnemy(currentX + 1, currentY);
+	                            break;
+	                        case 'd': // down
+	                            enemyList[0] = ReturnEnemy(currentX, currentY - 1);
+	                            enemyList[1] = ReturnEnemy(currentX - 1, currentY - 1);
+	                            enemyList[2] = ReturnEnemy(currentX - 1, currentY);
+	                            enemyList[3] = ReturnEnemy(currentX + 1, currentY - 1);
+	                            enemyList[4] = ReturnEnemy(currentX + 1, currentY);
+	                            break;
+	                    }
 
-                }
-                else
-                {
+	                }
+	                else
+	                {
 
-                    if (weaponType == 'b')
-                        r = 1;
-                    else
-                        r = 2;
+	                    if (weaponType == 'b')
+	                        r = 1;
+	                    else
+	                        r = 2;
 
-                    enemyList = new GameObject[r];
-                    switch (attackDir)
-                    {
-                        case 'l':
-                            for (int i = 0; i < r; i++)
-                            {
-                                enemyList[i] = ReturnEnemy(currentX - (i + 1), currentY);
-                            }
-                            break;
-                        case 'r':
-                            for (int i = 0; i < r; i++)
-                            {
-                                enemyList[i] = ReturnEnemy(currentX + (i + 1), currentY);
-                            }
-                            break;
-                        case 'u':
-                            for (int i = 0; i < r; i++)
-                            {
-                                enemyList[i] = ReturnEnemy(currentX, currentY + (i + 1));
-                            }
-                            break;
-                        case 'd':
-                            for (int i = 0; i < r; i++)
-                            {
-                                enemyList[i] = ReturnEnemy(currentX, currentY - (i + 1));
-                            }
-                            break;
-                    }
+	                    enemyList = new GameObject[r];
+	                    switch (attackDir)
+	                    {
+	                        case 'l':
+	                            for (int i = 0; i < r; i++)
+	                            {
+	                                enemyList[i] = ReturnEnemy(currentX - (i + 1), currentY);
+	                            }
+	                            break;
+	                        case 'r':
+	                            for (int i = 0; i < r; i++)
+	                            {
+	                                enemyList[i] = ReturnEnemy(currentX + (i + 1), currentY);
+	                            }
+	                            break;
+	                        case 'u':
+	                            for (int i = 0; i < r; i++)
+	                            {
+	                                enemyList[i] = ReturnEnemy(currentX, currentY + (i + 1));
+	                            }
+	                            break;
+	                        case 'd':
+	                            for (int i = 0; i < r; i++)
+	                            {
+	                                enemyList[i] = ReturnEnemy(currentX, currentY - (i + 1));
+	                            }
+	                            break;
+	                    }
 
+	                    
+	                }
+	                for (int i = 0; i < r; i++)
+	                {
+	                    if (enemyList[i] != null)
+	                    {
+	                        if (weaponType == 'b') // blunt
+	                        {
+	                            Debug.Log("Blunt");
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength * 2, 1)); // Inflict damage
+	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
+	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
+	                            yield return new WaitForSeconds(0.5f);
+	                        }
+	                        else if (weaponType == 't')
+	                        {
+	                            Debug.Log("Thrust");
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, Random.Range(2, 5))); // Inflict damage 2-4 times
+	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
+	                                yield return new WaitForSeconds(0f);
+	                        }
+	                        else //thust
+	                        {
 
-                }
-                for (int i = 0; i < r; i++)
-                {
-                    if (enemyList[i] != null)
-                    {
-                        if (weaponType == 'b') // blunt
-                        {
-                            Debug.Log("Blunt");
-                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength * 2, 1)); // Inflict damage
-                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
-                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
-                            yield return new WaitForSeconds(0.5f);
-                        }
-                        else if (weaponType == 't')
-                        {
-                            Debug.Log("Thrust");
-                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, Random.Range(2, 5))); // Inflict damage 2-4 times
-                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
-                                yield return new WaitForSeconds(0f);
-                        }
-                        else //thust
-                        {
-
-                            Debug.Log("Slice");
-                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage 2-4 times
-                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
-                                yield return new WaitForSeconds(0f);
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("NULL");
-                    }
-                }
-            }
-         }
-         else
-         {
-            GameObject enemy = null;
+	                            Debug.Log("Slice");
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage 2-4 times
+	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
+	                                yield return new WaitForSeconds(0f);
+	                        }
+	                    }
+	                    else
+	                    {
+	                        Debug.Log("NULL");
+	                    }
+	                }
+	            } 
+	         }
+	         else
+	         {
+	            GameObject enemy = null;
+	            switch (attackDir)
+	            {
+	                case 'l':
+	                    enemy = board.map[currentX - 1, currentY].entity;
+	                    break;
+	                case 'r':
+	                    enemy = board.map[currentX + 1, currentY].entity;
+	                    break;
+	                case 'u':
+	                    enemy = board.map[currentX, currentY + 1].entity;
+	                    break;
+	                case 'd':
+	                    enemy = board.map[currentX, currentY - 1].entity;
+	                    break;
+	            }
+	           
+	            if (enemy != null)
+	            {
+	                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
+	            }
+	            else
+	            {
+	                Debug.Log("NULL");
+	            }
+	         }
+	    }
+	    else // Range attack calc
+	    {
+	    	bool missed = true; // base case is missing
+	    	Vector2 missPos = new Vector2(0,0); // in case the player misses
+	    	ammo -= 1; // use one ammo
+	    	r = 10;
+	    	enemyList = new GameObject[r];
             switch (attackDir)
             {
                 case 'l':
-                    enemy = board.map[currentX - 1, currentY].entity;
+                	/*if(!seedXFlip)
+                	{
+                		seedXFlip = true;
+                		projectile.GetComponent<SpriteRenderer>().flipX = true;
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x - 10, this.transform.position.y);
+                    for (int i = 0; i < r; i++)
+                    {
+                        enemyList[i] = ReturnEnemy(currentX - (i + 1), currentY);
+                    }
                     break;
                 case 'r':
-                    enemy = board.map[currentX + 1, currentY].entity;
+                	/*if(seedXFlip)
+                	{
+                		seedXFlip = false;
+                		projectile.GetComponent<SpriteRenderer>().flipX = false;
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x + 10, this.transform.position.y);
+                    for (int i = 0; i < r; i++)
+                    {
+                        enemyList[i] = ReturnEnemy(currentX + (i + 1), currentY);
+                    }
                     break;
                 case 'u':
-                    enemy = board.map[currentX, currentY + 1].entity;
+                    /*if(seedYFlip)
+                	{
+                		seedYFlip = false;
+                		projectile.GetComponent<SpriteRenderer>().flipY = false;
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x, this.transform.position.y + 10);
+                    for (int i = 0; i < r; i++)
+                    {
+                        enemyList[i] = ReturnEnemy(currentX, currentY + (i + 1));
+                    }
                     break;
                 case 'd':
-                    enemy = board.map[currentX, currentY - 1].entity;
+                	/*if(!seedYFlip)
+                	{
+                		seedYFlip = true;
+                		projectile.GetComponent<SpriteRenderer>().flipY = true;
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x, this.transform.position.y - 10);
+                    for (int i = 0; i < r; i++)
+                    {
+                        enemyList[i] = ReturnEnemy(currentX, currentY - (i + 1));
+                    }
                     break;
             }
-
-            if (enemy != null)
+            for (int i = 0; i < r; i++)
             {
-                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
-            }
-            else
-            {
-                Debug.Log("NULL");
-            }
-         }
+                if (enemyList[i] != null)
+                {
+                	missed = false; // hit something
+                	seconds = 0.2f * (i+1); // per tile .2 seconds
+                    Debug.Log("Range from: " + this.transform.position + " to: " + enemyList[i].transform.position);
+                    enemyLocation = enemyList[i].transform.position;
+                    Debug.Log("Before " + projectile.transform.position);
+                    //rangeWait = true;
+                    while(rangeWait) // wait for projectile
+						yield return null;
 
+					Debug.Log("After " + projectile.transform.position);
+					enemyList[i].GetComponent<EnemyBasic>().makeAlert(); // piss the enemy off
+                    
+                    StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(2 + board.getDepth(), 1)); // Inflict damage
+                    yield return new WaitForSeconds(0.5f);  
+                    break;
+                }
+
+			}
+
+			if(missed)
+			{
+				enemyLocation = missPos;
+				while(rangeWait) // wait for projectile
+						yield return null;
+			}
+
+        }
         inCombat = false;
     }
 
@@ -457,16 +516,13 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
-                        SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
-                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
-
                     }
                     return true;
             }
         }
         else //something is there
-        {
+        {            
             Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
             return false;
         }
@@ -486,7 +542,7 @@ public class LLB : BasicEntity
                 Debug.Log("Picked up item");
                 //add item
                 inventory.isFull[i] = true;
-
+                
                 //if item is blueberry then this
                 Instantiate(itemButton, inventory.slots[i].transform, false);
                 Destroy(item);
@@ -501,24 +557,37 @@ public class LLB : BasicEntity
         if (health <= 0) {
             SceneManager.LoadScene("StartScene");
         }
-
+    
         if (checkInput && active) //No previous actions are being executed
         {
+        	if(timer != 0)
+        		timer = 0;
+
             if (Input.GetMouseButtonDown(0)) // left mouse click
             {
-                attack = true; // player will attempt to attack
-                checkInput = false; //input has been read
+            	if (invEquipped == 0)
+            	{
+            		attack = true; // player will attempt to attack
+        			checkInput = false; //input has been read	 
+            	}
+            	else if (invEquipped == 1 && ammo > 0)
+            	{
+            		attack = true; // player will attempt to attack
+        			checkInput = false; //input has been read	
+            	}
+
             }
             if (Input.GetMouseButtonDown(1)) // right mouse click
-            {
-                if (stamina > 30)
-                {
-                    specialA = true; // player will attempt to special attack
-                    checkInput = false; //input has been read
+            { 
+            	if(invEquipped == 0){
+	                if (stamina > 30)
+	                {
+	                    specialA = true; // player will attempt to special attack
+	                    checkInput = false; //input has been read
+	                }
+	                else
+	                    Debug.Log("Stamina is too low");
                 }
-                else
-                    Debug.Log("Stamina is too low");
-
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -593,7 +662,7 @@ public class LLB : BasicEntity
                     attackDir = 'u';
                 }
             }
-
+            
             if (Input.GetMouseButtonDown(0)) // Attack
             {
                 attackWait = false;
@@ -608,6 +677,25 @@ public class LLB : BasicEntity
                 targetHighlight.Deactivate();
             }
         }
+        else if (rangeWait) // Waiting for seed to travel
+        {
+
+        	switch(attackDir)
+        	{
+
+        	}
+        	if (timer <= seconds)
+        	{
+        		timer += Time.deltaTime;
+        		percent = timer / seconds;
+        		projectile.transform.position = Vector2.Lerp(playerLocation, enemyLocation, percent);
+        	}
+        	else
+        	{
+        		rangeWait = false;
+        		projectile.transform.position = new Vector2 (-500, 500);
+        	}
+        }
     }
 
 
@@ -617,8 +705,16 @@ public class LLB : BasicEntity
         {
             attack = false;
             attackWait = true;
-            targetHighlight.Activate(1, flipped, 'o', attackDir); // o = other i.e basic attack
-            StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
+            if(invEquipped == 0){
+	            targetHighlight.Activate(1, flipped, 'o', attackDir); // o = other i.e basic attack
+	            StartCoroutine(wait2Move('a', 1.5f)); // Starts animation timer and should stop inputs
+        	}
+        	else // invEquipped = 1
+        	 {
+        	 	rangeWait = true;
+        		targetHighlight.Activate(10, flipped, 'o', attackDir); // o = other i.e basic attack
+	            StartCoroutine(wait2Move('x', 1f)); // Using x since r for range is taken by right move 
+        	 }
         }
         else if (specialA)
         {
@@ -703,7 +799,7 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
-
+                      
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
@@ -712,7 +808,7 @@ public class LLB : BasicEntity
                 break;
             case 's': //Special attack
                 {
-
+                    
                     while (attackWait)// Start combat decisions
                         yield return null;
                     if (turnEnd) // if attack actually happened
@@ -721,13 +817,31 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(true));
-
+                        
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
                     }
                 }
                 break;
+            case 'x': // range attack
+	            { 
+	            	while (attackWait)
+	            		yield return null;
+	            	if (turnEnd) // if attack actually happened
+                    {
+
+        				playerLocation = transform.position;
+
+                        inCombat = true;
+                        StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
+                      
+                        while (inCombat)
+                            yield return new WaitForSeconds(0f); // waits till combat ends
+                        yield return new WaitForSeconds(0.5f);
+                    }
+	            }
+	            break;
             case 'l':  //Move left
                 {
                     attackDir = 'l'; // when we move attackDir = left
@@ -797,7 +911,7 @@ public class LLB : BasicEntity
             else
                 staminaUsed = false;
         }
-
+        
 
         turnEnd = false; // Reset after enemies
         checkInput = true; // Inputs are able to be taken again
