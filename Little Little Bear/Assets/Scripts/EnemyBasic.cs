@@ -19,7 +19,6 @@ public class EnemyBasic : BasicEntity
     {
         this.alert = false;
         this.waitAttack = false; // Ensures damage flash fully plays
-        //this.board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
         // ---------------------------------------------
