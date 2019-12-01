@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LLB : BasicEntity
 {
@@ -125,7 +126,6 @@ public class LLB : BasicEntity
                     if (weaponType == 'b')
                         r = 1;
                     else
-
                         r = 2;
 
                     enemyList = new GameObject[r];
@@ -233,7 +233,7 @@ public class LLB : BasicEntity
             if (board.map[x, y].tileType == TileSet.DIG_TILE)
             {
                 // Testing with 90% item spawn chance on dig -> TODO: set spawn chance back to <50%
-                if (Random.value <= 0.9f) // 35% chance
+                if (Random.value <= 0.35f) // 35% chance
                 {
                     board.spawnItem(x, y);
                     // PickUp(board.map[x, y].item); // Why doesn't this work??
@@ -274,6 +274,15 @@ public class LLB : BasicEntity
         // }
     }
 
+    private void AttachSpriteToPosition()
+    {
+        // Let's fix the misalligning manually
+        if (transform.position.x != currentX)
+            transform.position = new Vector2(currentX, transform.position.y);
+        if (transform.position.y != currentY)
+            transform.position = new Vector2(transform.position.x, currentY);
+    }
+
     private bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
@@ -294,36 +303,37 @@ public class LLB : BasicEntity
                     return false;
 
                 default: // Currently default since moving is only here
-                    // // DO NOT MOVE THIS OUT OF HERE
-                    // if (board.map[xDir, yDir].tileType == TileSet.TUNNEL)
-                    // {
-                    //     board.map[xDir, yDir].tileType = TileSet.FLOOR;
-
-                    //     if (Random.value < 0.2f) // 20% chance to spawn
-                    //     {
-                    //         board.spawnItem(xDir, yDir);
-                    //     }
-
-                    //     // Change the sprite of the worldTile that's there
-                    //     if (board.getBiome() == BiomeSet.FOREST)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestFloor;
-                    //     else if (board.getBiome() == BiomeSet.SWAMP)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
-                    //     else if (board.getBiome() == BiomeSet.CAVE)
-                    //         board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
-                    // }
-
-                    // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
-                    // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
+
+
+                    int xDiff = xDir - currentX;
+                    int yDiff = yDir - currentY;
+                    Debug.Log("XDIFF: "+xDiff);
+                    Debug.Log("YDIFF: "+yDiff);
 
                     // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
+
+                    if (board.map[currentX, currentY].tileType == TileSet.MUD)
+                    {
+                        // This should keep sliding us until we can't move anymore
+                        // if (xDiff != 0 && yDiff != 0)
+                        {
+                            Debug.Log("SLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDING");
+
+                            while (board.map[currentX + xDiff, currentY + yDiff].tileType == TileSet.MUD)
+                            {
+                                board.map[currentX + xDiff, currentY + yDiff].entity = board.map[currentX, currentY].entity;
+                                board.map[currentX, currentY].entity = null;
+                                currentX += xDiff;
+                                currentY += yDiff;
+                            }
+                        }
+                    }
 
                     // DO NOT MOVE THIS OUT OF HERE
                     if (board.map[currentX, currentY].tileType == TileSet.TUNNEL)
@@ -391,9 +401,13 @@ public class LLB : BasicEntity
         }
         */
     }
-    
+
     private void Update()
     {
+        if (health <= 0) {
+            SceneManager.LoadScene("StartScene");
+        }
+    
         if (checkInput && active) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
@@ -631,6 +645,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f); // Lagtime after movement is complete
                     turnEnd = true;
                 }
@@ -642,6 +657,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.right) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -652,6 +668,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.up) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -662,6 +679,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.down) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
