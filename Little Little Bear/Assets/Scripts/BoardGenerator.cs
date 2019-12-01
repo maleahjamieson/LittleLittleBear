@@ -747,7 +747,7 @@ public class BoardGenerator : MonoBehaviour
 
 	public void spawnItem(int xx, int yy)
 	{
-		int whichItem = Random.Range(0, 11);
+		int whichItem = Random.Range(0, 10);
 		GameObject tempItem = Instantiate(GameObject.Find("WorldItem"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
 
 		switch(whichItem)
@@ -767,11 +767,13 @@ public class BoardGenerator : MonoBehaviour
 			case 2:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Pocketknife;
 				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
+				tempItem.GetComponent<Item>().damageType = 's';
 				break;
 			// Rapier
 			case 3:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Rapier;
 				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
+				tempItem.GetComponent<Item>().damageType = 't';
 				break;
 			// Skunk Gas
 			case 4:
@@ -783,10 +785,11 @@ public class BoardGenerator : MonoBehaviour
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Snaps;
 				tempItem.GetComponent<Item>().itemType = ItemType.SNAPS;
 				break;
-			// StickRock
+			// Carrot
 			case 6:
-				tempItem.GetComponent<SpriteRenderer>().sprite = spr_StickRock;
-				tempItem.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
+				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Carrot;
+				tempItem.GetComponent<Item>().itemType = ItemType.CARROT;
+				tempItem.GetComponent<Item>().damageType = 'b';
 				break;
 			// Sunflower Seed
 			case 7:
@@ -803,11 +806,7 @@ public class BoardGenerator : MonoBehaviour
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Treat;
 				tempItem.GetComponent<Item>().itemType = ItemType.TREAT;
 				break;
-			// Carrot
-			case 10:
-				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Carrot;
-				tempItem.GetComponent<Item>().itemType = ItemType.CARROT;
-				break;
+
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;

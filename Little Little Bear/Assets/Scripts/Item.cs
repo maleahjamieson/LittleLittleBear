@@ -81,12 +81,15 @@ public class Item : MonoBehaviour
             case ItemType.STICK_ROCK:
             case ItemType.CARROT:
                 this.damageType = 'b';
+                //LLB.GetComponent<LLB>().weaponType = 'b';
                 break;
             case ItemType.RAPIER:
                 this.damageType = 't';
+                ///LLB.GetComponent<LLB>().weaponType = 't';
                 break;
             case ItemType.POCKETKNIFE:
                 this.damageType = 's';
+                //LLB.GetComponent<LLB>().weaponType = 's';
                 break;
         }
 
@@ -110,9 +113,27 @@ public class Item : MonoBehaviour
             Debug.Log("AMMO PLUS 10");
             Destroy(gameObject);
         }
+        else if(this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT || this.itemType == ItemType.POCKETKNIFE) //if weapon
+        {
+        	if(!inventory.isFull[0])
+        	{
+        		//put weapon in first slot and destroy on ground
+	            inventory.isFull[0] = true;
+	            inventory.items[0].damage = this.damage;
+	            inventory.items[0].damageType = this.damageType;
+	            inventory.items[0].range = this.range;
+	            inventory.items[0].type = this.itemType;
+	            //adds item button to slot
+	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
+	            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+	            button.GetComponent<Item>().itemType = this.itemType;
+	            LLB.GetComponent<LLB>().weaponType = this.damageType;
+	            Destroy(gameObject);
+        	}
+        }
         else
         {
-    	    for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
+    	    for(int i = 2; i < inventory.slots.Length; i++) //checking if inventory is full
     	    {
     	        if(inventory.isFull[i] == false && this.itemType != ItemType.SUNFLOWER_SEED)    //not full or seed, pickup item
     	        {
@@ -156,6 +177,10 @@ public class Item : MonoBehaviour
                 Debug.Log("ants everywhere (no function rn)");
                 Destroy(gameObject);
                 break;
+            case ItemType.THORN_VINE: // ants
+                Debug.Log("thorns (no function rn)");
+                Destroy(gameObject);
+                break;
             case ItemType.BLUEBERRIES: // berry
                 Debug.Log("munchin a blueberry");
                 if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
@@ -183,8 +208,7 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.CARROT:
                 Debug.Log("used carrot (no function rn)");
-                //Destroy(gameObject); no destroy cause carrot is base item
-                //in fact we should probably get rid of this
+                Destroy(gameObject);
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");

@@ -59,7 +59,7 @@ public class LLB : BasicEntity
         inCombat = false;
         checkInput = true;
         staminaUsed = false;
-        invEquipped = 1; // Start on weapon slot
+        invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 'b'; // Start with a carrot which is blunt
@@ -67,14 +67,14 @@ public class LLB : BasicEntity
         health = maxHealth;
         stamina = 100;
         strength = 4;
-        ammo = 10; // set to 0 JOEY
+        ammo = 0;
         seconds = 1;  
         projectile = GameObject.Find("Projectile");
         projectile.SetActive(false);
 
 
         PlayerData playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        if (playerData.health != 0 && playerData != null)
+        if (playerData.health > 0 )
         {
             health = playerData.health;
             stamina = playerData.stamina;
@@ -172,6 +172,7 @@ public class LLB : BasicEntity
 
         else
         {
+            
             maxHealth = 100;
             health = maxHealth;
             stamina = 100;
@@ -450,8 +451,10 @@ public class LLB : BasicEntity
 			if(missed)
 			{
 				enemyLocation = missPos;
+				projectile.SetActive(true);
 				while(rangeWait) // wait for projectile
 						yield return null;
+				projectile.SetActive(false);
 			}
 
         }
@@ -641,6 +644,8 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
+                        GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
                     }
                     return true;
@@ -658,9 +663,10 @@ public class LLB : BasicEntity
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
     {
         item.GetComponent<Item>().pickup();
-        Debug.Log("Running pickup function");
+        ammoCounter.text = "Ammo: " + ammo;
         /*
-        
+        Debug.Log("Running pickup function");
+
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
         {
             if(inventory.isFull[i] == false)    //not full, pickup item
