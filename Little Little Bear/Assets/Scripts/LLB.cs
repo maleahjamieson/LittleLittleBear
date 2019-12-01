@@ -42,7 +42,7 @@ public class LLB : BasicEntity
         invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
+        weaponType = 'r'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -398,19 +398,24 @@ public class LLB : BasicEntity
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
             {
-                attack = true; // player will attempt to attack
-                checkInput = false; //input has been read
+            	if(invEquipped == 0)
+            	{
+	                attack = true; // player will attempt to attack
+	                checkInput = false; //input has been read
+            	}
+            	
             }
             if (Input.GetMouseButtonDown(1)) // right mouse click
-            {
-                if (stamina > 30)
-                {
-                    specialA = true; // player will attempt to special attack
-                    checkInput = false; //input has been read
+            { 
+            	if(invEquipped == 0){
+	                if (stamina > 30)
+	                {
+	                    specialA = true; // player will attempt to special attack
+	                    checkInput = false; //input has been read
+	                }
+	                else
+	                    Debug.Log("Stamina is too low");
                 }
-                else
-                    Debug.Log("Stamina is too low");
-                
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
