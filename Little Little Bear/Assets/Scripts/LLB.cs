@@ -11,12 +11,12 @@ public class LLB : BasicEntity
     public int DungeonDepth;
     private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
     private char attackDir; // char hold, for Combat();
-    private int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
+    public int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
     private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
     private float seconds; // time of flight for projectile
     private float timer; // delta.time
     private float percent; // time / seconds
-
+    private float scroll; // scroll input
     private Vector2 playerLocation;
     private Vector2 enemyLocation;
     private Vector2 difference; // between llb and enemy
@@ -29,8 +29,11 @@ public class LLB : BasicEntity
     private bool rangeWait;
     private bool inCombat; // damage flash management 
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
-    private bool seedXFlip;
-    private bool seedYFlip;
+   	private bool sUp; // scroll up
+   	private bool sDown; // scroll down
+
+   // private bool seedXFlip;
+   // private bool seedYFlip;
 
     /*//inventory variables
     private Inventory inventory;
@@ -62,13 +65,13 @@ public class LLB : BasicEntity
         stamina = 100;
         strength = 4;
         ammo = 10; // set to 0 JOEY
-        seconds = 1;
-        seedXFlip = false;
-        seedYFlip = false;
+        seconds = 1;  
         projectile = GameObject.Find("Projectile");
         projectile.SetActive(false);
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
+        //seedXFlip = false;
+        //seedYFlip = false;
         //inventory = GetComponent<Inventory>();
         //health = GameManager.instance.playerHealth; // grab loaded health
 
@@ -565,6 +568,21 @@ public class LLB : BasicEntity
         	if(timer != 0)
         		timer = 0;
 
+        	scroll = Input.GetAxis("Mouse ScrollWheel"); 
+        	if (scroll > 0f) // up
+        	{	
+        		sUp = true;
+        		checkInput = false;
+        		Debug.Log("UP");
+        	}
+        	else if (scroll < 0f) // down
+        	{
+        		sDown = true;
+        		checkInput = false;
+        		Debug.Log("DOWN");
+        	}
+
+
             if (Input.GetMouseButtonDown(0)) // left mouse click
             {
             	if (invEquipped == 0)
@@ -699,6 +717,7 @@ public class LLB : BasicEntity
 
     void FixedUpdate() // Where animation and actions take place
     {
+
         if (attack)
         {
             attack = false;
@@ -739,6 +758,22 @@ public class LLB : BasicEntity
             dig = false;
             animator.SetTrigger("Dig");
             StartCoroutine(wait2Move('i', 2f)); // Start animation and call dig, d was taken, i = item
+        }
+        else if (sUp)
+        {
+        	sUp = false;
+        	invEquipped += 1;
+        	if (invEquipped > 3)
+        		invEquipped = 0;
+        	StartCoroutine(wait2Move('e', 0.1f));
+        }
+        else if (sDown)
+        {
+        	sDown = false;
+        	invEquipped -= 1;
+        	if (invEquipped < 0)
+        		invEquipped = 3;
+        	StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (moveLeft)
         {
@@ -899,6 +934,11 @@ public class LLB : BasicEntity
                     turnEnd = true;
                 }
                 break;
+            case 'e': // empty
+            {
+            	yield return new WaitForSeconds(t);
+            }
+            break;
         }
         //GameManager.instance.playersTurn = false; // Action complete, player loses turn enemies go
         //board.moveEnemies(); // Move all of the bad bois
