@@ -203,6 +203,8 @@ public class BoardGenerator : MonoBehaviour
 	private int direction_chance, trap_chance, spawn_chance, dig_chance;
 	private int general_item_chance, rare_item_chance;
 	private int dungeonDepth;
+	private Position puzzlePos;
+	private GridCell[,] puzzle;
 	public GridCell[,] map;
 
 	// Some miscellaneous stats for record-keeping and num-checks
@@ -991,37 +993,40 @@ public class BoardGenerator : MonoBehaviour
 	private void puzzle_room(Position p)
 	{
 		// Grab the puzzle from grabPuzzle();
-		GridCell[,] puzzle = grabPuzzle();
+		this.puzzle = grabPuzzle();
 		int xOffset = 0;
 		int yOffset = 0;
+
+		this.puzzlePos = p;
 
 		// Rotate the array based on the direction
 		// and set the offset accordingly
 		if (p.dir == Direction.NORTH)
 		{
 			Debug.Log("CREATING PUZZLE IN DIRECTION NORTH");
-			puzzle = rotate_right_90(11, puzzle);
+			this.puzzle = rotate_right_90(11, this.puzzle);
 			xOffset = -5;
 			yOffset = -10;
 		}
 		else if (p.dir == Direction.SOUTH)
 		{
 			Debug.Log("CREATING PUZZLE IN DIRECTION SOUTH");
-			puzzle = rotate_left_90(11, puzzle);
+			this.puzzle = rotate_left_90(11, this.puzzle);
 			xOffset = -5;
 			yOffset = 0;
 		}
 		else if (p.dir == Direction.EAST)
 		{
 			Debug.Log("CREATING PUZZLE IN DIRECTION EAST");
-			puzzle = rotate_right_90(11, puzzle);
-			puzzle = rotate_right_90(11, puzzle);
+			this.puzzle = rotate_right_90(11, this.puzzle);
+			this.puzzle = rotate_right_90(11, this.puzzle);
 			xOffset = 0;
 			yOffset = -5;
 		}
 		else if (p.dir == Direction.WEST)
 		{
 			Debug.Log("CREATING PUZZLE IN DIRECTION WEST");
+			// Don't need to rotate puzzle here
 			xOffset = -10;
 			yOffset = -5;
 		}
@@ -1048,11 +1053,78 @@ public class BoardGenerator : MonoBehaviour
 					this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity = null;
 				}
 
-				this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType = puzzle[xx, yy].tileType;
+				this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType = this.puzzle[xx, yy].tileType;
 			}
 		}
 
 		this.puzzleCounter++;
+	}
+
+	public void respawnPuzzle()
+	{
+		Position p = this.puzzlePos;
+		int xOffset = 0;
+		int yOffset = 0;
+
+		if (p.dir == Direction.NORTH)
+		{
+			xOffset = -5;
+			yOffset = -10;
+		}
+		else if (p.dir == Direction.SOUTH)
+		{
+			xOffset = -5;
+			yOffset = 0;
+		}
+		else if (p.dir == Direction.EAST)
+		{
+			xOffset = 0;
+			yOffset = -5;
+		}
+		else if (p.dir == Direction.WEST)
+		{
+			xOffset = -10;
+			yOffset = -5;
+		}
+
+		for (int xx = 0; xx < 11; xx++)
+		{
+			for (int yy = 0; yy < 11; yy++)
+			{
+				if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].item != null)
+				{
+					Destroy(this.map[p.x + xx + xOffset, p.y + yy + yOffset].item);
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].item = null;
+				}
+				if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity != null)
+				{
+					Destroy(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity);
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity = null;
+				}
+
+				this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType = this.puzzle[xx, yy].tileType;
+
+				if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType == TileSet.PIT)
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].worldTile.GetComponent<SpriteRenderer>().sprite = this.spr_ForestPit;
+				else if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType == TileSet.BRANCH)
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].worldTile.GetComponent<SpriteRenderer>().sprite = this.spr_ForestBranch;
+				else if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType == TileSet.KEY_TILE)
+				{
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].worldTile.GetComponent<SpriteRenderer>().sprite = this.spr_ForestKeyTile;
+
+					// Respawn the key
+					GameObject tempItem = Instantiate(GameObject.Find("WorldItem"), new Vector2((p.x + xx + xOffset) * offsetforTiles, (p.y + yy + yOffset) * offsetforTiles), Quaternion.identity);
+					tempItem.GetComponent<SpriteRenderer>().sprite = this.spr_Key;
+					tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
+					tempItem.GetComponent<Item>().itemType = ItemType.KEY;
+					this.map[p.x + xx + xOffset, p.y + yy + yOffset].item = tempItem;
+				}
+			}
+		}
+
+		HamsterEntity.GetComponent<LLB>().currentX = p.x;
+		HamsterEntity.GetComponent<LLB>().currentY = p.y;
+		HamsterEntity.GetComponent<LLB>().AttachSpriteToPosition();
 	}
 
 	// Done [ ]
@@ -1593,7 +1665,7 @@ public class BoardGenerator : MonoBehaviour
 	    this.spr_CaveFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Ground");
 	    this.spr_CaveWall = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Wall");
 	    this.spr_CaveBoulder = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Boulder");
-	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Tunnel");
 	    this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_DigTile");
 	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
 	    this.spr_CaveStart = this.spr_CaveFloor;
@@ -1763,6 +1835,14 @@ public class BoardGenerator : MonoBehaviour
 										tile.GetComponent<SpriteRenderer>().sprite = this.spr_CaveEnd;
 									break;
 								case TileSet.KEY_TILE:
+									// Create the key item here!
+									GameObject tempItem = Instantiate(GameObject.Find("WorldItem"), new Vector2(x * offsetforTiles, y * offsetforTiles), Quaternion.identity);
+									tempItem.GetComponent<SpriteRenderer>().sprite = this.spr_Key;
+									tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
+									tempItem.GetComponent<Item>().itemType = ItemType.KEY;
+									this.map[x, y].item = tempItem;
+
+									// Now set the type!
 									if (this.biome == BiomeSet.FOREST)
 										tile.GetComponent<SpriteRenderer>().sprite = this.spr_ForestKeyTile;
 									else if (this.biome == BiomeSet.SWAMP)

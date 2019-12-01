@@ -274,7 +274,7 @@ public class LLB : BasicEntity
         // }
     }
 
-    private void AttachSpriteToPosition()
+    public void AttachSpriteToPosition()
     {
         // Let's fix the misalligning manually
         if (transform.position.x != currentX)
@@ -292,15 +292,49 @@ public class LLB : BasicEntity
 
         if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
+            int xDiff = 0;
+            int yDiff = 0;
             switch (board.map[xDir, yDir].tileType)
             {
                 //don't move there
                 case TileSet.BOULDER:
+                    Debug.Log("Found boulder");
+                    xDiff = xDir - currentX;
+                    yDiff = yDir - currentY;
+                    Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
+
+                    if (xDiff != 0 || yDiff != 0)
+                    {
+                        Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
+                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER && board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL)
+                        {
+                            board.map[xDir + xDiff, yDir + yDiff].tileType = TileSet.BOULDER;
+                            board.map[xDir + xDiff, yDir + yDiff].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveBoulder;
+                            board.map[xDir, yDir].tileType = TileSet.FLOOR;
+                            board.map[xDir, yDir].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+                            board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
+                            board.map[currentX, currentY].entity = null;
+                            currentX = xDir;
+                            currentY = yDir;
+
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                    else
+                        return false;
+                    break;
                 case TileSet.ROCK:
                 case TileSet.WALL:
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
                     return false;
+                case TileSet.PIT:
+                    board.respawnPuzzle();
+                    StartCoroutine(Hurt(10, 1));
+                    return false;
+                    break;
 
                 default: // Currently default since moving is only here
                     Debug.Log("**** HEY I'M MOVING ****");
@@ -308,14 +342,21 @@ public class LLB : BasicEntity
                     board.map[currentX, currentY].entity = null;
 
 
-                    int xDiff = xDir - currentX;
-                    int yDiff = yDir - currentY;
+                    xDiff = xDir - currentX;
+                    yDiff = yDir - currentY;
                     Debug.Log("XDIFF: "+xDiff);
                     Debug.Log("YDIFF: "+yDiff);
 
-                    // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
-                    // board.map[xDir, yDir].entityType = selfEntity; // you are here now
-                    currentX = xDir;    // OverwritePosition
+
+                    // Before we change positions, see if we need to change a branch to a pit
+                    if (board.map[currentX, currentY].tileType == TileSet.BRANCH)
+                    {
+                        board.map[currentX, currentY].tileType = TileSet.PIT;
+                        board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_ForestPit;
+                    }
+
+                    // Move to new position
+                    currentX = xDir;
                     currentY = yDir;
 
                     if (board.map[currentX, currentY].tileType == TileSet.MUD)
