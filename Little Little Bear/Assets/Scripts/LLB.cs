@@ -465,10 +465,8 @@ public class LLB : BasicEntity
 			if(missed)
 			{
 				enemyLocation = missPos;
-				projectile.SetActive(true);
 				while(rangeWait) // wait for projectile
 						yield return null;
-				projectile.SetActive(false);
 			}
 
         }
@@ -727,6 +725,18 @@ public class LLB : BasicEntity
             {
             	if (invEquipped == 0)
             	{
+            		switch(weaponType)
+            		{
+            			case 'b':
+            			animator.SetInteger("WeaponType", 0);
+            			break;
+            			case 't':
+            			animator.SetInteger("WeaponType", 1);
+            			break;
+            			case 's':
+            			animator.SetInteger("WeaponType", 2);
+            			break;
+            		}
             		
             		attack = true; // player will attempt to attack
         			checkInput = false; //input has been read	 
@@ -735,12 +745,6 @@ public class LLB : BasicEntity
             	{
             		attack = true; // player will attempt to attack
         			checkInput = false; //input has been read	
-            	}
-            	else
-            	{
-            		//inv.items[invEquipped].use;// no idea what this do
-            		// need to set item bool to trigger in fixedUpdate, follow the outline of the others
-            		// checkInput = false; // stops input, and gets reset to true when wait2Move is run
             	}
 
             }
