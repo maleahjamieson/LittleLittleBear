@@ -91,6 +91,7 @@ public class Item : MonoBehaviour
 	            //if item is blueberry then this
 	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
                 button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+                button.GetComponent<Item>().itemType = this.itemType;
 	            Destroy(gameObject);
 	            break;
         	}
@@ -98,6 +99,7 @@ public class Item : MonoBehaviour
     }
     public void use() 
     {
+        Debug.Log("Using this item");
         switch (itemType)
         {
             case ItemType.RED_ANTS_BOTTLE: // ants
@@ -107,7 +109,6 @@ public class Item : MonoBehaviour
                     LLB.GetComponent<LLB>().health = LLB.GetComponent<LLB>().maxHealth; // Only goes as high as max health
                 else
                     LLB.GetComponent<LLB>().health += 20; // increase by 20
-                
                 break;
             case ItemType.SKUNK_GAS: // skunk
                 break;
