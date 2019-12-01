@@ -62,7 +62,7 @@ public class LLB : BasicEntity
         invEquipped = 1; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
+        weaponType = 'b'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -669,6 +669,7 @@ public class LLB : BasicEntity
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
     {
         item.GetComponent<Item>().pickup();
+        ammoCounter.text = "Ammo: " + ammo;
         /*
         Debug.Log("Running pickup function");
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full

@@ -55,12 +55,15 @@ public class Item : MonoBehaviour
             case ItemType.STICK_ROCK:
             case ItemType.CARROT:
                 this.damageType = 'b';
+                //LLB.GetComponent<LLB>().weaponType = 'b';
                 break;
             case ItemType.RAPIER:
                 this.damageType = 't';
+                //LLB.GetComponent<LLB>().weaponType = 't';
                 break;
             case ItemType.POCKETKNIFE:
                 this.damageType = 's';
+                //LLB.GetComponent<LLB>().weaponType = 's';
                 break;
         }
 
