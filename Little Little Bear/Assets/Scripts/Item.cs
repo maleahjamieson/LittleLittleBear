@@ -79,6 +79,8 @@ public class Item : MonoBehaviour
         {
             //adds ammo to counter and destroys object on ground
             LLB.GetComponent<LLB>().ammo += 10;
+            ammoCount = LLB.GetComponent<LLB>().ammo;
+
             Debug.Log("AMMO PLUS 10");
             Destroy(gameObject);
         }

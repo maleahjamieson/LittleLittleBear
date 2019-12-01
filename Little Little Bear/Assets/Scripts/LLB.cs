@@ -48,6 +48,7 @@ public class LLB : BasicEntity
     public int ammo; // amount of seeds
     public bool staminaUsed;
     public GameObject seedButton;
+    public Text ammoCounter;
 
     protected override void Start()
     {
@@ -89,6 +90,7 @@ public class LLB : BasicEntity
 	        seedButton = Instantiate(GameObject.Find("ButtonItem"), inv.slots[1].transform, false);
 	        seedButton.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 	        seedButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
+	        ammoCounter.text = "Ammo: " + ammo;
             
             foreach (InventoryItem ii in playerData.items)
             {
@@ -192,6 +194,7 @@ public class LLB : BasicEntity
 	        seedButton = Instantiate(GameObject.Find("ButtonItem"), inv.slots[1].transform, false);
 	        seedButton.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 	        seedButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
+	        ammoCounter.text = "Ammo: " + ammo;
         }
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
@@ -377,6 +380,7 @@ public class LLB : BasicEntity
 	    	bool missed = true; // base case is missing
 	    	Vector2 missPos = new Vector2(0,0); // in case the player misses
 	    	ammo -= 1; // use one ammo
+	    	ammoCounter.text = "Ammo: " + ammo;
 	    	r = 10;
 	    	enemyList = new GameObject[r];
             switch (attackDir)
