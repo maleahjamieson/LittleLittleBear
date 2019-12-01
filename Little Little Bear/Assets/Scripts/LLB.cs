@@ -400,9 +400,6 @@ public class LLB : BasicEntity
     private bool Move(int xDir, int yDir) // out let us return multiple values
     {
         board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-        // selfEntity = board.map[currentX, currentY].entityType;
-        Vector2 sPos = transform.position; //Start Position
-        Vector2 ePos = sPos + new Vector2(xDir, yDir); // End Position
 
         if (board.map[xDir, yDir].entity == null) // if nothing is there(for now)
         {
@@ -410,17 +407,17 @@ public class LLB : BasicEntity
             int yDiff = 0;
             switch (board.map[xDir, yDir].tileType)
             {
-                //don't move there
+                // Moveable boulders
                 case TileSet.BOULDER:
-                    Debug.Log("Found boulder");
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
-                    Debug.Log("Calculated xdiff: "+xDiff+", ydiff: "+yDiff);
 
                     if (xDiff != 0 || yDiff != 0)
                     {
-                        Debug.Log("Trying to move with xdiff: "+xDiff+", ydiff: "+yDiff);
-                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER && board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL)
+                        if (board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.BOULDER &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.WALL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.TUNNEL &&
+                            board.map[xDir + xDiff, yDir + yDiff].tileType != TileSet.DIG_TILE)
                         {
                             board.map[xDir + xDiff, yDir + yDiff].tileType = TileSet.BOULDER;
                             board.map[xDir + xDiff, yDir + yDiff].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveBoulder;
@@ -438,23 +435,26 @@ public class LLB : BasicEntity
                     }
                     else
                         return false;
-                    break;
+                    // break;
+
+                // Collision with solid, immobile walls
                 case TileSet.ROCK:
                 case TileSet.WALL:
-                    Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    //do nothing
+                    // Do nothing
                     return false;
+
+                // Falling into forest puzzle pit
                 case TileSet.PIT:
                     board.respawnPuzzle();
                     StartCoroutine(Hurt(10, 1));
                     return false;
-                    break;
+                    // break;
 
-                default: // Currently default since moving is only here
+                // Moving on normal tiles -> default movement
+                default:
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
-
 
                     xDiff = xDir - currentX;
                     yDiff = yDir - currentY;
@@ -495,10 +495,10 @@ public class LLB : BasicEntity
                     {
                         board.map[currentX, currentY].tileType = TileSet.FLOOR;
 
-                        if (Random.value < 0.2f) // 20% chance to spawn
+                        if (Random.value < 0.05f) // 5% chance to spawn
                         {
                             Debug.Log("Item would be spawned from tunnel");
-                            // board.spawnItem(currentX, currentY);
+                            board.spawnItem(currentX, currentY);
                         }
 
                         // Change the sprite of the worldTile that's there
@@ -508,6 +508,8 @@ public class LLB : BasicEntity
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_SwampFloor;
                         else if (board.getBiome() == BiomeSet.CAVE)
                             board.map[currentX, currentY].worldTile.GetComponent<SpriteRenderer>().sprite = board.spr_CaveFloor;
+
+                        return true;
                     }
 
                     //written by Maleah, pickup item for inventory
