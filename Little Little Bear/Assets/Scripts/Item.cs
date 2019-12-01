@@ -29,7 +29,6 @@ public class Item : MonoBehaviour
     public ItemType itemType; // a ants, b berry, etc
 
     public int damage;
-    public int ammoCount;
     public char damageType;
     public int range;
 
@@ -55,15 +54,12 @@ public class Item : MonoBehaviour
             case ItemType.STICK_ROCK:
             case ItemType.CARROT:
                 this.damageType = 'b';
-                //LLB.GetComponent<LLB>().weaponType = 'b';
                 break;
             case ItemType.RAPIER:
                 this.damageType = 't';
-                ///LLB.GetComponent<LLB>().weaponType = 't';
                 break;
             case ItemType.POCKETKNIFE:
                 this.damageType = 's';
-                //LLB.GetComponent<LLB>().weaponType = 's';
                 break;
         }
 
@@ -78,65 +74,31 @@ public class Item : MonoBehaviour
 
     public void pickup()
     {
-        if(this.itemType == ItemType.SUNFLOWER_SEED) //if seed, add to ammo counter and dont add to inventory
-        {
-            //adds ammo to counter and destroys object on ground
-            LLB.GetComponent<LLB>().ammo += 10;
-            ammoCount = LLB.GetComponent<LLB>().ammo;
+    	Debug.Log("Running pickup function");
+	    for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
+	    {
+	        if(inventory.isFull[i] == false)    //not full, pickup item
+	        {
+	            Debug.Log("Picked up item");
+	            //add item
+	            inventory.isFull[i] = true;
 
-            Debug.Log("AMMO PLUS 10");
-            Destroy(gameObject);
-        }
-        else if(this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT || this.itemType == ItemType.POCKETKNIFE) //if weapon
-        {
-            //put weapon in first slot and destroy on ground
-            inventory.isFull[0] = true;
-            inventory.items[0].damage = this.damage;
-            inventory.items[0].damageType = this.damageType;
-            inventory.items[0].range = this.range;
-            inventory.items[0].type = this.itemType;
-            //adds item button to slot
-            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
-            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
-            button.GetComponent<Item>().itemType = this.itemType;
-            LLB.GetComponent<LLB>().weaponType = this.damageType;
-            Destroy(gameObject);
-        }
-        else
-        {
-    	    for(int i = 2; i < inventory.slots.Length; i++) //checking if inventory is full
-    	    {
-    	        if(inventory.isFull[i] == false && this.itemType != ItemType.SUNFLOWER_SEED)    //not full or seed, pickup item
-    	        {
-    	            Debug.Log("Picked up item");
-    	            //add item
-    	            inventory.isFull[i] = true;
-
-                    inventory.items[i].damage = this.damage;
-                    inventory.items[i].damageType = this.damageType;
-                    inventory.items[i].range = this.range;
-                    inventory.items[i].type = this.itemType;
-    	            
-    	            //adds item button to slot
-    	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
-                    button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
-                    button.GetComponent<Item>().itemType = this.itemType;
-    	            Destroy(gameObject);
-    	            break;
-            	}
+                inventory.items[i].damage = this.damage;
+                inventory.items[i].damageType = this.damageType;
+                inventory.items[i].range = this.range;
+                inventory.items[i].type = this.itemType;
+	            
+	            //if item is blueberry then this
+	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
+                button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+                button.GetComponent<Item>().itemType = this.itemType;
+	            Destroy(gameObject);
+	            break;
         	}
-        }
+    	}
     }
     public void use() 
     {
-        for(int i = 0; i < inventory.slots.Length; i++)
-        {
-            if (inventory.items[i].type == itemType)
-            {
-                inventory.isFull[i] = false;
-                break;
-            }
-        }
         switch (itemType)
         {
             case ItemType.RED_ANTS_BOTTLE: // ants
@@ -155,9 +117,9 @@ public class Item : MonoBehaviour
                 Debug.Log("used smelly (no function rn)");
                 Destroy(gameObject);
                 break;
-            case ItemType.TREAT:
+            case ItemType.TREAT: // treat
                 Debug.Log("what a treat");
-                LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20;
+                LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20; // increase max health by 20
                 Destroy(gameObject);
                 break;
             case ItemType.STICK_ROCK:
@@ -170,33 +132,11 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.CARROT:
                 Debug.Log("used carrot (no function rn)");
-                Destroy(gameObject);
+                //Destroy(gameObject); no destroy cause carrot is base item
+                //in fact we should probably get rid of this
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");
-                Destroy(gameObject);
-                break;
-            case ItemType.SNAPS:
-                BoardGenerator board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
-                int xx = (int)(Random.value * board.getBoardWidth());
-                int yy = (int)(Random.value * board.getBoardHeight());
-
-                while (board.map[xx, yy].tileType != TileSet.FLOOR)
-                {
-                    xx = (int)(Random.value * board.getBoardWidth());
-                    yy = (int)(Random.value * board.getBoardHeight());
-                }
-                int cx, cy;
-                cx = LLB.GetComponent<LLB>().currentX;
-                cy = LLB.GetComponent<LLB>().currentY;
-
-                board.map[xx, yy].entity = board.map[cx, cy].entity;
-                board.map[cx, cy].entity = null;
-                LLB.GetComponent<LLB>().currentX = xx;
-                LLB.GetComponent<LLB>().currentY = yy;
-                LLB.GetComponent<LLB>().AttachSpriteToPosition();
-
-                // Need to free the inventory positions
                 Destroy(gameObject);
                 break;
             default:

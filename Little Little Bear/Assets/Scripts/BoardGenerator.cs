@@ -767,13 +767,13 @@ public class BoardGenerator : MonoBehaviour
 			case 2:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Pocketknife;
 				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
-				tempItem.GetComponent<Item>().damageType = 's';
+				//tempItem.GetComponent<Item>().damageType = 's';
 				break;
 			// Rapier
 			case 3:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Rapier;
 				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
-				tempItem.GetComponent<Item>().damageType = 't';
+				//tempItem.GetComponent<Item>().damageType = 't';
 				break;
 			// Skunk Gas
 			case 4:
@@ -789,7 +789,7 @@ public class BoardGenerator : MonoBehaviour
 			case 6:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Carrot;
 				tempItem.GetComponent<Item>().itemType = ItemType.CARROT;
-				tempItem.GetComponent<Item>().damageType = 'b';
+				//tempItem.GetComponent<Item>().damageType = 'b';
 				break;
 			// Sunflower Seed
 			case 7:
@@ -810,7 +810,7 @@ public class BoardGenerator : MonoBehaviour
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-		tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
+		tempItem.GetComponent<Item>().generateWeaponStats(dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 
