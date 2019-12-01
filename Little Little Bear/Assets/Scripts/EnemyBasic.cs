@@ -30,22 +30,22 @@ public class EnemyBasic : BasicEntity
         flipped = false;
     }
 
-    public void Set(enemyType t)
+    public void Set(enemyType t, int depth)
     {
         this.type = t;
         switch (type)
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 5;
+                this.strength = 5 + ((int)(depth / 2));
                 this.range = 1;
-                this.health = 8;
+                this.health = 8 + depth;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 10;
+                this.strength = 10 + depth;
                 this.range = 1;
-                this.health = 12;
+                this.health = 12 + (depth * 2);
                 break;
             case enemyType.Bear:
                 this.animator.SetTrigger("Bear");
