@@ -55,7 +55,7 @@ public class Item : MonoBehaviour
         }
 
         // Randomize the damage and add on to the base damage
-        int modifier = (int)(Random.value * depth);
+        int modifier = (int)(depth + (Random.value * (depth/2)));
         this.damage += modifier;
 
         // Flip
