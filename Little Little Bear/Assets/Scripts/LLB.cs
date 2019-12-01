@@ -233,7 +233,7 @@ public class LLB : BasicEntity
             if (board.map[x, y].tileType == TileSet.DIG_TILE)
             {
                 // Testing with 90% item spawn chance on dig -> TODO: set spawn chance back to <50%
-                if (Random.value <= 0.9f) // 35% chance
+                if (Random.value <= 0.35f) // 35% chance
                 {
                     board.spawnItem(x, y);
                     // PickUp(board.map[x, y].item); // Why doesn't this work??
@@ -272,6 +272,15 @@ public class LLB : BasicEntity
         //             break;
         //     }
         // }
+    }
+
+    private void AttachSpriteToPosition()
+    {
+        // Let's fix the misalligning manually
+        if (transform.position.x != currentX)
+            transform.position = new Vector2(currentX, transform.position.y);
+        if (transform.position.y != currentY)
+            transform.position = new Vector2(transform.position.x, currentY);
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -320,10 +329,32 @@ public class LLB : BasicEntity
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
 
+                    int xDiff = xDir - currentX;
+                    int yDiff = yDir - currentY;
+                    Debug.Log("XDIFF: "+xDiff);
+                    Debug.Log("YDIFF: "+yDiff);
+
                     // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
+
+                    if (board.map[currentX, currentY].tileType == TileSet.MUD)
+                    {
+                        // This should keep sliding us until we can't move anymore
+                        // if (xDiff != 0 && yDiff != 0)
+                        {
+                            Debug.Log("SLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDING");
+
+                            while (board.map[currentX + xDiff, currentY + yDiff].tileType == TileSet.MUD)
+                            {
+                                board.map[currentX + xDiff, currentY + yDiff].entity = board.map[currentX, currentY].entity;
+                                board.map[currentX, currentY].entity = null;
+                                currentX += xDiff;
+                                currentY += yDiff;
+                            }
+                        }
+                    }
 
                     // DO NOT MOVE THIS OUT OF HERE
                     if (board.map[currentX, currentY].tileType == TileSet.TUNNEL)
@@ -626,6 +657,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f); // Lagtime after movement is complete
                     turnEnd = true;
                 }
@@ -637,6 +669,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.right) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -647,6 +680,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.up) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -657,6 +691,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.down) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
