@@ -18,8 +18,24 @@ public class Inventory : MonoBehaviour
 public class Inventory : MonoBehaviour
 {
     public bool[] isFull;
+    public InventoryItem[] items = new InventoryItem[4];
     public GameObject[] slots;
     public int selectedSlot = 0;
+
+    public bool[] getFullSlots()
+    {
+        return isFull;
+    }
+
+    public InventoryItem[] getItemStructs()
+    {
+        return items;
+    }
+
+    public GameObject[] getSlotButtons()
+    {
+        return slots;
+    }
 
     void Start()
     {
