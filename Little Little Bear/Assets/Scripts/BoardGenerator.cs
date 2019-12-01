@@ -823,7 +823,7 @@ public class BoardGenerator : MonoBehaviour
 
 						// Making enemy object for the board, then setting it's stats based on enemyType
 						GameObject enemy = (GameObject)Instantiate(GameObject.Find(enemyArray[enemyTypeRand]), new Vector2((m.x + xx) * offsetforTiles, (m.y + yy) * offsetforTiles), Quaternion.identity);
-						enemy.GetComponent<EnemyBasic>().Set(enemyChosenType);
+						enemy.GetComponent<EnemyBasic>().Set(enemyChosenType, this.dungeonDepth);
 						// Debug.Log("Placing: " + enemy.name + " at x: " + m.x + " y: " + m.y);
 
 						this.map[m.x + xx, m.y + yy].entity = enemy;
@@ -1575,8 +1575,9 @@ public class BoardGenerator : MonoBehaviour
 	    // this.spr_CaveTunnel = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    this.spr_CaveDig = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_DigTile");
 	    this.spr_CaveHallway = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Hallway");
-	    // this.spr_CaveStart = Resources.Load<Sprite>("Art/CaveTiles/tile_");
-	    // this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_");
+	    this.spr_CaveStart = this.spr_CaveFloor;
+	    this.spr_CavePuzzleFloor = this.spr_CaveFloor;
+	    this.spr_CaveEnd = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_EndTile");
 	    this.spr_CaveSpawner = Resources.Load<Sprite>("Art/CaveTiles/tile_Cave_Spawner");
 	    // this.spr_CaveSecretFloor = Resources.Load<Sprite>("Art/CaveTiles/tile_");
 	    // this.spr_CaveTrap = Resources.Load<Sprite>("Art/CaveTiles/tile_");
