@@ -19,7 +19,6 @@ public class EnemyBasic : BasicEntity
     {
         this.alert = false;
         this.waitAttack = false; // Ensures damage flash fully plays
-        this.board = GameObject.Find("LevelTilesGenerator").GetComponent<gameManager>().board;
         visitedPoints = new ArrayList();
         // ---- will change when board calls Set() -----
         // ---------------------------------------------
@@ -31,22 +30,22 @@ public class EnemyBasic : BasicEntity
         flipped = false;
     }
 
-    public void Set(enemyType t)
+    public void Set(enemyType t, int depth)
     {
         this.type = t;
         switch (type)
         {
             case enemyType.Mantis:
                 this.animator.SetTrigger("Mantis");
-                this.strength = 5 + ((int)(this.board.getDepth() / 2));
+                this.strength = 5 + ((int)(depth / 2));
                 this.range = 1;
-                this.health = 8 + this.board.getDepth();
+                this.health = 8 + depth;
                 break;
             case enemyType.Falcon:
                 this.animator.SetTrigger("Falcon");
-                this.strength = 10 + this.board.getDepth();
+                this.strength = 10 + depth;
                 this.range = 1;
-                this.health = 12 + (this.board.getDepth() * 2);
+                this.health = 12 + (depth * 2);
                 break;
             case enemyType.Bear:
                 this.animator.SetTrigger("Bear");
