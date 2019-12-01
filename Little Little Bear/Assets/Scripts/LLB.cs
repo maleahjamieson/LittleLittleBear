@@ -13,7 +13,7 @@ public class LLB : BasicEntity
     private int aDirX = 1, aDirY = 0; // Attack direction x and y, how we aim
     private char attackDir; // char hold, for Combat();
     public int invEquipped; // 0 melee, 1 range, 2 first item, 3 second item
-    private char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
+    public char weaponType; // b=blunt, t=thrust, s=slice, r=ranged
     private float seconds; // time of flight for projectile
     private float timer; // delta.time
     private float percent; // time / seconds
@@ -59,7 +59,7 @@ public class LLB : BasicEntity
         inCombat = false;
         checkInput = true;
         staminaUsed = false;
-        invEquipped = 1; // Start on weapon slot
+        invEquipped = 0; // Start on weapon slot
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 's'; // Start with a carrot which is blunt
@@ -67,7 +67,7 @@ public class LLB : BasicEntity
         health = maxHealth;
         stamina = 100;
         strength = 4;
-        ammo = 10; // set to 0 JOEY
+        ammo = 0;
         seconds = 1;  
         projectile = GameObject.Find("Projectile");
         projectile.SetActive(false);
@@ -123,11 +123,13 @@ public class LLB : BasicEntity
                                 case ItemType.POCKETKNIFE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
                                     button.GetComponent<Item>().itemType = ii.type;
+
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.RAPIER:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
                                     button.GetComponent<Item>().itemType = ii.type;
+
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SKUNK_GAS:
@@ -143,6 +145,7 @@ public class LLB : BasicEntity
                                 case ItemType.STICK_ROCK:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
                                     button.GetComponent<Item>().itemType = ii.type;
+                                    
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SUNFLOWER_SEED:
@@ -672,6 +675,7 @@ public class LLB : BasicEntity
     private void PickUp(GameObject item)   // Picks up the item off the floor (In the future we can add UI)
     {
         item.GetComponent<Item>().pickup();
+        ammoCounter.text = "Ammo: " + ammo;
         /*
         Debug.Log("Running pickup function");
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
