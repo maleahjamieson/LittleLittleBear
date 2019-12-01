@@ -47,6 +47,7 @@ public class LLB : BasicEntity
     public int stamina;  // Special move gague, when below a certain amount you cant use special
     public int ammo; // amount of seeds
     public bool staminaUsed;
+    public GameObject seedButton;
 
     protected override void Start()
     {
@@ -82,6 +83,12 @@ public class LLB : BasicEntity
             Inventory inv = gameObject.GetComponent<Inventory>();
             //inv.isFull = playerData.isFull;
             inv.items = playerData.items;
+
+	        //setting 2nd slot to sunflower seeds always
+	        inv.isFull[1] = true;
+	        seedButton = Instantiate(GameObject.Find("ButtonItem"), inv.slots[1].transform, false);
+	        seedButton.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
+	        seedButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
             
             foreach (InventoryItem ii in playerData.items)
             {
@@ -178,6 +185,13 @@ public class LLB : BasicEntity
             health = maxHealth;
             stamina = 100;
             strength = 4;
+
+            Inventory inv = gameObject.GetComponent<Inventory>();
+	        //setting 2nd slot to sunflower seeds always
+	        inv.isFull[1] = true;
+	        seedButton = Instantiate(GameObject.Find("ButtonItem"), inv.slots[1].transform, false);
+	        seedButton.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
+	        seedButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
         }
         targetHighlight = GameObject.Find("Highlight").GetComponent<Highlight>();
         base.Start();
