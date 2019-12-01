@@ -42,9 +42,17 @@ public class UIManager : MonoBehaviour {
                 SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                 break;
 			case ClickType.LoadGame:
+                
 
-                GlobalMan.instance.data = SaveData.LoadPlayer();
-                Debug.Log(GlobalMan.instance.data.health);
+                if (SaveData.LoadPlayer() == null)
+                {
+                    Debug.Log(GlobalMan.instance.data.health);
+                }
+                else
+                {
+                    GlobalMan.instance.data = SaveData.LoadPlayer();
+                }
+                
 
                 
                 /*
