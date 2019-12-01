@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6618821180493726312
+--- !u!1 &7814094596155314170
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6618821180493726319}
-  - component: {fileID: 6618821180493726318}
-  - component: {fileID: 6618821180493726313}
+  - component: {fileID: 7814094596155314149}
+  - component: {fileID: 7814094596155314148}
+  - component: {fileID: 7814094596155314171}
   m_Layer: 0
   m_Name: LevelTilesGenerator
   m_TagString: Untagged
@@ -18,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6618821180493726319
+--- !u!4 &7814094596155314149
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6618821180493726312}
+  m_GameObject: {fileID: 7814094596155314170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.9, y: 0.5, z: -90.58636}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,33 +32,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6618821180493726318
+--- !u!114 &7814094596155314148
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6618821180493726312}
+  m_GameObject: {fileID: 7814094596155314170}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 965bded3839800241ab7471d7f75b18b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Floor: {fileID: 0}
-  Wall: {fileID: 0}
-  Rock: {fileID: 0}
-  Mud: {fileID: 0}
-  Secret_Floor: {fileID: 0}
-  Trap: {fileID: 0}
-  Spawner: {fileID: 0}
-  Puzzle_Floor: {fileID: 0}
-  Dig: {fileID: 0}
-  Puzzle_Hallway: {fileID: 0}
-  Hallway: {fileID: 0}
-  Dig_Tile: {fileID: 0}
-  Boulder: {fileID: 0}
-  Start_Tile: {fileID: 0}
-  End_Tile: {fileID: 0}
   spawnableItems:
   - {fileID: 8460208083832651338, guid: c1e10bd2633e88a44a5bfdd81196d834, type: 3}
   - {fileID: 3219788761789833612, guid: bb064d9232bd47b43932c36cdd46ca30, type: 3}
@@ -69,27 +54,91 @@ MonoBehaviour:
   - {fileID: 4996363094516396106, guid: 59bdd2b34858fcb499ab1c85627215c8, type: 3}
   - {fileID: 1507616257591408600, guid: 3d4ae86fc3bbdb64287e797808360d5c, type: 3}
   - {fileID: 1498160981137674331, guid: c166ccb1fc9942c4c9b6cd68cab3a73a, type: 3}
+  spr_ForestFloor: {fileID: 21300000, guid: 4e0d89145e78f4f4197e3ebb352b4ec3, type: 3}
+  spr_ForestWall: {fileID: 21300000, guid: c4a8d49bf2ef5bb4eb55de48f81f1398, type: 3}
+  spr_ForestBranch: {fileID: 0}
+  spr_ForestPit: {fileID: 0}
+  spr_ForestPuzzleFloor: {fileID: 21300000, guid: f0df9e79e59082f4d8296b38275172bc,
+    type: 3}
+  spr_ForestTunnel: {fileID: 0}
+  spr_ForestDig: {fileID: 21300000, guid: ff8e618e10b380c4d93b40be8859562e, type: 3}
+  spr_ForestHallway: {fileID: 21300000, guid: 2a36ca1b2a080614180973decd2a1efc, type: 3}
+  spr_ForestStart: {fileID: 0}
+  spr_ForestEnd: {fileID: 0}
+  spr_ForestSpawner: {fileID: 21300000, guid: d88d6b460a937394086516b2c58d1191, type: 3}
+  spr_ForestSecretFloor: {fileID: 21300000, guid: ed221b05b4e2a054aa29bb9b7c1650d6,
+    type: 3}
+  spr_ForestTrap: {fileID: 21300000, guid: e9fa7c8df8b817f47ad771e92ff77d5c, type: 3}
+  spr_ForestPuzzleHallway: {fileID: 21300000, guid: 2c23ccccfc1008249a0c2672605e1826,
+    type: 3}
+  spr_ForestKeyTile: {fileID: 0}
+  spr_SwampFloor: {fileID: 0}
+  spr_SwampWall: {fileID: 0}
+  spr_SwampMud: {fileID: 0}
+  spr_SwampPuzzleFloor: {fileID: 0}
+  spr_SwampTunnel: {fileID: 0}
+  spr_SwampDig: {fileID: 0}
+  spr_SwampHallway: {fileID: 0}
+  spr_SwampStart: {fileID: 0}
+  spr_SwampEnd: {fileID: 0}
+  spr_SwampSpawner: {fileID: 0}
+  spr_SwampSecretFloor: {fileID: 0}
+  spr_SwampTrap: {fileID: 0}
+  spr_SwampPuzzleHallway: {fileID: 0}
+  spr_SwampKeyTile: {fileID: 0}
+  spr_SwampRock: {fileID: 0}
+  spr_CaveFloor: {fileID: 0}
+  spr_CaveWall: {fileID: 0}
+  spr_CavePuzzleFloor: {fileID: 0}
+  spr_CaveTunnel: {fileID: 0}
+  spr_CaveDig: {fileID: 0}
+  spr_CaveHallway: {fileID: 0}
+  spr_CaveStart: {fileID: 0}
+  spr_CaveEnd: {fileID: 0}
+  spr_CaveSpawner: {fileID: 0}
+  spr_CaveSecretFloor: {fileID: 0}
+  spr_CaveTrap: {fileID: 0}
+  spr_CavePuzzleHallway: {fileID: 0}
+  spr_CaveKeyTile: {fileID: 0}
+  spr_CaveBoulder: {fileID: 0}
+  spr_RedAntsBottle: {fileID: 0}
+  spr_Blueberries: {fileID: 0}
+  spr_Pocketknife: {fileID: 0}
+  spr_Rapier: {fileID: 0}
+  spr_SkunkGas: {fileID: 0}
+  spr_Snaps: {fileID: 0}
+  spr_StickRock: {fileID: 0}
+  spr_SunflowerSeed: {fileID: 0}
+  spr_ThornVine: {fileID: 0}
+  spr_Carrot: {fileID: 0}
+  spr_Treat: {fileID: 0}
+  spr_Key: {fileID: 0}
   HamsterEntity: {fileID: 0}
   offsetforTiles: 1
---- !u!114 &6618821180493726313
+  enemyActive: 0
+--- !u!114 &7814094596155314171
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6618821180493726312}
+  m_GameObject: {fileID: 7814094596155314170}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65075bc7a8380ed438ccf7c6adb0e109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  board: {fileID: 6618821180493726318}
+  board: {fileID: 7814094596155314148}
   CreditsMenu: {fileID: 0}
   SaveMenu: {fileID: 0}
   LLB: {fileID: 0}
   BackgroundMenu: {fileID: 0}
   InventoryMenu: {fileID: 0}
+  TargetTile: {fileID: 0}
+  GlobalMan: {fileID: 0}
+  depth: 0
   Paused: 0
   CreditsOn: 0
   NewOrLoad: 0
   SaveOn: 0
+  dungeonDepth: 0
