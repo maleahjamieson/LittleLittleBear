@@ -83,8 +83,9 @@ public class gameManager : MonoBehaviour {
             board.LoadTileSprites();
             board.LoadItemSprites();
             board.setBoardSize(2500, 2500);
-            board.setDungeonDepth(dungeonDepth);
+            // board.setDungeonDepth(dungeonDepth);
             // board.setDungeonDepth(10); // Testing boss level
+            board.setDungeonDepth(1); // Testing mud sliding
             Debug.Log("Generate!");
             board.generate();
             Debug.Log("Should be generated at depth: "+dungeonDepth);

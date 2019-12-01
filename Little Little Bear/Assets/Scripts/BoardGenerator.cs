@@ -384,16 +384,6 @@ public class BoardGenerator : MonoBehaviour
 		return this.dungeonDepth;
 	}
 
-	public int getBoardWidth()
-	{
-		return this.board_width;
-	}
-
-	public int getBoardHeight()
-	{
-		return this.board_height;
-	}
-
 	//**********************************//
 	//          Helper Methods          //
 	//**********************************//
@@ -662,12 +652,6 @@ public class BoardGenerator : MonoBehaviour
 							this.map[m.x + j, m.y + k].entity = null;
 						}
 
-						if (this.map[m.x + j, m.y + k].item != null)
-						{
-							Destroy(this.map[m.x + j, m.y + k].item);
-							this.map[m.x + j, m.y + k].item = null;
-						}
-
 						this.tileCounter++;
 						this.digCounter++;
 					}
@@ -694,12 +678,6 @@ public class BoardGenerator : MonoBehaviour
 
 								Destroy(this.map[m.x + j, m.y + k].entity);
 								this.map[m.x + j, m.y + k].entity = null;
-							}
-
-							if (this.map[m.x + j, m.y + k].item != null)
-							{
-								Destroy(this.map[m.x + j, m.y + k].item);
-								this.map[m.x + j, m.y + k].item = null;
 							}
 
 							this.tileCounter++;
@@ -747,67 +725,66 @@ public class BoardGenerator : MonoBehaviour
 
 	public void spawnItem(int xx, int yy)
 	{
-		int whichItem = Random.Range(0, 11);
+		int whichItem = Random.Range(0, 9);
 		GameObject tempItem = Instantiate(GameObject.Find("WorldItem"), new Vector2(xx * offsetforTiles, yy * offsetforTiles), Quaternion.identity);
 
 		switch(whichItem)
 		{
-			// Red Ants Bottle
 			case 0:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_RedAntsBottle;
 				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
-			// Blueberries
+			}
 			default:
 			case 1:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Blueberries;
 				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
 				break;
-			// PocketKnife
+			}
 			case 2:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Pocketknife;
 				tempItem.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
 				break;
-			// Rapier
+			}
 			case 3:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Rapier;
 				tempItem.GetComponent<Item>().itemType = ItemType.RAPIER;
 				break;
-			// Skunk Gas
+			}
 			case 4:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_SkunkGas;
 				tempItem.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
 				break;
-			// Snaps
+			}
 			case 5:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Snaps;
 				tempItem.GetComponent<Item>().itemType = ItemType.SNAPS;
 				break;
-			// StickRock
+			}
 			case 6:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_StickRock;
 				tempItem.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
 				break;
-			// Sunflower Seed
+			}
 			case 7:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_SunflowerSeed;
 				tempItem.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
 				break;
-			// Thorny Vines
+			}
 			case 8:
+			{
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_ThornVine;
 				tempItem.GetComponent<Item>().itemType = ItemType.THORN_VINE;
 				break;
-			// Treat
-			case 9:
-				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Treat;
-				tempItem.GetComponent<Item>().itemType = ItemType.TREAT;
-				break;
-			// Carrot
-			case 10:
-				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Carrot;
-				tempItem.GetComponent<Item>().itemType = ItemType.CARROT;
-				break;
+			}
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
