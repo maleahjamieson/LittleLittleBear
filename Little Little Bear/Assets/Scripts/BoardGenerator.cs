@@ -71,7 +71,6 @@ public struct GridCell
 {
 	public GameObject worldTile;
 	public TileSet tileType;
-    // public EntitySet entityType;
     public GameObject entity;
     public GameObject item;
 
@@ -646,6 +645,9 @@ public class BoardGenerator : MonoBehaviour
 						// Remove any entities we've found
 						if (this.map[m.x + j, m.y + k].entity != null)
 						{
+							if (this.EnemyList.Contains(this.map[m.x + j, m.y + k].entity))
+								this.EnemyList.Remove(this.map[m.x + j, m.y + k].entity);
+
 							Destroy(this.map[m.x + j, m.y + k].entity);
 							this.map[m.x + j, m.y + k].entity = null;
 						}
@@ -671,6 +673,9 @@ public class BoardGenerator : MonoBehaviour
 							// Remove any entities we've found
 							if (this.map[m.x + j, m.y + k].entity != null)
 							{
+								if (this.EnemyList.Contains(this.map[m.x + j, m.y + k].entity))
+									this.EnemyList.Remove(this.map[m.x + j, m.y + k].entity);
+
 								Destroy(this.map[m.x + j, m.y + k].entity);
 								this.map[m.x + j, m.y + k].entity = null;
 							}
@@ -1049,6 +1054,9 @@ public class BoardGenerator : MonoBehaviour
 				}
 				if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity != null)
 				{
+					if (this.EnemyList.Contains(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity))
+						this.EnemyList.Remove(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity);
+
 					Destroy(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity);
 					this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity = null;
 				}
@@ -1098,8 +1106,11 @@ public class BoardGenerator : MonoBehaviour
 				}
 				if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity != null)
 				{
-					Destroy(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity);
-					this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity = null;
+					if (this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity != HamsterEntity)
+					{
+						Destroy(this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity);
+						this.map[p.x + xx + xOffset, p.y + yy + yOffset].entity = null;
+					}
 				}
 
 				this.map[p.x + xx + xOffset, p.y + yy + yOffset].tileType = this.puzzle[xx, yy].tileType;
