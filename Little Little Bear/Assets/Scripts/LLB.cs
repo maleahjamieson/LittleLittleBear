@@ -244,50 +244,56 @@ public class LLB : BasicEntity
 	    }
 	    else // Range attack calc
 	    {
+	    	bool missed = true; // base case is missing
+	    	Vector2 missPos = new Vector2(0,0); // in case the player misses
 	    	ammo -= 1; // use one ammo
 	    	r = 10;
 	    	enemyList = new GameObject[r];
             switch (attackDir)
             {
                 case 'l':
-                	if(!seedXFlip)
+                	/*if(!seedXFlip)
                 	{
                 		seedXFlip = true;
                 		projectile.GetComponent<SpriteRenderer>().flipX = true;
-                	}
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x - 10, this.transform.position.y);
                     for (int i = 0; i < r; i++)
                     {
                         enemyList[i] = ReturnEnemy(currentX - (i + 1), currentY);
                     }
                     break;
                 case 'r':
-                	if(seedXFlip)
+                	/*if(seedXFlip)
                 	{
                 		seedXFlip = false;
                 		projectile.GetComponent<SpriteRenderer>().flipX = false;
-                	}
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x + 10, this.transform.position.y);
                     for (int i = 0; i < r; i++)
                     {
                         enemyList[i] = ReturnEnemy(currentX + (i + 1), currentY);
                     }
                     break;
                 case 'u':
-                    if(seedYFlip)
+                    /*if(seedYFlip)
                 	{
                 		seedYFlip = false;
                 		projectile.GetComponent<SpriteRenderer>().flipY = false;
-                	}
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x, this.transform.position.y + 10);
                     for (int i = 0; i < r; i++)
                     {
                         enemyList[i] = ReturnEnemy(currentX, currentY + (i + 1));
                     }
                     break;
                 case 'd':
-                	if(!seedYFlip)
+                	/*if(!seedYFlip)
                 	{
                 		seedYFlip = true;
                 		projectile.GetComponent<SpriteRenderer>().flipY = true;
-                	}
+                	}*/
+                	missPos = new Vector2 (this.transform.position.x, this.transform.position.y - 10);
                     for (int i = 0; i < r; i++)
                     {
                         enemyList[i] = ReturnEnemy(currentX, currentY - (i + 1));
@@ -298,6 +304,7 @@ public class LLB : BasicEntity
             {
                 if (enemyList[i] != null)
                 {
+                	missed = false; // hit something
                 	seconds = 0.2f * (i+1); // per tile .2 seconds
                     Debug.Log("Range from: " + this.transform.position + " to: " + enemyList[i].transform.position);
                     enemyLocation = enemyList[i].transform.position;
@@ -314,6 +321,13 @@ public class LLB : BasicEntity
                     break;
                 }
 
+			}
+
+			if(missed)
+			{
+				enemyLocation = missPos;
+				while(rangeWait) // wait for projectile
+						yield return null;
 			}
 
         }
@@ -550,10 +564,17 @@ public class LLB : BasicEntity
 
             if (Input.GetMouseButtonDown(0)) // left mouse click
             {
+            	if (invEquipped == 0)
+            	{
+            		attack = true; // player will attempt to attack
+        			checkInput = false; //input has been read	 
+            	}
+            	else if (invEquipped == 1 && ammo > 0)
+            	{
+            		attack = true; // player will attempt to attack
+        			checkInput = false; //input has been read	
+            	}
 
-	        	attack = true; // player will attempt to attack
-        		checkInput = false; //input has been read	        
-	
             }
             if (Input.GetMouseButtonDown(1)) // right mouse click
             { 
@@ -803,7 +824,7 @@ public class LLB : BasicEntity
                 }
                 break;
             case 'x': // range attack
-	            {
+	            { 
 	            	while (attackWait)
 	            		yield return null;
 	            	if (turnEnd) // if attack actually happened
