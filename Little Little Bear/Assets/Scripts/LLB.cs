@@ -70,8 +70,8 @@ public class LLB : BasicEntity
         projectile.SetActive(false);
 
 
-        playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        if (playerData.health != 0)
+        PlayerData playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
+        if (playerData.health != 0 && playerData != null)
         {
             health = playerData.health;
             stamina = playerData.stamina;
