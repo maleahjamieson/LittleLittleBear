@@ -55,15 +55,15 @@ public class Item : MonoBehaviour
             case ItemType.STICK_ROCK:
             case ItemType.CARROT:
                 this.damageType = 'b';
-                //LLB.GetComponent<LLB>().weaponType = 'b';
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 break;
             case ItemType.RAPIER:
                 this.damageType = 't';
-                //LLB.GetComponent<LLB>().weaponType = 't';
+                LLB.GetComponent<LLB>().weaponType = 't';
                 break;
             case ItemType.POCKETKNIFE:
                 this.damageType = 's';
-                //LLB.GetComponent<LLB>().weaponType = 's';
+                LLB.GetComponent<LLB>().weaponType = 's';
                 break;
         }
 
@@ -155,8 +155,7 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.CARROT:
                 Debug.Log("used carrot (no function rn)");
-                //Destroy(gameObject); no destroy cause carrot is base item
-                //in fact we should probably get rid of this
+                Destroy(gameObject);
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");
