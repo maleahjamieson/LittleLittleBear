@@ -72,6 +72,8 @@ public class gameManager : MonoBehaviour {
             board = gameObject.AddComponent(typeof(BoardGenerator)) as BoardGenerator;
             board.setBoardSize(2500, 2500);
             board.setDungeonDepth(dungeonDepth);
+            // board.setDungeonDepth(10); // Testing boss level
+            // board.setDungeonDepth(4); // Testing mud sliding
             board.generate();
             Debug.Log("Should be generated at depth: "+dungeonDepth);
             board.HamsterEntity = GameObject.Find("Player");

@@ -20,7 +20,7 @@ public class LLB : BasicEntity
     private bool dig;
     private bool turnEnd;
     private bool attackWait;
-    private bool inCombat; // damage flash management 
+    private bool inCombat; // damage flash management
     private bool checkInput; // If true we can accept user input, avoids interrupting animation
     public bool staminaUsed;
 
@@ -54,7 +54,7 @@ public class LLB : BasicEntity
         //health = GameManager.instance.playerHealth; // grab loaded health
 
     }
-    
+
     private void OnEnable() // When level starts up we enable the player entity
     {
         flipped = false;
@@ -70,11 +70,11 @@ public class LLB : BasicEntity
         GameObject tempEnemy = board.map[x, y].entity;
         return tempEnemy;
     }
-    
-    private IEnumerator Combat(bool special) // basic : special = false, direction = d 
+
+    private IEnumerator Combat(bool special) // basic : special = false, direction = d
     {
         Debug.Log("Combat");
-        bool flash = false; // currently, pretty sure we dont need this 
+        bool flash = false; // currently, pretty sure we dont need this
         GameObject[] enemyList;
         if (special)
          {
@@ -158,7 +158,7 @@ public class LLB : BasicEntity
                             break;
                     }
 
-                    
+
                 }
                 for (int i = 0; i < r; i++)
                 {
@@ -193,7 +193,7 @@ public class LLB : BasicEntity
                         Debug.Log("NULL");
                     }
                 }
-            } 
+            }
          }
          else
          {
@@ -213,7 +213,7 @@ public class LLB : BasicEntity
                     enemy = board.map[currentX, currentY - 1].entity;
                     break;
             }
-           
+
             if (enemy != null)
             {
                 StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
@@ -223,7 +223,7 @@ public class LLB : BasicEntity
                 Debug.Log("NULL");
             }
          }
-        
+
         inCombat = false;
     }
 
@@ -234,7 +234,7 @@ public class LLB : BasicEntity
             if (board.map[x, y].tileType == TileSet.DIG_TILE)
             {
                 // Testing with 90% item spawn chance on dig -> TODO: set spawn chance back to <50%
-                if (Random.value <= 0.9f) // 35% chance
+                if (Random.value <= 0.35f) // 35% chance
                 {
                     board.spawnItem(x, y);
                     // PickUp(board.map[x, y].item); // Why doesn't this work??
@@ -273,6 +273,15 @@ public class LLB : BasicEntity
         //             break;
         //     }
         // }
+    }
+
+    private void AttachSpriteToPosition()
+    {
+        // Let's fix the misalligning manually
+        if (transform.position.x != currentX)
+            transform.position = new Vector2(currentX, transform.position.y);
+        if (transform.position.y != currentY)
+            transform.position = new Vector2(transform.position.x, currentY);
     }
 
     private bool Move(int xDir, int yDir) // out let us return multiple values
@@ -316,15 +325,37 @@ public class LLB : BasicEntity
 
                     // Debug.Log("MOVING X: " + xDir + " AND Y: " + yDir);
                     // Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
-                    
+
                     Debug.Log("**** HEY I'M MOVING ****");
                     board.map[xDir, yDir].entity = board.map[currentX, currentY].entity;
                     board.map[currentX, currentY].entity = null;
-                    
+
+                    int xDiff = xDir - currentX;
+                    int yDiff = yDir - currentY;
+                    Debug.Log("XDIFF: "+xDiff);
+                    Debug.Log("YDIFF: "+yDiff);
+
                     // board.map[currentX, currentY].entityType = EntitySet.NOTHING; // nothing where you where
                     // board.map[xDir, yDir].entityType = selfEntity; // you are here now
                     currentX = xDir;    // OverwritePosition
                     currentY = yDir;
+
+                    if (board.map[currentX, currentY].tileType == TileSet.MUD)
+                    {
+                        // This should keep sliding us until we can't move anymore
+                        // if (xDiff != 0 && yDiff != 0)
+                        {
+                            Debug.Log("SLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIDING");
+
+                            while (board.map[currentX + xDiff, currentY + yDiff].tileType == TileSet.MUD)
+                            {
+                                board.map[currentX + xDiff, currentY + yDiff].entity = board.map[currentX, currentY].entity;
+                                board.map[currentX, currentY].entity = null;
+                                currentX += xDiff;
+                                currentY += yDiff;
+                            }
+                        }
+                    }
 
                     // DO NOT MOVE THIS OUT OF HERE
                     if (board.map[currentX, currentY].tileType == TileSet.TUNNEL)
@@ -363,7 +394,7 @@ public class LLB : BasicEntity
             }
         }
         else //something is there
-        {            
+        {
             Debug.Log("CONTAINS " + board.map[xDir, yDir].entity);
             return false;
         }
@@ -383,7 +414,7 @@ public class LLB : BasicEntity
                 Debug.Log("Picked up item");
                 //add item
                 inventory.isFull[i] = true;
-                
+
                 //if item is blueberry then this
                 Instantiate(itemButton, inventory.slots[i].transform, false);
                 Destroy(item);
@@ -398,7 +429,7 @@ public class LLB : BasicEntity
         if (health <= 0) {
             SceneManager.LoadScene("StartScene");
         }
-    
+
         if (checkInput && active) //No previous actions are being executed
         {
             if (Input.GetMouseButtonDown(0)) // left mouse click
@@ -415,7 +446,7 @@ public class LLB : BasicEntity
                 }
                 else
                     Debug.Log("Stamina is too low");
-                
+
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -490,7 +521,7 @@ public class LLB : BasicEntity
                     attackDir = 'u';
                 }
             }
-            
+
             if (Input.GetMouseButtonDown(0)) // Attack
             {
                 attackWait = false;
@@ -600,7 +631,7 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(false)); // Once LLB attack animation ends, do damage
-                      
+
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
@@ -609,7 +640,7 @@ public class LLB : BasicEntity
                 break;
             case 's': //Special attack
                 {
-                    
+
                     while (attackWait)// Start combat decisions
                         yield return null;
                     if (turnEnd) // if attack actually happened
@@ -618,7 +649,7 @@ public class LLB : BasicEntity
                         yield return new WaitForSeconds(t);
                         inCombat = true;
                         StartCoroutine(Combat(true));
-                        
+
                         while (inCombat)
                             yield return new WaitForSeconds(0f); // waits till combat ends
                         yield return new WaitForSeconds(0.5f);
@@ -631,6 +662,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.left) / 2); // Splits the difference so its a 2 step
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.left) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f); // Lagtime after movement is complete
                     turnEnd = true;
                 }
@@ -642,6 +674,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.right) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.right) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -652,6 +685,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.up) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.up) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -662,6 +696,7 @@ public class LLB : BasicEntity
                     transform.Translate((Vector2.down) / 2);
                     yield return new WaitForSeconds(0.1f);
                     transform.Translate((Vector2.down) / 2);
+                    AttachSpriteToPosition();
                     yield return new WaitForSeconds(t - 0.1f);
                     turnEnd = true;
                 }
@@ -690,7 +725,7 @@ public class LLB : BasicEntity
             else
                 staminaUsed = false;
         }
-        
+
 
         turnEnd = false; // Reset after enemies
         checkInput = true; // Inputs are able to be taken again
