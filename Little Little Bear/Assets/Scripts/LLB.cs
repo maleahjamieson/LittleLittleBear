@@ -59,30 +59,88 @@ public class LLB : BasicEntity
             Inventory inv = gameObject.GetComponent<Inventory>();
             //inv.isFull = playerData.isFull;
             inv.items = playerData.items;
-            //inv.slots = GameObject.FindGameObjectsWithTag("InventorySlot");
+            
             foreach (InventoryItem ii in playerData.items)
             {
                 if (ii.type != ItemType.NOTHING)
                 {
                     for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
                     {
-                        if (inv.isFull[i] == false)    //not full, pickup item
+                        // if (playerData.isFull[i])    //not full, pickup item
+                        if (!inv.isFull[i])
                         {
                             //if item is blueberry then this
                             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
-                            foreach (GameObject o in GameObject.FindGameObjectsWithTag("Item"))
+                            Debug.Log("Trying to put type "+ii.type+" in inventory");
+                            switch (ii.type)
                             {
-                                if (o.GetComponent<Item>().itemType == ii.type)
-                                {
-                                    button.GetComponent<Image>().sprite = o.GetComponent<SpriteRenderer>().sprite;
+                                case ItemType.RED_ANTS_BOTTLE:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
+                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
-                                }
+                                default:
+                                    inv.isFull[i] = false;
+                                    Destroy(button);
+                                    break;
+                                case ItemType.BLUEBERRIES:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Blueberries");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.POCKETKNIFE:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.RAPIER:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.SKUNK_GAS:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SkunkGas");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.SNAPS:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Snaps");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.STICK_ROCK:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.SUNFLOWER_SEED:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.THORN_VINE:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/ThornVines");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.CARROT:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Carrot");
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
+                                case ItemType.TREAT:
+                                    button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Treat"); // board.spr_Treat;
+                                    button.GetComponent<Item>().itemType = ii.type;
+                                    inv.isFull[i] = true;
+                                    break;
                             }
-
 
                             break;
                         }
+                        // else
+                        // {
+                        //     inv.isFull[i] = false;
+                        // }
                     }
                 }
             }
