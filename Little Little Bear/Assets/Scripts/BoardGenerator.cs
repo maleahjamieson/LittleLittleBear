@@ -810,7 +810,7 @@ public class BoardGenerator : MonoBehaviour
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-		tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
+		//tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 

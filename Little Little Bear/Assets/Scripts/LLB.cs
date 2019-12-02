@@ -108,7 +108,6 @@ public class LLB : BasicEntity
                             {
                                 case ItemType.RED_ANTS_BOTTLE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 default:
@@ -117,55 +116,42 @@ public class LLB : BasicEntity
                                     break;
                                 case ItemType.BLUEBERRIES:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Blueberries");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.POCKETKNIFE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
-                                    button.GetComponent<Item>().itemType = ii.type;
-
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.RAPIER:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
-                                    button.GetComponent<Item>().itemType = ii.type;
-
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SKUNK_GAS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SkunkGas");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SNAPS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Snaps");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.STICK_ROCK:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
-                                    button.GetComponent<Item>().itemType = ii.type;
-                                    
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SUNFLOWER_SEED:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.THORN_VINE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/ThornVines");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.CARROT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Carrot");
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.TREAT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Treat"); // board.spr_Treat;
-                                    button.GetComponent<Item>().itemType = ii.type;
                                     inv.isFull[i] = true;
                                     break;
                             }
@@ -322,7 +308,7 @@ public class LLB : BasicEntity
 	                        if (weaponType == 'b') // blunt
 	                        {
 	                            Debug.Log("Blunt");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength * 2, 1)); // Inflict damage
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength * 2, 1)); // Inflict damage
 	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
 	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
 	                            yield return new WaitForSeconds(0.5f);
@@ -330,7 +316,7 @@ public class LLB : BasicEntity
 	                        else if (weaponType == 't')
 	                        {
 	                            Debug.Log("Thrust");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, Random.Range(2, 5))); // Inflict damage 2-4 times
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength, Random.Range(2, 5))); // Inflict damage 2-4 times
 	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
 	                                yield return new WaitForSeconds(0f);
 	                        }
@@ -338,7 +324,7 @@ public class LLB : BasicEntity
 	                        {
 
 	                            Debug.Log("Slice");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage 2-4 times
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength, 1)); // Inflict damage 2-4 times
 	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
 	                                yield return new WaitForSeconds(0f);
 	                        }
@@ -371,7 +357,7 @@ public class LLB : BasicEntity
 	           
 	            if (enemy != null)
 	            {
-	                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
+	                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(this.strength, 1)); // Inflict damage
 	            }
 	            else
 	            {
@@ -680,6 +666,7 @@ public class LLB : BasicEntity
         ammoCounter.text = "Ammo: " + ammo;
         /*
         Debug.Log("Running pickup function");
+
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
         {
             if(inventory.isFull[i] == false)    //not full, pickup item
@@ -727,19 +714,6 @@ public class LLB : BasicEntity
             {
             	if (invEquipped == 0)
             	{
-            		switch(weaponType)
-            		{
-            			case 'b':
-            			animator.SetInteger("WeaponType", 0);
-            			break;
-            			case 't':
-            			animator.SetInteger("WeaponType", 1);
-            			break;
-            			case 's':
-            			animator.SetInteger("WeaponType", 2);
-            			break;
-            		}
-            		
             		attack = true; // player will attempt to attack
         			checkInput = false; //input has been read	 
             	}

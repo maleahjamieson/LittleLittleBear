@@ -38,12 +38,38 @@ public class Item : MonoBehaviour
 	// Start is called before the first frame update
     void Start()
     {
-        this.damage = 4;
-        this.damageType = 'b';
-        this.range = 1;
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         LLB = GameObject.Find("Player");
-        // playerHealth = LLB.GetComponent<LLB>().health;
+        int depth = LLB.GetComponent<LLB>().DungeonDepth;
+        int modifier;
+
+        switch (this.itemType)
+        {
+            case ItemType.STICK_ROCK:
+            case ItemType.CARROT:
+                this.damageType = 'b';
+                this.damage = 6;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            case ItemType.RAPIER:
+                this.damageType = 't';
+                this.damage = 4;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            case ItemType.POCKETKNIFE:
+                this.damageType = 's';
+                this.damage = 5;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            default:
+                break;
+        }
     }
 
     public void generateWeaponStats(int depth)
@@ -94,8 +120,10 @@ public class Item : MonoBehaviour
         		//put weapon in first slot and destroy on ground
 	            inventory.isFull[0] = true;
 	            inventory.items[0].damage = this.damage;
-	            inventory.items[0].damageType = this.damageType;
-	            inventory.items[0].range = this.range;
+                LLB.GetComponent<LLB>().strength = this.damage;
+                inventory.items[0].damageType = this.damageType;
+                LLB.GetComponent<LLB>().weaponType = this.damageType;
+                inventory.items[0].range = this.range;
 	            inventory.items[0].type = this.itemType;
 	            //adds item button to slot
 	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
@@ -114,11 +142,10 @@ public class Item : MonoBehaviour
     	            Debug.Log("Picked up item");
     	            //add item
     	            inventory.isFull[i] = true;
-
-                    inventory.items[i].damage = this.damage;
-                    inventory.items[i].damageType = this.damageType;
-                    inventory.items[i].range = this.range;
                     inventory.items[i].type = this.itemType;
+
+                    if (this.itemType == ItemType.POCKETKNIFE || this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT)
+                        break;
     	            
     	            //adds item button to slot
     	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
@@ -211,6 +238,12 @@ public class Item : MonoBehaviour
                 break;
         }
     }
+
+    // Update is called once per frame
+    // void Update () 
+    // {
+
+    // }
 
     
 }
