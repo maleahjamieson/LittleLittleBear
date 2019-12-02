@@ -684,7 +684,6 @@ public class BoardGenerator : MonoBehaviour
 						this.tileCounter++;
 						this.digCounter++;
 					}
-					///*
 					else
 					{
 						// Move past the used tiles
@@ -719,7 +718,6 @@ public class BoardGenerator : MonoBehaviour
 							this.digCounter++;
 						}
 					}
-					//*/
 				}
 			}
 
@@ -769,7 +767,7 @@ public class BoardGenerator : MonoBehaviour
 				Debug.Log("Error: unexpected item, aborting item creation...");
 				Destroy(tempItem);
 				return;
-				break;
+				// break;
 			// Red Ants Bottle
 			case 0:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_RedAntsBottle;
