@@ -45,6 +45,37 @@ public class Ambience : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        depth = GameObject.Find("Player").GetComponent<LLB>().DungeonDepth;
+
+        if (depth < 2)
+        {
+            if (SoundSource.clip != ForestClip)
+            {
+                SoundSource.clip = ForestClip;
+                SoundSource.volume = 0.04f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
+        else if (depth < 3)
+        {
+            if (SoundSource.clip != SwampClip)
+            {
+                SoundSource.clip = SwampClip;
+                SoundSource.volume = 0.02f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
+        else
+        {
+            if (SoundSource.clip != CaveClip)
+            {
+                SoundSource.clip = CaveClip;
+                SoundSource.volume = 0.05f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
     }
 }

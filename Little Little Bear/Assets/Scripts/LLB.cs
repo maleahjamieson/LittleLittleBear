@@ -355,7 +355,8 @@ public class LLB : BasicEntity
 	         }
 	         else
 	         {
-	            GameObject enemy = null;
+                Debug.Log("*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&");
+	            GameObject enemy; // = null;
 	            switch (attackDir)
 	            {
 	                case 'l':
@@ -368,8 +369,12 @@ public class LLB : BasicEntity
 	                    enemy = board.map[currentX, currentY + 1].entity;
 	                    break;
 	                case 'd':
-	                    enemy = board.map[currentX, currentY - 1].entity;
+                        Debug.Log("Attacking down: map_entity is "+board.map[currentX, currentY-1].entity);
+	                    enemy = board.map[currentX, currentY - 1].entity; // Breaks the game
 	                    break;
+                    default:
+                        enemy = null;
+                        break;
 	            }
 	           
 	            if (enemy != null)
