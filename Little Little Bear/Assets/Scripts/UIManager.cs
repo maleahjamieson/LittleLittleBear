@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 //enum that contains all UI buttons
 public enum ClickType {MainMenu, Pause, Save, NewGame, LoadGame, Settings, Credits, Music, ExitMenu, Inventory, Quit
 
@@ -8,6 +9,7 @@ public enum ClickType {MainMenu, Pause, Save, NewGame, LoadGame, Settings, Credi
 public class UIManager : MonoBehaviour {
 	
 	static public gameManager GManager;
+    public Text load;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +23,7 @@ public class UIManager : MonoBehaviour {
 			case ClickType.MainMenu:
 			break;
 			case ClickType.NewGame:
-                if (!gameManager.instance.SaveMenu.activeSelf)
+                /*if (!gameManager.instance.SaveMenu.activeSelf)
                 {
                     gameManager.instance.NewOrLoad = true;
                     gameManager.instance.SaveMenu.SetActive(true);
@@ -29,10 +31,11 @@ public class UIManager : MonoBehaviour {
                 else
                 {
                     gameManager.instance.SaveMenu.SetActive(false);
-                }
+                }*/ //dont need save slots anymore
 
                 // Moved the break below EraseSaveFiles and the LoadScene function
                 //erase Save files
+                gameManager.instance.NewOrLoad = true;
                 EraseSaveFiles();
                 //load save from txt probs would be best here
                 //force load level 1
@@ -53,8 +56,8 @@ public class UIManager : MonoBehaviour {
                     GlobalMan.instance.data = SaveData.LoadPlayer();
                 }
                 
+                this.load.text = "Please Press Start Game";
 
-                
                 /*
                 if (!gameManager.instance.SaveMenu.activeSelf)
                 {
