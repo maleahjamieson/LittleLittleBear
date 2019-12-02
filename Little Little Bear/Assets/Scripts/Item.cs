@@ -120,8 +120,10 @@ public class Item : MonoBehaviour
         		//put weapon in first slot and destroy on ground
 	            inventory.isFull[0] = true;
 	            inventory.items[0].damage = this.damage;
-	            inventory.items[0].damageType = this.damageType;
-	            inventory.items[0].range = this.range;
+                LLB.GetComponent<LLB>().strength = this.damage;
+                inventory.items[0].damageType = this.damageType;
+                LLB.GetComponent<LLB>().weaponType = this.damageType;
+                inventory.items[0].range = this.range;
 	            inventory.items[0].type = this.itemType;
 	            //adds item button to slot
 	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
@@ -143,13 +145,7 @@ public class Item : MonoBehaviour
                     inventory.items[i].type = this.itemType;
 
                     if (this.itemType == ItemType.POCKETKNIFE || this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT)
-                    {
-                        inventory.items[i].damage = this.damage;
-                        LLB.GetComponent<LLB>().strength = this.damage;
-                        inventory.items[i].damageType = this.damageType;
-                        LLB.GetComponent<LLB>().weaponType = this.damageType;
-                        inventory.items[i].range = this.range;
-                    }
+                        break;
     	            
     	            //adds item button to slot
     	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
