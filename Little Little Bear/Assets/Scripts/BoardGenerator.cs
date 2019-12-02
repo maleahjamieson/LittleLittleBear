@@ -333,6 +333,7 @@ public class BoardGenerator : MonoBehaviour
 		this.dungeonDepth = depth;
 
 		updateDungeonDepth();
+		// testingParameters();
 	}
 
 	public void setDefaultParameters()
@@ -355,6 +356,18 @@ public class BoardGenerator : MonoBehaviour
 		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
 		setHallwayParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, false);
 		setTunnelParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, 1 + this.dungeonDepth, 5 + this.dungeonDepth);
+		setOffshootParams(5 + this.dungeonDepth, 15 + this.dungeonDepth, 5 + this.dungeonDepth, 30);
+		setTileParams(50, 50, 50);
+		setMiscParams(40, 70, 100);
+	}
+
+	public void testingParameters()
+	{
+		setBoardParams(2 + this.dungeonDepth, 4 + this.dungeonDepth, 1 + this.dungeonDepth, 999);
+		setRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth, true); // Previously, (5, 10, 5, 10, true);
+		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
+		setHallwayParams(6 + this.dungeonDepth, 8 + this.dungeonDepth, false);
+		setTunnelParams(6 + this.dungeonDepth, 8 + this.dungeonDepth, 1 + this.dungeonDepth, 3 + this.dungeonDepth);
 		setOffshootParams(5 + this.dungeonDepth, 15 + this.dungeonDepth, 5 + this.dungeonDepth, 30);
 		setTileParams(50, 50, 50);
 		setMiscParams(40, 70, 100);
@@ -1191,7 +1204,7 @@ public class BoardGenerator : MonoBehaviour
 		// For now, just use the normal room script
 		// TODO: specific changes for ending room
 		room(p);
-		
+
 		if (this.map[p.x, p.y].item != null)
 		{
 			Destroy(this.map[p.x, p.y].item);
