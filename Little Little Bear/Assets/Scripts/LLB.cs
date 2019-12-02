@@ -312,6 +312,8 @@ public class LLB : BasicEntity
 	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
 	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
 	                            yield return new WaitForSeconds(0.5f);
+	                            enemyList[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+	                            
 	                        }
 	                        else if (weaponType == 't')
 	                        {
