@@ -99,6 +99,7 @@ public class UIManager : MonoBehaviour {
 
                 break;
             case ClickType.Quit:
+                Debug.Log("Quitting game");
                 Application.Quit();
                 break;
 		}
