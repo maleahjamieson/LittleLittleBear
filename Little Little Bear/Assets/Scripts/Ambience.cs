@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Ambience : MonoBehaviour
 {
-    public AudioClip SoundClip;
+    public AudioClip ForestClip;
+    public AudioClip SwampClip;
+    public AudioClip CaveClip;
     public AudioSource SoundSource;
     public int depth;
     PlayerData playerData;
@@ -12,31 +14,35 @@ public class Ambience : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
-        SoundSource.clip = SoundClip;
-        depth = playerData.depth;
-    }
+        // playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
+        ForestClip = Resources.Load<AudioClip>("Sounds/forest");
+        SwampClip = Resources.Load<AudioClip>("Sounds/pond");
+        CaveClip = Resources.Load<AudioClip>("Sounds/cave");
+        depth = GameObject.Find("Player").GetComponent<LLB>().DungeonDepth;
 
-    // Update is called once per frame
-    void Update()
-    {
         if (depth < 4)
         {
-            SoundClip = Resources.Load<AudioClip>("Sounds/forest");
+            SoundSource.clip = ForestClip;
             SoundSource.volume = 0.1f;
             SoundSource.Play();
         }
-        else if(depth < 7)
+        else if (depth < 7)
         {
-            SoundClip = Resources.Load<AudioClip>("Sounds/pond");
+            SoundSource.clip = SwampClip;
             SoundSource.volume = 0.1f;
             SoundSource.Play();
         }
         else
         {
-            SoundClip = Resources.Load<AudioClip>("Sounds/cave");
+            SoundSource.clip = CaveClip;
             SoundSource.volume = 0.05f;
             SoundSource.Play();
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // asdf
     }
 }
