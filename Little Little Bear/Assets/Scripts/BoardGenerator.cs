@@ -364,9 +364,9 @@ public class BoardGenerator : MonoBehaviour
 	public void testingParameters()
 	{
 		// First, change the biome if we need to
-		if (this.dungeonDepth <= 3)
+		if (this.dungeonDepth <= 1)
 			this.biome = BiomeSet.FOREST;
-		else if (this.dungeonDepth <= 6)
+		else if (this.dungeonDepth <= 2)
 			this.biome = BiomeSet.SWAMP;
 		else
 			this.biome = BiomeSet.CAVE;
@@ -1592,7 +1592,7 @@ public class BoardGenerator : MonoBehaviour
 		g.dir = pickDir();
 
 		// If we've hit the final level, make the boss level instead and jump out
-		if (this.dungeonDepth > 9)
+		if (this.dungeonDepth > 3)
 		{
 			boss_arena(g);
 			make_walls();
