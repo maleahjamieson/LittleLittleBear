@@ -15,7 +15,6 @@ public class Music : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
         ForestClip = Resources.Load<AudioClip>("Sounds/forestMusic");
         SwampClip = Resources.Load<AudioClip>("Sounds/swampMusic");
         CaveClip = Resources.Load<AudioClip>("Sounds/caveMusic");
@@ -55,6 +54,6 @@ public class Music : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // asdf
+
     }
 }
