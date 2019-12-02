@@ -80,6 +80,8 @@ public class LLB : BasicEntity
             stamina = playerData.stamina;
             strength = playerData.strength;
             maxHealth = playerData.maxHealth;
+            ammo = playerData.ammo;
+            weaponType = playerData.weaponType;
 
             Inventory inv = gameObject.GetComponent<Inventory>();
             //inv.isFull = playerData.isFull;
@@ -99,15 +101,17 @@ public class LLB : BasicEntity
                     for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
                     {
                         // if (playerData.isFull[i])    //not full, pickup item
-                        if (!inv.isFull[i])
+                        // if (!inv.isFull[i])
+                        if (playerData.isFull[i] && !inv.isFull[i])
                         {
                             //if item is blueberry then this
                             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
-                            Debug.Log("Trying to put type "+ii.type+" in inventory");
+                            Debug.Log("Trying to put type "+ii.type+" in inventory at slot"+i);
                             switch (ii.type)
                             {
                                 case ItemType.RED_ANTS_BOTTLE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
+                                    button.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
                                     inv.isFull[i] = true;
                                     break;
                                 default:
@@ -116,42 +120,52 @@ public class LLB : BasicEntity
                                     break;
                                 case ItemType.BLUEBERRIES:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Blueberries");
+                                    button.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.POCKETKNIFE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
+                                    button.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.RAPIER:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
+                                    button.GetComponent<Item>().itemType = ItemType.RAPIER;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SKUNK_GAS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SkunkGas");
+                                    button.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SNAPS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Snaps");
+                                    button.GetComponent<Item>().itemType = ItemType.SNAPS;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.STICK_ROCK:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
+                                    button.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SUNFLOWER_SEED:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
+                                    button.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.THORN_VINE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/ThornVines");
+                                    button.GetComponent<Item>().itemType = ItemType.THORN_VINE;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.CARROT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Carrot");
+                                    button.GetComponent<Item>().itemType = ItemType.CARROT;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.TREAT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Treat"); // board.spr_Treat;
+                                    button.GetComponent<Item>().itemType = ItemType.TREAT;
                                     inv.isFull[i] = true;
                                     break;
                             }
@@ -165,9 +179,6 @@ public class LLB : BasicEntity
                     }
                 }
             }
-
-
-
         }
 
         else
@@ -177,6 +188,9 @@ public class LLB : BasicEntity
             health = maxHealth;
             stamina = 100;
             strength = 4;
+            ammo = 0;
+            weaponType = 'b';
+
 
             Inventory inv = gameObject.GetComponent<Inventory>();
 	        //setting 2nd slot to sunflower seeds always
@@ -312,6 +326,8 @@ public class LLB : BasicEntity
 	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
 	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
 	                            yield return new WaitForSeconds(0.5f);
+	                            enemyList[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+	                            
 	                        }
 	                        else if (weaponType == 't')
 	                        {
@@ -485,28 +501,6 @@ public class LLB : BasicEntity
                 board.map[x, y].tileType = TileSet.FLOOR;
             }
         }
-
-        // GameObject item = board.map[x, y].item;
-        // if (item == null)
-        //     Debug.Log("Nothing was found");
-        // else
-        // {
-        //     switch (item.GetComponent<Item>().itemType)
-        //     {
-        //         case 'a':
-        //             Debug.Log("Picked up ants in a bottle!");
-        //             break;
-        //         case 'b':
-        //             Debug.Log("Picked up blue berries!");
-        //             break;
-        //         case 's':
-        //             Debug.Log("Picked up skunk gas!");
-        //             break;
-        //         case 't':
-        //             Debug.Log("Picked up a treat!");
-        //             break;
-        //     }
-        // }
     }
 
     public void AttachSpriteToPosition()
@@ -644,6 +638,7 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        DungeonDepth++;
                         SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                         GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
