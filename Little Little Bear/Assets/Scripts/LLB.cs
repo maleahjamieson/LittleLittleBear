@@ -165,9 +165,6 @@ public class LLB : BasicEntity
                     }
                 }
             }
-
-
-
         }
 
         else
@@ -485,28 +482,6 @@ public class LLB : BasicEntity
                 board.map[x, y].tileType = TileSet.FLOOR;
             }
         }
-
-        // GameObject item = board.map[x, y].item;
-        // if (item == null)
-        //     Debug.Log("Nothing was found");
-        // else
-        // {
-        //     switch (item.GetComponent<Item>().itemType)
-        //     {
-        //         case 'a':
-        //             Debug.Log("Picked up ants in a bottle!");
-        //             break;
-        //         case 'b':
-        //             Debug.Log("Picked up blue berries!");
-        //             break;
-        //         case 's':
-        //             Debug.Log("Picked up skunk gas!");
-        //             break;
-        //         case 't':
-        //             Debug.Log("Picked up a treat!");
-        //             break;
-        //     }
-        // }
     }
 
     public void AttachSpriteToPosition()

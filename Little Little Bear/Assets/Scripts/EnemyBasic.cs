@@ -130,6 +130,11 @@ public class EnemyBasic : BasicEntity
                         mySpriteRenderer.flipX = false;
                     }
 
+                    if (board.map[currentX, currentY].tileType == TileSet.PIT)
+                    {
+                        StartCoroutine(Hurt(9999, 1));
+                    }
+
                     return true;
             }
         }
