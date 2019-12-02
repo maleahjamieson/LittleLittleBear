@@ -4,24 +4,53 @@ using UnityEngine;
 
 public class Music : MonoBehaviour
 {
-    public AudioClip MusicClip;
-    public AudioSource MusicSource;
+    public AudioClip ForestClip;
+    public AudioClip SwampClip;
+    public AudioClip CaveClip;
+    public AudioClip BearClip;
+    public AudioSource SoundSource;
     public int depth;
+    PlayerData playerData;
 
     // Start is called before the first frame update
     void Start()
     {
-        MusicSource.clip = MusicClip;
-        depth = GetComponent<LLB>().DungeonDepth;
+        // playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
+        ForestClip = Resources.Load<AudioClip>("Sounds/forestMusic");
+        SwampClip = Resources.Load<AudioClip>("Sounds/swampMusic");
+        CaveClip = Resources.Load<AudioClip>("Sounds/caveMusic");
+        BearClip = Resources.Load<AudioClip>("Sounds/bearMusic");
+        depth = GameObject.Find("Player").GetComponent<LLB>().DungeonDepth;
+
+        if (depth < 2)
+        {
+            SoundSource.clip = ForestClip;
+            SoundSource.volume = 0.1f;
+            SoundSource.Play();
+        }
+        else if (depth < 3)
+        {
+            SoundSource.clip = SwampClip;
+            SoundSource.volume = 0.1f;
+            SoundSource.Play();
+        }
+        else if (depth < 4)
+        {
+            SoundSource.clip = CaveClip;
+            SoundSource.volume = 0.1f;
+            SoundSource.Play();
+        }
+        else
+        {
+            SoundSource.clip = BearClip;
+            SoundSource.volume = 0.1f;
+            SoundSource.Play();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(depth < 4)
-        {
-            //MusicSource = Resources.Load<AudioSource>("/Sounds/forest1");
-            //MusicSource.Play();
-        }
+        // asdf
     }
 }

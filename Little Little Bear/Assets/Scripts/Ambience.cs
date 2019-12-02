@@ -20,13 +20,13 @@ public class Ambience : MonoBehaviour
         CaveClip = Resources.Load<AudioClip>("Sounds/cave");
         depth = GameObject.Find("Player").GetComponent<LLB>().DungeonDepth;
 
-        if (depth < 4)
+        if (depth < 2)
         {
             SoundSource.clip = ForestClip;
             SoundSource.volume = 0.1f;
             SoundSource.Play();
         }
-        else if (depth < 7)
+        else if (depth < 3)
         {
             SoundSource.clip = SwampClip;
             SoundSource.volume = 0.1f;
