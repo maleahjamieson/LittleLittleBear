@@ -99,7 +99,8 @@ public class LLB : BasicEntity
                     for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
                     {
                         // if (playerData.isFull[i])    //not full, pickup item
-                        if (!inv.isFull[i])
+                        // if (!inv.isFull[i])
+                        if (playerData.isFull[i])
                         {
                             //if item is blueberry then this
                             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);

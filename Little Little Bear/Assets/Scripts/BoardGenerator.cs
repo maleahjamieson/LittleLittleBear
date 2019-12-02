@@ -752,13 +752,17 @@ public class BoardGenerator : MonoBehaviour
 
 		switch(whichItem)
 		{
+			default:
+				Debug.Log("Error: unexpected item, aborting item creation...");
+				Destroy(tempItem);
+				return;
+				break;
 			// Red Ants Bottle
 			case 0:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_RedAntsBottle;
 				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
 			// Blueberries
-			default:
 			case 1:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Blueberries;
 				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
@@ -1166,7 +1170,7 @@ public class BoardGenerator : MonoBehaviour
 		// For now, just use the normal room script
 		// TODO: specific changes for starting room
 		room(p);
-		
+
 		if (this.map[p.x, p.y].entity != null)
 		{
 			if (this.EnemyList.Contains(this.map[p.x, p.y].entity))
