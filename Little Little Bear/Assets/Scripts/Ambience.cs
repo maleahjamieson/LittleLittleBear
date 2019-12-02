@@ -14,7 +14,6 @@ public class Ambience : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // playerData = GameObject.Find("GlobalManager").GetComponent<GlobalMan>().data;
         ForestClip = Resources.Load<AudioClip>("Sounds/forest");
         SwampClip = Resources.Load<AudioClip>("Sounds/pond");
         CaveClip = Resources.Load<AudioClip>("Sounds/cave");
@@ -46,6 +45,6 @@ public class Ambience : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // asdf
+        
     }
 }
