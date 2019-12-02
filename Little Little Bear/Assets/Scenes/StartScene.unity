@@ -688,7 +688,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -696,18 +696,21 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Credits:
 
-    David Cuno
+    Lead Programmer - Christopher Walen
 
-    Thomas Harrod
+    Sprite and Sound
+    System - David Cuno
 
-    Maleah Jamieson
+    UI and Save System - Thomas Harrod
 
-    Joseph Potter
+    Items and Inventory
+    - Maleah Jamieson
 
-    Christopher Walken
+    Player Character and Weapons - Joseph Potter
 
 
-    Created for COP 4331C Fall 2019
+    Created
+    for COP 4331C Fall 2019
 
 '
 --- !u!222 &386332131
