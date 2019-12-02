@@ -223,7 +223,7 @@ public class Item : MonoBehaviour
                 int xx = (int)(Random.value * board.getBoardWidth());
                 int yy = (int)(Random.value * board.getBoardHeight());
 
-                while (board.map[xx, yy].tileType != TileSet.FLOOR)
+                while (board.map[xx, yy].tileType != TileSet.FLOOR && board.map[xx, yy].entity == null)
                 {
                     xx = (int)(Random.value * board.getBoardWidth());
                     yy = (int)(Random.value * board.getBoardHeight());
