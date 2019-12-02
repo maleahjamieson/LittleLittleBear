@@ -192,6 +192,10 @@ public class Item : MonoBehaviour
             case ItemType.TREAT:
                 Debug.Log("what a treat");
                 LLB.GetComponent<LLB>().maxHealth = LLB.GetComponent<LLB>().maxHealth + 20;
+                if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
+                    LLB.GetComponent<LLB>().health = LLB.GetComponent<LLB>().maxHealth; // Only goes as high as max health
+                else
+                    LLB.GetComponent<LLB>().health += 20; // increase by 20
                 Destroy(gameObject);
                 break;
             case ItemType.STICK_ROCK:
