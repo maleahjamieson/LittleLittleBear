@@ -100,6 +100,7 @@ public class EnemyBasic : BasicEntity
                 case TileSet.ROCK:
                 case TileSet.WALL:
                 case TileSet.TUNNEL:
+                case TileSet.END_TILE:
                     Debug.Log("CONTAINS " + board.map[xDir, yDir].tileType);
                     //do nothing
                     return false;
@@ -284,22 +285,30 @@ public class EnemyBasic : BasicEntity
             dist[3] = (int)Mathf.Abs(Mathf.Abs(x) - Mathf.Abs(this.currentX - 1)) + Mathf.Abs(Mathf.Abs(y) - Mathf.Abs(this.currentY));
 
             // Check for walls
-            if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL || map[this.currentX, this.currentY-1].tileType == TileSet.TUNNEL)
+            if (map[this.currentX, this.currentY-1].tileType == TileSet.WALL
+                || map[this.currentX, this.currentY-1].tileType == TileSet.TUNNEL
+                || map[this.currentX, this.currentY-1].tileType == TileSet.END_TILE)
             {
                 // Debug.Log("S-Wall");
                 dist[0] = 9999.9f;
             }
-            if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL || map[this.currentX, this.currentY+1].tileType == TileSet.TUNNEL)
+            if (map[this.currentX, this.currentY+1].tileType == TileSet.WALL
+                || map[this.currentX, this.currentY+1].tileType == TileSet.TUNNEL
+                || map[this.currentX, this.currentY+1].tileType == TileSet.END_TILE)
             {
                 // Debug.Log("N-Wall");
                 dist[1] = 9999.9f;
             }
-            if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL || map[this.currentX+1, this.currentY].tileType == TileSet.TUNNEL)
+            if (map[this.currentX+1, this.currentY].tileType == TileSet.WALL
+                || map[this.currentX+1, this.currentY].tileType == TileSet.TUNNEL
+                || map[this.currentX+1, this.currentY].tileType == TileSet.END_TILE)
             {
                 // Debug.Log("E-Wall");
                 dist[2] = 9999.9f;
             }
-            if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL || map[this.currentX-1, this.currentY].tileType == TileSet.TUNNEL)
+            if (map[this.currentX-1, this.currentY].tileType == TileSet.WALL
+                || map[this.currentX-1, this.currentY].tileType == TileSet.TUNNEL
+                || map[this.currentX-1, this.currentY].tileType == TileSet.END_TILE)
             {
                 // Debug.Log("W-Wall");
                 dist[3] = 9999.9f;
