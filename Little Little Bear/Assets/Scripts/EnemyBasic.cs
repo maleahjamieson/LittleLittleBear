@@ -12,7 +12,8 @@ public class EnemyBasic : BasicEntity
     public enum enemyType : short
     {
         Empty = -1, Mantis = 0, Falcon = 1,
-        Bear = 2
+        Snake, BlueHeron, Spider, Salamander,
+        Bear
     };
 
     protected override void Start()
@@ -47,8 +48,35 @@ public class EnemyBasic : BasicEntity
                 this.range = 1;
                 this.health = 12 + (depth * 2);
                 break;
+            case enemyType.Snake:
+                this.animator.SetTrigger("Snake");
+                this.strength = 7 + ((int)(depth / 2));
+                this.range = 1;
+                this.health = 10 + depth;
+                break;
+            case enemyType.BlueHeron:
+                this.animator.SetTrigger("BlueHeron");
+                this.strength = 10 + depth;
+                this.range = 1;
+                this.health = 14 + (depth * 2);
+                break;
+            case enemyType.Spider:
+                this.animator.SetTrigger("Spider");
+                this.strength = 9 + ((int)(depth / 2));
+                this.range = 1;
+                this.health = 12 + depth;
+                break;
+            case enemyType.Salamander:
+                this.animator.SetTrigger("Salamander");
+                this.strength = 10 + depth;
+                this.range = 1;
+                this.health = 16 + (depth * 2);
+                break;
             case enemyType.Bear:
                 this.animator.SetTrigger("Bear");
+                this.strength = 20;
+                this.range = 1;
+                this.health = 200;
                 break;
             default:
                 this.animator.SetTrigger("Mantis");
