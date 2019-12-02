@@ -355,6 +355,7 @@ public class LLB : BasicEntity
 	         }
 	         else
 	         {
+                Debug.Log("*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&*&");
 	            GameObject enemy = null;
 	            switch (attackDir)
 	            {
@@ -368,7 +369,7 @@ public class LLB : BasicEntity
 	                    enemy = board.map[currentX, currentY + 1].entity;
 	                    break;
 	                case 'd':
-	                    enemy = board.map[currentX, currentY - 1].entity;
+	                    enemy = board.map[currentX, currentY - 1].entity; // Breaks the game
 	                    break;
 	            }
 	           
