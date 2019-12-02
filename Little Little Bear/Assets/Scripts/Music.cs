@@ -26,24 +26,28 @@ public class Music : MonoBehaviour
         {
             SoundSource.clip = ForestClip;
             SoundSource.volume = 0.1f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
         else if (depth < 3)
         {
             SoundSource.clip = SwampClip;
             SoundSource.volume = 0.1f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
         else if (depth < 4)
         {
             SoundSource.clip = CaveClip;
-            SoundSource.volume = 0.1f;
+            SoundSource.volume = 0.25f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
         else
         {
             SoundSource.clip = BearClip;
             SoundSource.volume = 0.1f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
     }
