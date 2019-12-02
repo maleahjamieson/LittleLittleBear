@@ -1935,6 +1935,47 @@ public class BoardGenerator : MonoBehaviour
 										tile.GetComponent<SpriteRenderer>().sprite = this.spr_SwampStart;
 									else if (this.biome == BiomeSet.CAVE)
 										tile.GetComponent<SpriteRenderer>().sprite = this.spr_CaveStart;
+
+									// Check immediate tiles around the start tile and remove any enemies that are there
+									// This hardcodes the solution to the problem of enemies spawning adjacent to player at
+									// start and upon attacking them in a finished build of the game, all control of the 
+									// player breaks
+
+									// Above
+									if (this.map[x, y+1].entity != null)
+									{
+										if (this.EnemyList.Contains(this.map[x, y+1].entity))
+											this.EnemyList.Remove(this.map[x, y+1].entity);
+
+										Destroy(this.map[x, y+1].entity);
+										this.map[x, y+1].entity = null;
+									}
+									// Below
+									if (this.map[x, y-1].entity != null)
+									{
+										if (this.EnemyList.Contains(this.map[x, y-1].entity))
+											this.EnemyList.Remove(this.map[x, y-1].entity);
+
+										Destroy(this.map[x, y+1].entity);
+										this.map[x, y-1].entity = null;
+									}
+									// Left and right
+									if (this.map[x+1, y].entity != null)
+									{
+										if (this.EnemyList.Contains(this.map[x+1, y].entity))
+											this.EnemyList.Remove(this.map[x+1, y].entity);
+
+										Destroy(this.map[x+1, y].entity);
+										this.map[x, y+1].entity = null;
+									}
+									if (this.map[x-1, y].entity != null)
+									{
+										if (this.EnemyList.Contains(this.map[x-1, y].entity))
+											this.EnemyList.Remove(this.map[x-1, y].entity);
+
+										Destroy(this.map[x-1, y].entity);
+										this.map[x, y-1].entity = null;
+									}
 									break;
 								case TileSet.END_TILE:
 									if (this.biome == BiomeSet.FOREST)
