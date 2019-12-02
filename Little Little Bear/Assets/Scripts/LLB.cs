@@ -60,6 +60,7 @@ public class LLB : BasicEntity
         checkInput = true;
         staminaUsed = false;
         invEquipped = 0; // Start on weapon slot
+        GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
         weaponType = 'b'; // Start with a carrot which is blunt
@@ -888,8 +889,37 @@ public class LLB : BasicEntity
         	invEquipped += 1;
         	if (invEquipped > 3)
         		invEquipped = 0;
-            GetComponent<Inventory>().slots[invEquipped].GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/invSlotHighlighted");
-            StartCoroutine(wait2Move('e', 0.1f));
+
+            if (invEquipped == 0)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 1)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 2)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 3)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+            }
+
+        	StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (sDown)
         {
@@ -897,8 +927,37 @@ public class LLB : BasicEntity
         	invEquipped -= 1;
         	if (invEquipped < 0)
         		invEquipped = 3;
-            GetComponent<Inventory>().slots[invEquipped].GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/invSlotHighlighted");
-            StartCoroutine(wait2Move('e', 0.1f));
+
+            if (invEquipped == 0)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 1)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 2)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 3)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+            }
+
+        	StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (moveLeft)
         {
