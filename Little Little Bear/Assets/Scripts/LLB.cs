@@ -696,6 +696,7 @@ public class LLB : BasicEntity
         	{	
         		sUp = true;
         		checkInput = false;
+
         		Debug.Log("UP");
         	}
         	else if (scroll < 0f) // down
