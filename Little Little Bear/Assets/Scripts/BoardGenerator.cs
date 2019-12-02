@@ -1274,6 +1274,7 @@ public class BoardGenerator : MonoBehaviour
 		this.map[p.x, p.y].entity = boss;
 		boss.GetComponent<EnemyBasic>().currentX = p.x;
 		boss.GetComponent<EnemyBasic>().currentY = p.y;
+		boss.transform.position = new Vector2(p.x, p.y);
 		boss.GetComponent<EnemyBasic>().makeAlert();
 		this.EnemyList.Add(boss);
 	}
