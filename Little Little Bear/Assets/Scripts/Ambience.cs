@@ -20,7 +20,6 @@ public class Ambience : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //depth = GetComponent<LLB>().DungeonDepth;
         if (depth < 4)
         {
             SoundClip = Resources.Load<AudioClip>("Sounds/forest");
