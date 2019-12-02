@@ -332,8 +332,8 @@ public class BoardGenerator : MonoBehaviour
 	{
 		this.dungeonDepth = depth;
 
-		updateDungeonDepth();
-		// testingParameters();
+		// updateDungeonDepth();
+		testingParameters();
 	}
 
 	public void setDefaultParameters()
@@ -363,6 +363,14 @@ public class BoardGenerator : MonoBehaviour
 
 	public void testingParameters()
 	{
+		// First, change the biome if we need to
+		if (this.dungeonDepth <= 3)
+			this.biome = BiomeSet.FOREST;
+		else if (this.dungeonDepth <= 6)
+			this.biome = BiomeSet.SWAMP;
+		else
+			this.biome = BiomeSet.CAVE;
+
 		setBoardParams(2 + this.dungeonDepth, 4 + this.dungeonDepth, 1 + this.dungeonDepth, 999);
 		setRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth, true); // Previously, (5, 10, 5, 10, true);
 		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
@@ -839,9 +847,16 @@ public class BoardGenerator : MonoBehaviour
 		// Debug.Log("Picked width and height: "+_width+", "+_height);
 
 		// Strings that point to Enemy Prefabs
-		string[] enemyArray = new string[2];
+		string[] enemyArray = new string[6];
+		// Forest
 		enemyArray[0] = "MantisEnemy";
 		enemyArray[1] = "FalconEnemy";
+		// Swamp
+		enemyArray[2] = "SnakeEnemy";
+		enemyArray[3] = "BlueHeronEnemy";
+		// Cave
+		enemyArray[4] = "SpiderEnemy";
+		enemyArray[5] = "SalamanderEnemy";
 
 		int lBound, rBound, uBound, dBound;
 
@@ -891,7 +906,15 @@ public class BoardGenerator : MonoBehaviour
 
 						// Create an enemy
 						// Picking index from enemyArray
-						int enemyTypeRand = Random.Range(0,2);
+						int enemyTypeRand = 0;
+
+						if (biome == BiomeSet.FOREST)
+							enemyTypeRand = Random.Range(0,2);
+						else if (biome == BiomeSet.SWAMP)
+							enemyTypeRand = Random.Range(2, 4);
+						else
+							enemyTypeRand = Random.Range(4, 6);
+
 						EnemyBasic.enemyType enemyChosenType = (EnemyBasic.enemyType) enemyTypeRand;
 
 						// Making enemy object for the board, then setting it's stats based on enemyType
@@ -1244,6 +1267,15 @@ public class BoardGenerator : MonoBehaviour
 		}
 
 		this.map[p.x, p.y + 10].tileType = TileSet.START_TILE;
+
+		// Spawn the boss
+		GameObject boss = (GameObject)Instantiate(GameObject.Find("BearBoss"), new Vector2(p.x, p.y), Quaternion.identity);
+		boss.GetComponent<EnemyBasic>().Set(EnemyBasic.enemyType.Bear, this.dungeonDepth);
+		this.map[p.x, p.y].entity = boss;
+		boss.GetComponent<EnemyBasic>().currentX = p.x;
+		boss.GetComponent<EnemyBasic>().currentY = p.y;
+		boss.GetComponent<EnemyBasic>().makeAlert();
+		this.EnemyList.Add(boss);
 	}
 
 	// Done [ ]
