@@ -61,9 +61,9 @@ public class EnemyBasic : BasicEntity
     private IEnumerator Attack()
     {
         BasicEntity LLB = gameManager.FindObjectOfType<LLB>();
-        Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
-        StartCoroutine(LLB.GetComponent<LLB>().Hurt(strength, 1)); // Inflict damage
-        Debug.Log("LLB HP: " + LLB.health);
+        //Debug.Log(this.type + " at x: " + this.currentX + " y: " + this.currentY + " hit LLB who is at x: " + LLB.currentX + " y: " + LLB.currentY + " for: " + this.strength);
+        StartCoroutine(LLB.GetComponent<LLB>().Hurt(this.strength, 1)); // Inflict damage
+        Debug.Log("LLB HP is now: " + LLB.health);
         yield return new WaitForSeconds(0f);
     }
     /*public void Launched(int distance, char dir) // blunt special move
