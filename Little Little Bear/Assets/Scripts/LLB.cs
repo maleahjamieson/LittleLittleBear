@@ -80,6 +80,8 @@ public class LLB : BasicEntity
             stamina = playerData.stamina;
             strength = playerData.strength;
             maxHealth = playerData.maxHealth;
+            ammo = playerData.ammo;
+            weaponType = playerData.weaponType;
 
             Inventory inv = gameObject.GetComponent<Inventory>();
             //inv.isFull = playerData.isFull;
@@ -175,6 +177,9 @@ public class LLB : BasicEntity
             health = maxHealth;
             stamina = 100;
             strength = 4;
+            ammo = 0;
+            weaponType = 'b';
+
 
             Inventory inv = gameObject.GetComponent<Inventory>();
 	        //setting 2nd slot to sunflower seeds always
@@ -310,6 +315,8 @@ public class LLB : BasicEntity
 	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
 	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
 	                            yield return new WaitForSeconds(0.5f);
+	                            enemyList[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+	                            
 	                        }
 	                        else if (weaponType == 't')
 	                        {
@@ -620,6 +627,7 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        DungeonDepth++;
                         SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                         GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);

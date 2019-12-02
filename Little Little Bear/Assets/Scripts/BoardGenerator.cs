@@ -1631,7 +1631,10 @@ public class BoardGenerator : MonoBehaviour
             {
                 temp.GetComponent<BasicEntity>().stunnedTurns -= 1;
                 if (temp.GetComponent<BasicEntity>().stunnedTurns < 0)
+                {
+                	temp.GetComponent<SpriteRenderer>().color = Color.white;
                     temp.GetComponent<BasicEntity>().stunned = false;
+                }
             }
 		}
 	}

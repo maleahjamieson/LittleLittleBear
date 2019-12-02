@@ -196,18 +196,26 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.STICK_ROCK:
                 Debug.Log("used stick rock (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.RAPIER:
                 Debug.Log("used sword (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.CARROT:
                 Debug.Log("used carrot (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.SNAPS:
