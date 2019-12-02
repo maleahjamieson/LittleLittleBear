@@ -700,6 +700,7 @@ public class LLB : BasicEntity
         	{	
         		sUp = true;
         		checkInput = false;
+
         		Debug.Log("UP");
         	}
         	else if (scroll < 0f) // down
@@ -892,7 +893,8 @@ public class LLB : BasicEntity
         	invEquipped += 1;
         	if (invEquipped > 3)
         		invEquipped = 0;
-        	StartCoroutine(wait2Move('e', 0.1f));
+            GetComponent<Inventory>().slots[invEquipped].GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/invSlotHighlighted");
+            StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (sDown)
         {
@@ -900,7 +902,8 @@ public class LLB : BasicEntity
         	invEquipped -= 1;
         	if (invEquipped < 0)
         		invEquipped = 3;
-        	StartCoroutine(wait2Move('e', 0.1f));
+            GetComponent<Inventory>().slots[invEquipped].GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/invSlotHighlighted");
+            StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (moveLeft)
         {
