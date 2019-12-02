@@ -12,6 +12,14 @@ public class Highlight : MonoBehaviour
     public GameObject LLB;
     public GameObject[] tileList;
 
+    // public enum TileType
+    // {
+    //     NOTHING = -1,
+    //     FWall = "tile_Forest_Wall", FTun = "tile_Forest_Tunnel", 
+    //     SWall = "tile_Swamp_Wall", STun = "tile_SwampTunnel", 
+    //     CWall = "tile_Cave_Wall", CTun = "tile_Cave_Tunnel"
+    // };
+
     public void Start()
     {
         for(int i = 0; i < tileList.Length; i++) // hide all the tiles
@@ -38,6 +46,9 @@ public class Highlight : MonoBehaviour
                     Aim(d);
                     
                     break;
+                // case 'm': // Mouse-over highlight
+                    
+                //     break;
                 default: // Range, thrust, blunt and basic
                 for (int i = 0; i < r; i++) // runs through range and places in a line
                 {
@@ -96,7 +107,6 @@ public class Highlight : MonoBehaviour
                     }
 
                 break;
-
             default:
             for (int i = 0; i < range; i++)
             {

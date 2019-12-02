@@ -333,6 +333,7 @@ public class BoardGenerator : MonoBehaviour
 		this.dungeonDepth = depth;
 
 		updateDungeonDepth();
+		// testingParameters();
 	}
 
 	public void setDefaultParameters()
@@ -355,6 +356,18 @@ public class BoardGenerator : MonoBehaviour
 		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
 		setHallwayParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, false);
 		setTunnelParams(6 + this.dungeonDepth, 12 + this.dungeonDepth, 1 + this.dungeonDepth, 5 + this.dungeonDepth);
+		setOffshootParams(5 + this.dungeonDepth, 15 + this.dungeonDepth, 5 + this.dungeonDepth, 30);
+		setTileParams(50, 50, 50);
+		setMiscParams(40, 70, 100);
+	}
+
+	public void testingParameters()
+	{
+		setBoardParams(2 + this.dungeonDepth, 4 + this.dungeonDepth, 1 + this.dungeonDepth, 999);
+		setRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth, true); // Previously, (5, 10, 5, 10, true);
+		setSecretRoomParams(4 + this.dungeonDepth, 7 + this.dungeonDepth, 4 + this.dungeonDepth, 7 + this.dungeonDepth);
+		setHallwayParams(6 + this.dungeonDepth, 8 + this.dungeonDepth, false);
+		setTunnelParams(6 + this.dungeonDepth, 8 + this.dungeonDepth, 1 + this.dungeonDepth, 3 + this.dungeonDepth);
 		setOffshootParams(5 + this.dungeonDepth, 15 + this.dungeonDepth, 5 + this.dungeonDepth, 30);
 		setTileParams(50, 50, 50);
 		setMiscParams(40, 70, 100);
@@ -671,7 +684,6 @@ public class BoardGenerator : MonoBehaviour
 						this.tileCounter++;
 						this.digCounter++;
 					}
-					///*
 					else
 					{
 						// Move past the used tiles
@@ -706,7 +718,6 @@ public class BoardGenerator : MonoBehaviour
 							this.digCounter++;
 						}
 					}
-					//*/
 				}
 			}
 
@@ -752,13 +763,17 @@ public class BoardGenerator : MonoBehaviour
 
 		switch(whichItem)
 		{
+			default:
+				Debug.Log("Error: unexpected item, aborting item creation...");
+				Destroy(tempItem);
+				return;
+				// break;
 			// Red Ants Bottle
 			case 0:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_RedAntsBottle;
 				tempItem.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
 				break;
 			// Blueberries
-			default:
 			case 1:
 				tempItem.GetComponent<SpriteRenderer>().sprite = spr_Blueberries;
 				tempItem.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
@@ -810,7 +825,7 @@ public class BoardGenerator : MonoBehaviour
 		}
 
 		tempItem.GetComponent<SpriteRenderer>().sortingOrder = 1;
-		tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
+		//tempItem.GetComponent<Item>().generateWeaponStats(this.dungeonDepth);
 		this.map[xx, yy].item = tempItem;
 	}
 
@@ -1166,6 +1181,16 @@ public class BoardGenerator : MonoBehaviour
 		// For now, just use the normal room script
 		// TODO: specific changes for starting room
 		room(p);
+
+		if (this.map[p.x, p.y].entity != null)
+		{
+			if (this.EnemyList.Contains(this.map[p.x, p.y].entity))
+				this.EnemyList.Remove(this.map[p.x, p.y].entity);
+
+			Destroy(this.map[p.x, p.y].entity);
+			this.map[p.x, p.y].entity = null;
+		}
+
 		this.map[p.x, p.y].tileType = TileSet.START_TILE;
 
 		this.roomCounter++;
@@ -1177,6 +1202,22 @@ public class BoardGenerator : MonoBehaviour
 		// For now, just use the normal room script
 		// TODO: specific changes for ending room
 		room(p);
+
+		if (this.map[p.x, p.y].item != null)
+		{
+			Destroy(this.map[p.x, p.y].item);
+			this.map[p.x, p.y].item = null;
+		}
+
+		if (this.map[p.x, p.y].entity != null)
+		{
+			if (this.EnemyList.Contains(this.map[p.x, p.y].entity))
+				this.EnemyList.Remove(this.map[p.x, p.y].entity);
+
+			Destroy(this.map[p.x, p.y].entity);
+			this.map[p.x, p.y].entity = null;
+		}
+
 		this.map[p.x, p.y].tileType = TileSet.END_TILE;
 
 		this.roomCounter++;
@@ -1617,7 +1658,10 @@ public class BoardGenerator : MonoBehaviour
             {
                 temp.GetComponent<BasicEntity>().stunnedTurns -= 1;
                 if (temp.GetComponent<BasicEntity>().stunnedTurns < 0)
+                {
+                	temp.GetComponent<SpriteRenderer>().color = Color.white;
                     temp.GetComponent<BasicEntity>().stunned = false;
+                }
             }
 		}
 	}

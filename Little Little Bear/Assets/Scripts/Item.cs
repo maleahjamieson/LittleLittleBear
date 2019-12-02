@@ -38,12 +38,38 @@ public class Item : MonoBehaviour
 	// Start is called before the first frame update
     void Start()
     {
-        this.damage = 4;
-        this.damageType = 'b';
-        this.range = 1;
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
         LLB = GameObject.Find("Player");
-        // playerHealth = LLB.GetComponent<LLB>().health;
+        int depth = LLB.GetComponent<LLB>().DungeonDepth;
+        int modifier;
+
+        switch (this.itemType)
+        {
+            case ItemType.STICK_ROCK:
+            case ItemType.CARROT:
+                this.damageType = 'b';
+                this.damage = 6;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            case ItemType.RAPIER:
+                this.damageType = 't';
+                this.damage = 4;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            case ItemType.POCKETKNIFE:
+                this.damageType = 's';
+                this.damage = 5;
+                this.range = 1;
+                modifier = (int)(depth + (Random.value * (depth / 2)));
+                this.damage += modifier;
+                break;
+            default:
+                break;
+        }
     }
 
     public void generateWeaponStats(int depth)
@@ -89,18 +115,23 @@ public class Item : MonoBehaviour
         }
         else if(this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT || this.itemType == ItemType.POCKETKNIFE) //if weapon
         {
-            //put weapon in first slot and destroy on ground
-            inventory.isFull[0] = true;
-            inventory.items[0].damage = this.damage;
-            inventory.items[0].damageType = this.damageType;
-            inventory.items[0].range = this.range;
-            inventory.items[0].type = this.itemType;
-            //adds item button to slot
-            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
-            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
-            button.GetComponent<Item>().itemType = this.itemType;
-            LLB.GetComponent<LLB>().weaponType = this.damageType;
-            Destroy(gameObject);
+        	if(!inventory.isFull[0])
+        	{
+        		//put weapon in first slot and destroy on ground
+	            inventory.isFull[0] = true;
+	            inventory.items[0].damage = this.damage;
+                LLB.GetComponent<LLB>().strength = this.damage;
+                inventory.items[0].damageType = this.damageType;
+                LLB.GetComponent<LLB>().weaponType = this.damageType;
+                inventory.items[0].range = this.range;
+	            inventory.items[0].type = this.itemType;
+	            //adds item button to slot
+	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[0].transform, false);
+	            button.GetComponent<Image>().sprite = GetComponent<SpriteRenderer>().sprite;
+	            button.GetComponent<Item>().itemType = this.itemType;
+	            LLB.GetComponent<LLB>().weaponType = this.damageType;
+	            Destroy(gameObject);
+        	}
         }
         else
         {
@@ -111,11 +142,10 @@ public class Item : MonoBehaviour
     	            Debug.Log("Picked up item");
     	            //add item
     	            inventory.isFull[i] = true;
-
-                    inventory.items[i].damage = this.damage;
-                    inventory.items[i].damageType = this.damageType;
-                    inventory.items[i].range = this.range;
                     inventory.items[i].type = this.itemType;
+
+                    if (this.itemType == ItemType.POCKETKNIFE || this.itemType == ItemType.RAPIER || this.itemType == ItemType.STICK_ROCK || this.itemType == ItemType.CARROT)
+                        break;
     	            
     	            //adds item button to slot
     	            GameObject button = Instantiate(GameObject.Find("ButtonItem"), inventory.slots[i].transform, false);
@@ -143,6 +173,10 @@ public class Item : MonoBehaviour
                 Debug.Log("ants everywhere (no function rn)");
                 Destroy(gameObject);
                 break;
+            case ItemType.THORN_VINE: // ants
+                Debug.Log("thorns (no function rn)");
+                Destroy(gameObject);
+                break;
             case ItemType.BLUEBERRIES: // berry
                 Debug.Log("munchin a blueberry");
                 if (LLB.GetComponent<LLB>().health >= (LLB.GetComponent<LLB>().maxHealth - 20))
@@ -162,18 +196,26 @@ public class Item : MonoBehaviour
                 break;
             case ItemType.STICK_ROCK:
                 Debug.Log("used stick rock (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.RAPIER:
                 Debug.Log("used sword (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.CARROT:
                 Debug.Log("used carrot (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.POCKETKNIFE:
                 Debug.Log("used knife (no function rn)");
+                LLB.GetComponent<LLB>().strength = 4;
+                LLB.GetComponent<LLB>().weaponType = 'b';
                 Destroy(gameObject);
                 break;
             case ItemType.SNAPS:
@@ -181,7 +223,7 @@ public class Item : MonoBehaviour
                 int xx = (int)(Random.value * board.getBoardWidth());
                 int yy = (int)(Random.value * board.getBoardHeight());
 
-                while (board.map[xx, yy].tileType != TileSet.FLOOR)
+                while (board.map[xx, yy].tileType != TileSet.FLOOR && board.map[xx, yy].entity == null)
                 {
                     xx = (int)(Random.value * board.getBoardWidth());
                     yy = (int)(Random.value * board.getBoardHeight());
@@ -204,6 +246,12 @@ public class Item : MonoBehaviour
                 break;
         }
     }
+
+    // Update is called once per frame
+    // void Update () 
+    // {
+
+    // }
 
     
 }

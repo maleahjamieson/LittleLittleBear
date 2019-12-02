@@ -60,9 +60,10 @@ public class LLB : BasicEntity
         checkInput = true;
         staminaUsed = false;
         invEquipped = 0; // Start on weapon slot
+        GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
         range = 10; // base range on range weapon. I dont know if this will ever change
         attackDir = 'r';
-        weaponType = 's'; // Start with a carrot which is blunt
+        weaponType = 'b'; // Start with a carrot which is blunt
         maxHealth = 100;
         health = maxHealth;
         stamina = 100;
@@ -80,6 +81,8 @@ public class LLB : BasicEntity
             stamina = playerData.stamina;
             strength = playerData.strength;
             maxHealth = playerData.maxHealth;
+            ammo = playerData.ammo;
+            weaponType = playerData.weaponType;
 
             Inventory inv = gameObject.GetComponent<Inventory>();
             //inv.isFull = playerData.isFull;
@@ -99,16 +102,17 @@ public class LLB : BasicEntity
                     for (int i = 0; i < inv.slots.Length; i++) //checking if inventory is full
                     {
                         // if (playerData.isFull[i])    //not full, pickup item
-                        if (!inv.isFull[i])
+                        // if (!inv.isFull[i])
+                        if (playerData.isFull[i] && !inv.isFull[i])
                         {
                             //if item is blueberry then this
                             GameObject button = Instantiate(GameObject.Find("ButtonItem"), inv.slots[i].transform, false);
-                            Debug.Log("Trying to put type "+ii.type+" in inventory");
+                            Debug.Log("Trying to put type "+ii.type+" in inventory at slot"+i);
                             switch (ii.type)
                             {
                                 case ItemType.RED_ANTS_BOTTLE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/RedAntsBottle");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.RED_ANTS_BOTTLE;
                                     inv.isFull[i] = true;
                                     break;
                                 default:
@@ -117,55 +121,52 @@ public class LLB : BasicEntity
                                     break;
                                 case ItemType.BLUEBERRIES:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Blueberries");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.BLUEBERRIES;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.POCKETKNIFE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/PocketKnife");
-                                    button.GetComponent<Item>().itemType = ii.type;
-
+                                    button.GetComponent<Item>().itemType = ItemType.POCKETKNIFE;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.RAPIER:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Rapier");
-                                    button.GetComponent<Item>().itemType = ii.type;
-
+                                    button.GetComponent<Item>().itemType = ItemType.RAPIER;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SKUNK_GAS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SkunkGas");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.SKUNK_GAS;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SNAPS:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Snaps");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.SNAPS;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.STICK_ROCK:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/StickRock");
-                                    button.GetComponent<Item>().itemType = ii.type;
-                                    
+                                    button.GetComponent<Item>().itemType = ItemType.STICK_ROCK;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.SUNFLOWER_SEED:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/SunflowerSeed");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.SUNFLOWER_SEED;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.THORN_VINE:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/ThornVines");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.THORN_VINE;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.CARROT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Carrot");
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.CARROT;
                                     inv.isFull[i] = true;
                                     break;
                                 case ItemType.TREAT:
                                     button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/Items/Treat"); // board.spr_Treat;
-                                    button.GetComponent<Item>().itemType = ii.type;
+                                    button.GetComponent<Item>().itemType = ItemType.TREAT;
                                     inv.isFull[i] = true;
                                     break;
                             }
@@ -179,9 +180,6 @@ public class LLB : BasicEntity
                     }
                 }
             }
-
-
-
         }
 
         else
@@ -191,6 +189,9 @@ public class LLB : BasicEntity
             health = maxHealth;
             stamina = 100;
             strength = 4;
+            ammo = 0;
+            weaponType = 'b';
+
 
             Inventory inv = gameObject.GetComponent<Inventory>();
 	        //setting 2nd slot to sunflower seeds always
@@ -322,15 +323,17 @@ public class LLB : BasicEntity
 	                        if (weaponType == 'b') // blunt
 	                        {
 	                            Debug.Log("Blunt");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength * 2, 1)); // Inflict damage
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength * 2, 1)); // Inflict damage
 	                            enemyList[i].GetComponent<EnemyBasic>().stunned = true;
 	                            enemyList[i].GetComponent<EnemyBasic>().stunnedTurns = 1; // For now only 1
 	                            yield return new WaitForSeconds(0.5f);
+	                            enemyList[i].GetComponent<SpriteRenderer>().color = Color.yellow;
+	                            
 	                        }
 	                        else if (weaponType == 't')
 	                        {
 	                            Debug.Log("Thrust");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, Random.Range(2, 5))); // Inflict damage 2-4 times
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength, Random.Range(2, 5))); // Inflict damage 2-4 times
 	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
 	                                yield return new WaitForSeconds(0f);
 	                        }
@@ -338,7 +341,7 @@ public class LLB : BasicEntity
 	                        {
 
 	                            Debug.Log("Slice");
-	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage 2-4 times
+	                            StartCoroutine(enemyList[i].GetComponent<EnemyBasic>().Hurt(this.strength, 1)); // Inflict damage 2-4 times
 	                            while (enemyList[i].GetComponent<EnemyBasic>().flash)
 	                                yield return new WaitForSeconds(0f);
 	                        }
@@ -371,7 +374,7 @@ public class LLB : BasicEntity
 	           
 	            if (enemy != null)
 	            {
-	                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(strength, 1)); // Inflict damage
+	                StartCoroutine(enemy.GetComponent<EnemyBasic>().Hurt(this.strength, 1)); // Inflict damage
 	            }
 	            else
 	            {
@@ -465,8 +468,10 @@ public class LLB : BasicEntity
 			if(missed)
 			{
 				enemyLocation = missPos;
+				projectile.SetActive(true);
 				while(rangeWait) // wait for projectile
 						yield return null;
+				projectile.SetActive(false);
 			}
 
         }
@@ -497,28 +502,6 @@ public class LLB : BasicEntity
                 board.map[x, y].tileType = TileSet.FLOOR;
             }
         }
-
-        // GameObject item = board.map[x, y].item;
-        // if (item == null)
-        //     Debug.Log("Nothing was found");
-        // else
-        // {
-        //     switch (item.GetComponent<Item>().itemType)
-        //     {
-        //         case 'a':
-        //             Debug.Log("Picked up ants in a bottle!");
-        //             break;
-        //         case 'b':
-        //             Debug.Log("Picked up blue berries!");
-        //             break;
-        //         case 's':
-        //             Debug.Log("Picked up skunk gas!");
-        //             break;
-        //         case 't':
-        //             Debug.Log("Picked up a treat!");
-        //             break;
-        //     }
-        // }
     }
 
     public void AttachSpriteToPosition()
@@ -656,6 +639,7 @@ public class LLB : BasicEntity
                     if (board.map[xDir, yDir].tileType == TileSet.END_TILE)
                     {
                         gameManager.instance.dungeonDepth++;
+                        DungeonDepth++;
                         SaveData.SavePlayer(gameManager.instance.LLB.GetComponent<LLB>(), gameManager.instance.LLB.GetComponent<Inventory>());
                         GlobalMan.instance.data = SaveData.LoadPlayer();
                         gameManager.instance.LoadScene(1);
@@ -678,6 +662,7 @@ public class LLB : BasicEntity
         ammoCounter.text = "Ammo: " + ammo;
         /*
         Debug.Log("Running pickup function");
+
         for(int i = 0; i < inventory.slots.Length; i++) //checking if inventory is full
         {
             if(inventory.isFull[i] == false)    //not full, pickup item
@@ -725,19 +710,6 @@ public class LLB : BasicEntity
             {
             	if (invEquipped == 0)
             	{
-            		switch(weaponType)
-            		{
-            			case 'b':
-            			animator.SetInteger("WeaponType", 0);
-            			break;
-            			case 't':
-            			animator.SetInteger("WeaponType", 1);
-            			break;
-            			case 's':
-            			animator.SetInteger("WeaponType", 2);
-            			break;
-            		}
-            		
             		attack = true; // player will attempt to attack
         			checkInput = false; //input has been read	 
             	}
@@ -916,6 +888,36 @@ public class LLB : BasicEntity
         	invEquipped += 1;
         	if (invEquipped > 3)
         		invEquipped = 0;
+
+            if (invEquipped == 0)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 1)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 2)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 3)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+            }
+
         	StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (sDown)
@@ -924,6 +926,36 @@ public class LLB : BasicEntity
         	invEquipped -= 1;
         	if (invEquipped < 0)
         		invEquipped = 3;
+
+            if (invEquipped == 0)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 1)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 2)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+            }
+            else if (invEquipped == 3)
+            {
+                GameObject.Find("slot1").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot2").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot3").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlot");
+                GameObject.Find("slot4").GetComponent<Image>().sprite = Resources.Load<Sprite>("Art/invSlotHighlighted");
+            }
+
         	StartCoroutine(wait2Move('e', 0.1f));
         }
         else if (moveLeft)
