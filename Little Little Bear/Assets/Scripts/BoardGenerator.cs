@@ -1191,6 +1191,22 @@ public class BoardGenerator : MonoBehaviour
 		// For now, just use the normal room script
 		// TODO: specific changes for ending room
 		room(p);
+		
+		if (this.map[p.x, p.y].item != null)
+		{
+			Destroy(this.map[p.x, p.y].item);
+			this.map[p.x, p.y].item = null;
+		}
+
+		if (this.map[p.x, p.y].entity != null)
+		{
+			if (this.EnemyList.Contains(this.map[p.x, p.y].entity))
+				this.EnemyList.Remove(this.map[p.x, p.y].entity);
+
+			Destroy(this.map[p.x, p.y].entity);
+			this.map[p.x, p.y].entity = null;
+		}
+
 		this.map[p.x, p.y].tileType = TileSet.END_TILE;
 
 		this.roomCounter++;
