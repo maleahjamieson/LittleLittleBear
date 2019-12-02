@@ -23,19 +23,22 @@ public class Ambience : MonoBehaviour
         if (depth < 2)
         {
             SoundSource.clip = ForestClip;
-            SoundSource.volume = 0.1f;
+            SoundSource.volume = 0.04f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
         else if (depth < 3)
         {
             SoundSource.clip = SwampClip;
-            SoundSource.volume = 0.1f;
+            SoundSource.volume = 0.02f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
         else
         {
             SoundSource.clip = CaveClip;
             SoundSource.volume = 0.05f;
+            SoundSource.loop = true;
             SoundSource.Play();
         }
     }
