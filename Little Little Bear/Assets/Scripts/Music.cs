@@ -54,6 +54,47 @@ public class Music : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        depth = GameObject.Find("Player").GetComponent<LLB>().DungeonDepth;
 
+        if (depth < 2)
+        {
+            if (SoundSource.clip != ForestClip)
+            {
+                SoundSource.clip = ForestClip;
+                SoundSource.volume = 0.1f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
+        else if (depth < 3)
+        {
+            if (SoundSource.clip != SwampClip)
+            {
+                SoundSource.clip = SwampClip;
+                SoundSource.volume = 0.1f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
+        else if (depth < 4)
+        {
+            if (SoundSource.clip != CaveClip)
+            {
+                SoundSource.clip = CaveClip;
+                SoundSource.volume = 0.25f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
+        else
+        {
+            if (SoundSource.clip != BearClip)
+            {
+                SoundSource.clip = BearClip;
+                SoundSource.volume = 0.1f;
+                SoundSource.loop = true;
+                SoundSource.Play();
+            }
+        }
     }
 }
