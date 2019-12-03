@@ -659,7 +659,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 20}
-  m_SizeDelta: {x: 450, y: 400}
+  m_SizeDelta: {x: 450, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &386332130
 MonoBehaviour:
@@ -701,44 +701,46 @@ MonoBehaviour:
 
     Maleah Jamieson
 
-    (Items, Inventory and Documentation)
+    (Items, inventory, documentation, UI, testing & merging)
 
 
     Assistant Manager:
 
     Joseph Potter
 
-    (Player control and combat)
+    (Player control, combat, various bugfixes)
 
 
     Lead Programmer:
 
     Christopher Walen
 
-    (Board generator, puzzles, player control)
+    (AI, Board generator, puzzles, player control)
 
 
     Programmers:
 
     David Cuno
 
-    (Sounds system)
+    (Sounds system, documentation, various bugfixes)
 
 
     Thomas Harrod
 
-    (UI and Save System)
+    (UI, Save system, Grid system, Board Generator)
 
 
     Sprite Art:
 
-    David Cuno
+    David Cuno - items, map tiles, weapons
 
-    Joseph Potter
+    Joseph Potter - items, weapons, enemies, rat friend
 
-    Christopher Walen
+    Christopher Walen - enemies, map tiles
 
-    Micaela York
+    Micaela York - LLB character
+
+    Maleah Jamieson - items, home background
 
 
     Created for COP 4331C Fall 2019
