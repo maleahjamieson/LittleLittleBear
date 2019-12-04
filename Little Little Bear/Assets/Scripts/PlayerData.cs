@@ -11,7 +11,7 @@ public class PlayerData
     public int depth;
     public int ammo;//ammo, weapontype
     public char weaponType;
-    //inventory shit fuck safa
+    //inventory stuff
     public bool[] isFull;
     public InventoryItem[] items = new InventoryItem[4];
     //public string slotTag; // needs to be set
